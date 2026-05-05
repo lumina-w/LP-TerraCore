@@ -5,7 +5,7 @@ import { Icon } from 'astro-icon/components';
 <header class="nav">
   <div class="container nav-inner">
     <a href="#top" aria-label="TerraCore inicio">
-      <Brand size={26} />
+      <Brand size={40} />
     </a>
 
     <nav class="nav-links" aria-label="Navegación principal">
@@ -17,12 +17,12 @@ import { Icon } from 'astro-icon/components';
     </nav>
 
     <div class="nav-cta">
-      <a href="#login" class="nav-login">
-        <Icon name="lucide:log-in" width={16} height={16} />
+      <a href="https://terracoreapp.co/login" class="nav-login btn">
         Iniciar sesión
       </a>
       <a href="#demo" class="btn btn-primary nav-demo">
         Solicita demo
+        <Icon name="lucide:arrow-right" width={14} height={14} />
       </a>
     </div>
   </div>
@@ -33,16 +33,14 @@ import { Icon } from 'astro-icon/components';
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(249, 247, 244, 0.84);
-    backdrop-filter: saturate(180%) blur(10px);
-    -webkit-backdrop-filter: saturate(180%) blur(10px);
+    background: #ffffff;
     border-bottom: 1px solid var(--color-border);
   }
   .nav-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 68px;
   }
   .nav-links {
     display: flex;
@@ -51,7 +49,13 @@ import { Icon } from 'astro-icon/components';
     color: var(--color-text-secondary);
     font-weight: 500;
   }
-  .nav-links a:hover { color: var(--color-text); }
+  .nav-links a {
+    transition: transform 180ms var(--ease-standard), color 180ms var(--ease-standard);
+  }
+  .nav-links a:hover {
+    transform: scale(1.05);
+    color: var(--color-text);
+  }
   @media (max-width: 880px) { .nav-links { display: none; } }
   .nav-cta { display: flex; align-items: center; gap: 12px; }
   .nav-login {
