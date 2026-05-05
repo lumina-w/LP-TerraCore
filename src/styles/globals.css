@@ -121,6 +121,16 @@
   button { font-family: inherit; cursor: pointer; border: 0; background: none; }
   img, video { display: block; max-width: 100%; }
 
+  /* Hover scale — buttons/CTAs only, not plain text links */
+  .btn {
+    transition:
+      transform 180ms var(--ease-standard),
+      background-color 180ms var(--ease-standard),
+      color 180ms var(--ease-standard),
+      box-shadow 180ms var(--ease-standard);
+  }
+  .btn:hover { transform: scale(1.03); }
+
   :focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus);
