@@ -17,8 +17,17 @@ const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '#'
         TerraCore centraliza operaciones, reduce costos y acelera el crecimiento de tu empresa.
       </p>
       <div class="flex flex-col sm:flex-row gap-3">
-        <Button href={ctaUrl} variant="primary" size="lg">Agendar demo</Button>
-        <Button href="#features" variant="secondary" size="lg">Ver funciones</Button>
+        <Button
+          href={ctaUrl}
+          variant="primary"
+          size="lg"
+          onclick="window.trackEvent('click_cta_hero')"
+        >
+          Agendar demo
+        </Button>
+        <Button href="#features" variant="secondary" size="lg">
+          Ver funciones
+        </Button>
       </div>
     </section>
 

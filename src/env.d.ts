@@ -2,7 +2,8 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
-  readonly GA_ID: string
+  readonly PUBLIC_GA_ID: string
+  readonly PUBLIC_SITE_URL: string
   readonly MAIN_CTA_URL: string
   readonly CONTACT_WHATSAPP: string
 }
