@@ -2,124 +2,373 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Política de Privacidad | TerraCore" description="Política de privacidad y tratamiento de datos personales de TerraCore.">
-  <div class="legal-page">
-    <div class="container">
-      <h1 class="legal-title">Política de Privacidad</h1>
-      <p class="legal-updated">Última actualización: mayo de 2026</p>
-
-      <div class="legal-body">
-        <p>En TerraCore (operado por Lúmina W SAS) nos tomamos en serio la privacidad de nuestros usuarios. Esta política describe cómo recolectamos, usamos y protegemos su información.</p>
-
-        <h2>1. Responsable del tratamiento</h2>
-        <p><strong>Lúmina W SAS</strong><br />
-        Antioquia, Colombia<br />
-        Correo: <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a><br />
-        Teléfono: <a href="tel:+573108283088">+57 310 828 3088</a></p>
-
-        <h2>2. Datos que recolectamos</h2>
-        <p>Recolectamos únicamente la información necesaria para prestar el servicio:</p>
-        <ul>
-          <li><strong>Datos de cuenta:</strong> nombre, correo electrónico, número de teléfono, nombre de la finca.</li>
-          <li><strong>Datos operativos:</strong> registros de animales, producción, insumos, salud animal y finanzas que usted ingresa.</li>
-          <li><strong>Datos de uso:</strong> páginas visitadas, funciones utilizadas y métricas de rendimiento (anonimizadas).</li>
-          <li><strong>Datos técnicos:</strong> dirección IP, tipo de navegador, sistema operativo (para soporte técnico).</li>
-        </ul>
-
-        <h2>3. Finalidad del tratamiento</h2>
-        <p>Usamos sus datos para:</p>
-        <ul>
-          <li>Prestar y mejorar el servicio TerraCore.</li>
-          <li>Enviar notificaciones relacionadas con su cuenta o el servicio.</li>
-          <li>Brindar soporte técnico y atención al cliente.</li>
-          <li>Cumplir obligaciones legales y regulatorias.</li>
-        </ul>
-        <p>No usamos sus datos para publicidad de terceros ni los vendemos a ningún tercero.</p>
-
-        <h2>4. Base legal</h2>
-        <p>El tratamiento de datos se realiza con base en: (a) la ejecución del contrato de servicio, (b) el consentimiento informado del titular, y (c) el cumplimiento de obligaciones legales, de acuerdo con la Ley 1581 de 2012 y el Decreto 1377 de 2013.</p>
-
-        <h2>5. Almacenamiento y seguridad</h2>
-        <p>Los datos se almacenan en servidores Hostinger VPS ubicados en Europa, que cumplen con estándares de seguridad de la industria. Implementamos cifrado en tránsito (TLS) y en reposo, control de acceso por roles y auditorías periódicas de seguridad.</p>
-
-        <h2>6. Compartición de datos</h2>
-        <p>Solo compartimos datos con terceros en los siguientes casos:</p>
-        <ul>
-          <li><strong>Proveedores de infraestructura:</strong> Hostinger (alojamiento), necesarios para la operación del servicio.</li>
-          <li><strong>Obligación legal:</strong> cuando una autoridad competente lo requiera mediante orden judicial.</li>
-        </ul>
-
-        <h2>7. Transferencias internacionales</h2>
-        <p>Sus datos se almacenan en servidores ubicados en la Unión Europea, que ofrece un nivel adecuado de protección de datos reconocido internacionalmente.</p>
-
-        <h2>8. Retención de datos</h2>
-        <p>Conservamos sus datos mientras su cuenta esté activa. Al cancelar el servicio, los datos operativos se conservan por 30 días para permitir su exportación, tras lo cual son eliminados de forma segura.</p>
-
-        <h2>9. Sus derechos</h2>
-        <p>Como titular de datos personales en Colombia, usted tiene derecho a:</p>
-        <ul>
-          <li>Conocer, actualizar y rectificar sus datos.</li>
-          <li>Solicitar prueba de la autorización otorgada.</li>
-          <li>Ser informado sobre el uso de sus datos.</li>
-          <li>Revocar la autorización y solicitar la supresión de datos (cuando no exista obligación legal de conservarlos).</li>
-          <li>Presentar quejas ante la Superintendencia de Industria y Comercio (SIC).</li>
-        </ul>
-        <p>Ejerza sus derechos escribiendo a <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a>.</p>
-
-        <h2>10. Cookies y analítica</h2>
-        <p>Usamos Google Analytics 4 (GA4) para comprender cómo se usa el sitio web. Los datos de GA4 son anonimizados y no se vinculan con su identidad personal. Puede optar por no participar usando extensiones de navegador compatibles.</p>
-
-        <h2>11. Cambios en la política</h2>
-        <p>Notificaremos cambios materiales a esta política por correo electrónico con al menos 15 días de anticipación.</p>
-
-        <h2>12. Habeas Data</h2>
-        <p>Para ejercer sus derechos de Habeas Data, consulte nuestra <a href="/habeas-data">página dedicada</a>.</p>
-
-        <h2>13. Contacto</h2>
-        <p>Para cualquier consulta sobre privacidad: <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a> · <a href="tel:+573108283088">+57 310 828 3088</a></p>
+<BaseLayout
+  title="Política de Privacidad — TerraCore"
+  description="Política de privacidad y tratamiento de datos personales de TerraCore conforme a la Ley 1581 de 2012. Lúmina W SAS, Colombia."
+>
+  <main>
+    <div class="legal-hero">
+      <div class="container">
+        <p class="legal-eyebrow">Documento legal</p>
+        <h1 class="legal-title">Política de Privacidad</h1>
+        <p class="legal-meta">Última actualización: mayo de 2026 &nbsp;·&nbsp; Ley 1581 de 2012</p>
       </div>
     </div>
-  </div>
+
+    <div class="legal-body">
+      <div class="container">
+        <div class="legal-layout">
+          <nav class="legal-toc" aria-label="Tabla de contenidos">
+            <p class="toc-label">Contenido</p>
+            <ol class="toc-list">
+              <li><a href="#responsable">1. Responsable del tratamiento</a></li>
+              <li><a href="#datos-recolectados">2. Datos que recolectamos</a></li>
+              <li><a href="#finalidad">3. Finalidad del tratamiento</a></li>
+              <li><a href="#base-legal">4. Base legal</a></li>
+              <li><a href="#seguridad">5. Almacenamiento y seguridad</a></li>
+              <li><a href="#comparticion">6. Compartición de datos</a></li>
+              <li><a href="#transferencias">7. Transferencias internacionales</a></li>
+              <li><a href="#retencion">8. Retención de datos</a></li>
+              <li><a href="#derechos">9. Sus derechos</a></li>
+              <li><a href="#cookies">10. Cookies y analítica</a></li>
+              <li><a href="#cambios">11. Cambios en la política</a></li>
+              <li><a href="#habeas-data">12. Habeas Data</a></li>
+              <li><a href="#contacto">13. Contacto</a></li>
+            </ol>
+          </nav>
+
+          <article class="legal-content">
+            <p class="legal-intro">
+              En <strong>TerraCore</strong>, operado por <strong>Lúmina W SAS</strong>, nos tomamos en serio
+              la privacidad de nuestros usuarios. Esta política describe cómo recolectamos, usamos y
+              protegemos su información, en cumplimiento de la <strong>Ley 1581 de 2012</strong> y el
+              Decreto 1377 de 2013.
+            </p>
+
+            <section id="responsable">
+              <h2>1. Responsable del tratamiento</h2>
+              <div class="contact-block">
+                <p><strong>Lúmina W SAS</strong></p>
+                <p>Antioquia, Colombia</p>
+                <p>Correo: <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a></p>
+                <p>Teléfono / WhatsApp: <a href="https://wa.me/573108283088" target="_blank" rel="noopener">+57 310 828 3088</a></p>
+              </div>
+            </section>
+
+            <section id="datos-recolectados">
+              <h2>2. Datos que recolectamos</h2>
+              <p>Recolectamos únicamente la información necesaria para prestar el servicio:</p>
+              <ul>
+                <li><strong>Datos de cuenta:</strong> nombre, correo electrónico, número de teléfono, nombre de la finca.</li>
+                <li><strong>Datos operativos:</strong> registros de animales, producción, insumos, salud animal y finanzas que usted ingresa.</li>
+                <li><strong>Datos de uso:</strong> páginas visitadas, funciones utilizadas y métricas de rendimiento (anonimizadas).</li>
+                <li><strong>Datos técnicos:</strong> dirección IP, tipo de navegador, sistema operativo (para soporte técnico).</li>
+              </ul>
+            </section>
+
+            <section id="finalidad">
+              <h2>3. Finalidad del tratamiento</h2>
+              <p>Usamos sus datos para:</p>
+              <ul>
+                <li>Prestar y mejorar el servicio TerraCore.</li>
+                <li>Enviar notificaciones relacionadas con su cuenta o el servicio.</li>
+                <li>Brindar soporte técnico y atención al cliente.</li>
+                <li>Cumplir obligaciones legales y regulatorias.</li>
+              </ul>
+              <p>No usamos sus datos para publicidad de terceros ni los vendemos a ningún tercero.</p>
+            </section>
+
+            <section id="base-legal">
+              <h2>4. Base legal</h2>
+              <p>El tratamiento de datos se realiza con base en: (a) la ejecución del contrato de servicio, (b) el consentimiento informado del titular, y (c) el cumplimiento de obligaciones legales, de acuerdo con la Ley 1581 de 2012 y el Decreto 1377 de 2013.</p>
+            </section>
+
+            <section id="seguridad">
+              <h2>5. Almacenamiento y seguridad</h2>
+              <p>Los datos se almacenan en servidores Hostinger VPS ubicados en Europa, que cumplen con estándares de seguridad de la industria. Implementamos:</p>
+              <ul>
+                <li>Cifrado en tránsito (TLS) y en reposo.</li>
+                <li>Control de acceso por roles.</li>
+                <li>Auditorías periódicas de seguridad.</li>
+              </ul>
+            </section>
+
+            <section id="comparticion">
+              <h2>6. Compartición de datos</h2>
+              <p>Solo compartimos datos con terceros en los siguientes casos:</p>
+              <ul>
+                <li><strong>Proveedores de infraestructura:</strong> Hostinger (alojamiento), necesario para la operación del servicio, bajo contratos de procesamiento de datos.</li>
+                <li><strong>Obligación legal:</strong> cuando una autoridad competente lo requiera mediante orden judicial.</li>
+              </ul>
+            </section>
+
+            <section id="transferencias">
+              <h2>7. Transferencias internacionales</h2>
+              <p>Sus datos se almacenan en servidores ubicados en la Unión Europea, que ofrece un nivel adecuado de protección de datos reconocido internacionalmente. La transferencia se realiza conforme al artículo 24 de la Ley 1581 de 2012.</p>
+            </section>
+
+            <section id="retencion">
+              <h2>8. Retención de datos</h2>
+              <p>Conservamos sus datos mientras su cuenta esté activa. Al cancelar el servicio, los datos operativos se conservan por 30 días para permitir su exportación, tras lo cual son eliminados de forma segura.</p>
+            </section>
+
+            <section id="derechos">
+              <h2>9. Sus derechos</h2>
+              <p>Como titular de datos personales en Colombia, conforme al artículo 8 de la Ley 1581 de 2012, usted tiene derecho a:</p>
+              <ul>
+                <li>Conocer, actualizar y rectificar sus datos.</li>
+                <li>Solicitar prueba de la autorización otorgada.</li>
+                <li>Ser informado sobre el uso de sus datos.</li>
+                <li>Revocar la autorización y solicitar la supresión de datos (cuando no exista obligación legal de conservarlos).</li>
+                <li>Presentar quejas ante la Superintendencia de Industria y Comercio (SIC).</li>
+              </ul>
+              <p>Ejerza sus derechos escribiendo a <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a> o consulte nuestra <a href="/habeas-data">Política de Habeas Data</a>.</p>
+            </section>
+
+            <section id="cookies">
+              <h2>10. Cookies y analítica</h2>
+              <p>Usamos Google Analytics 4 (GA4) para comprender cómo se usa el sitio web. Los datos de GA4 son anonimizados y no se vinculan con su identidad personal. Puede optar por no participar usando extensiones de navegador compatibles con GA4.</p>
+            </section>
+
+            <section id="cambios">
+              <h2>11. Cambios en la política</h2>
+              <p>Notificaremos cambios materiales a esta política por correo electrónico con al menos 15 días de anticipación. La versión actualizada se publicará en esta misma página.</p>
+            </section>
+
+            <section id="habeas-data">
+              <h2>12. Habeas Data</h2>
+              <p>Para ejercer sus derechos de Habeas Data conforme a la Ley 1581 de 2012, consulte nuestra <a href="/habeas-data">Política de Habeas Data</a> donde encontrará el procedimiento detallado y los plazos de respuesta.</p>
+            </section>
+
+            <section id="contacto">
+              <h2>13. Contacto</h2>
+              <p>Para cualquier consulta sobre privacidad y tratamiento de datos:</p>
+              <div class="contact-block">
+                <p><strong>Lúmina W SAS</strong></p>
+                <p>Antioquia, Colombia</p>
+                <p><a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a></p>
+                <p><a href="https://wa.me/573108283088" target="_blank" rel="noopener">WhatsApp: +57 310 828 3088</a></p>
+              </div>
+            </section>
+
+            <div class="legal-links">
+              <a href="/terminos">Términos y Condiciones →</a>
+              <a href="/habeas-data">Habeas Data →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </main>
 </BaseLayout>
 
 <style>
-  .legal-page {
-    padding: 80px 0 120px;
-    min-height: 70vh;
+  .legal-hero {
+    background: var(--color-primary-active);
+    padding: 72px 0 56px;
+    color: #fff;
   }
+
+  .legal-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 14px;
+  }
+
   .legal-title {
-    font-size: clamp(28px, 4vw, 40px);
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 52px);
     font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: 8px;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 14px;
   }
-  .legal-updated {
+
+  .legal-meta {
     font-size: 14px;
-    color: var(--color-text-muted);
-    margin-bottom: 48px;
+    color: rgba(255, 255, 255, 0.45);
   }
+
   .legal-body {
-    max-width: 720px;
-    line-height: 1.75;
-    color: var(--color-text-secondary);
+    padding: 64px 0 96px;
+    background: var(--color-bg);
   }
-  .legal-body h2 {
+
+  .legal-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 880px) {
+    .legal-layout {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+
+  .legal-toc {
+    position: sticky;
+    top: 24px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 22px 20px;
+  }
+
+  .toc-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .toc-list li a {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-standard);
+    display: block;
+    padding: 3px 0;
+    line-height: 1.4;
+  }
+
+  .toc-list li a:hover {
+    color: var(--color-primary);
+  }
+
+  .legal-content {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 48px 52px;
+  }
+
+  @media (max-width: 600px) {
+    .legal-content {
+      padding: 28px 20px;
+    }
+  }
+
+  .legal-intro {
+    font-size: 16px;
+    line-height: 26px;
+    color: var(--color-text-secondary);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 18px;
+    margin-bottom: 40px;
+  }
+
+  .legal-content section {
+    margin-bottom: 36px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .legal-content section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 32px;
+    padding-bottom: 0;
+  }
+
+  .legal-content h2 {
+    font-family: var(--font-display);
     font-size: 18px;
     font-weight: 700;
-    color: var(--color-primary);
-    margin: 40px 0 12px;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    scroll-margin-top: 80px;
   }
-  .legal-body p,
-  .legal-body li {
+
+  .legal-content p {
     font-size: 15px;
+    line-height: 24px;
+    color: var(--color-text-secondary);
     margin-bottom: 12px;
   }
-  .legal-body ul {
-    padding-left: 20px;
-    margin-bottom: 12px;
+
+  .legal-content p:last-child {
+    margin-bottom: 0;
   }
-  .legal-body a {
-    color: var(--color-accent);
+
+  .legal-content ul {
+    margin: 10px 0 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .legal-content li {
+    font-size: 15px;
+    line-height: 23px;
+    color: var(--color-text-secondary);
+  }
+
+  .legal-content a {
+    color: var(--color-text-link);
     text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .legal-content a:hover {
+    color: var(--color-text-link-hover);
+  }
+
+  .legal-content strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .contact-block {
+    background: var(--color-surface-sunken);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  .contact-block p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .legal-links {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .legal-links a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-link);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-standard);
+  }
+
+  .legal-links a:hover {
+    color: var(--color-text-link-hover);
   }
 </style>
