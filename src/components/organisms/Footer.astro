@@ -167,6 +167,10 @@ const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
     align-items: center;
     gap: 8px;
   }
+  .foot-links--contact li :global(svg) {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
   .foot-links--contact a {
     color: inherit;
     text-decoration: none;

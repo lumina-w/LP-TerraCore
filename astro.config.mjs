@@ -9,4 +9,5 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   integrations: [tailwind({ applyBaseStyles: false }), icon(), sitemap()],
   site: 'https://terracoreapp.co',
+  devToolbar: { enabled: false },
 });
