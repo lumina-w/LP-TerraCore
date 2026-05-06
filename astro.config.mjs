@@ -1,12 +1,12 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
-import node from '@astrojs/node';
+import netlify from '@astrojs/netlify';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   output: 'hybrid',
-  adapter: node({ mode: 'standalone' }),
+  adapter: netlify(),
   integrations: [tailwind({ applyBaseStyles: false }), icon(), sitemap()],
   site: 'https://terracoreapp.co',
   devToolbar: { enabled: false },
