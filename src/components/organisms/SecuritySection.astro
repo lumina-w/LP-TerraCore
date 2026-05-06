@@ -5,23 +5,23 @@ import { Icon } from 'astro-icon/components';
 const items = [
   {
     icon: 'lucide:shield',
-    h: 'Datos en Colombia',
-    p: 'Tu información vive en servidores en territorio nacional. Sin transferencia internacional.',
-  },
-  {
-    icon: 'lucide:lock',
-    h: 'Cifrado en todo momento',
-    p: 'TLS en tránsito y AES-256 en reposo. Backups diarios cifrados, restauración en horas.',
+    h: 'Cifrado en tránsito',
+    p: 'TLS en todos los endpoints. Ninguna comunicación viaja sin cifrar.',
   },
   {
     icon: 'lucide:users',
     h: 'Roles y permisos',
-    p: 'Cada usuario ve solo lo que necesita. Auditoría completa de quién hizo qué y cuándo.',
+    p: 'Cada usuario ve solo lo que necesita según su rol. Sin accesos de más, sin información expuesta.',
   },
   {
     icon: 'lucide:cloud',
-    h: 'Tu información, tuya',
-    p: 'Exporta a CSV cuando quieras. Si decides irte, te entregamos tus datos completos en 48 h.',
+    h: 'Tus datos, tuyos',
+    p: 'Exporta a CSV cuando quieras. Si decides irte, te entregamos todo en 48 horas sin preguntas.',
+  },
+  {
+    icon: 'lucide:eye-off',
+    h: 'Sin minería de datos',
+    p: 'Tu información no se usa para publicidad ni para entrenar modelos de IA. Punto.',
   },
 ];
 ---
@@ -32,12 +32,12 @@ const items = [
       <div>
         <Eyebrow num="05" onDark>Privacidad y seguridad</Eyebrow>
         <h2 class="display lg security-heading">
-          Tu finca es tuya.<br />Tus datos también.
+          Tu finca es tuya.<br /><span class="accent">Tus datos también.</span>
         </h2>
       </div>
       <p class="security-lead">
-        Trabajamos bajo Ley 1581 de 2012 (Habeas Data) y mejores prácticas de seguridad. Nada de
-        minería de datos para terceros, nada de modelos de IA entrenados con tu información.
+        Trabajamos bajo la Ley 1581 de 2012 (Habeas Data). Nada de minería de datos para terceros,
+        nada de modelos de IA entrenados con tu información.
       </p>
     </div>
 
@@ -86,6 +86,9 @@ const items = [
   .security-heading {
     color: #fff;
     margin-top: 16px;
+  }
+  .security-heading .accent {
+    color: var(--color-accent);
   }
   .security-lead {
     color: rgba(255, 255, 255, 0.7);
