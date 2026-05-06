@@ -149,30 +149,30 @@ const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
   nums.forEach((n) => io.observe(n));
 
   // ── Video lightbox ────────────────────────────────────────────
-  const overlay = document.getElementById('video-overlay') as HTMLElement;
-  const video = document.getElementById('demo-video') as HTMLVideoElement;
-  const openBtn = document.getElementById('video-open-btn')!;
-  const closeBtn = document.getElementById('video-close-btn')!;
-  const backdrop = document.getElementById('video-backdrop')!;
+  const overlay = document.getElementById('video-overlay') as HTMLElement | null;
+  const video = document.getElementById('demo-video') as HTMLVideoElement | null;
+  const openBtn = document.getElementById('video-open-btn');
+  const closeBtn = document.getElementById('video-close-btn');
+  const backdrop = document.getElementById('video-backdrop');
 
   function openVideo() {
-    overlay.hidden = false;
+    if (overlay) overlay.hidden = false;
     document.body.style.overflow = 'hidden';
-    video.focus();
+    video?.focus();
   }
 
   function closeVideo() {
-    overlay.hidden = true;
+    if (overlay) overlay.hidden = true;
     document.body.style.overflow = '';
-    video.pause();
-    video.currentTime = 0;
+    video?.pause();
+    if (video) video.currentTime = 0;
   }
 
-  openBtn.addEventListener('click', openVideo);
-  closeBtn.addEventListener('click', closeVideo);
-  backdrop.addEventListener('click', closeVideo);
+  openBtn?.addEventListener('click', openVideo);
+  closeBtn?.addEventListener('click', closeVideo);
+  backdrop?.addEventListener('click', closeVideo);
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !overlay.hidden) closeVideo();
+    if (e.key === 'Escape' && overlay && !overlay.hidden) closeVideo();
   });
 </script>
 
