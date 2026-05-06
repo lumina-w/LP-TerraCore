@@ -1,0 +1,375 @@
+---
+import Eyebrow from '@atoms/Eyebrow.astro';
+
+const tabData = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    images: ['/screens/dashboard-1.webp', '/screens/dashboard-2.webp'],
+  },
+  { id: 'animales', label: 'Animales', images: ['/screens/animales.webp'] },
+  { id: 'insumos', label: 'Insumos', images: ['/screens/insumos.webp'] },
+  { id: 'herramientas', label: 'Herramientas', images: ['/screens/herramientas.webp'] },
+  { id: 'produccion', label: 'Producción', images: ['/screens/produccion.webp'] },
+  {
+    id: 'salud',
+    label: 'Salud Animal',
+    images: [
+      '/screens/salud-animal-1.webp',
+      '/screens/salud-animal-2.webp',
+      '/screens/salud-animal-3.webp',
+    ],
+  },
+];
+---
+
+<section class="showcase reveal" id="producto">
+  <div class="showcase__bg" aria-hidden="true"></div>
+  <div class="container" style="position:relative">
+    <div class="section-head" style="margin-bottom:24px">
+      <div>
+        <Eyebrow num="02" onDark>El producto</Eyebrow>
+        <h2 class="display lg showcase__heading">
+          Diseñado para el <span class="accent">campo</span>,<br />no para una oficina.
+        </h2>
+      </div>
+      <p class="lead showcase__lead">
+        Tipografía grande, contraste alto, lecturas de un golpe de vista. La interfaz funciona desde
+        el celular en la manga del corral hasta el escritorio del administrador.
+      </p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="showcase-tabs" role="tablist" aria-label="Capturas del producto">
+      {
+        tabData.map((t, i) => (
+          <button
+            class:list={['showcase-tab', i === 0 && 'active']}
+            role="tab"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            aria-controls={`panel-${t.id}`}
+            data-tab={t.id}
+          >
+            {t.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- Image frame -->
+    <div class="showcase-frame" id="showcase-frame" role="tabpanel" id="panel-dashboard">
+      <img
+        id="showcase-img"
+        src={tabData[0]!.images[0]}
+        alt={`TerraCore | ${tabData[0]!.label}`}
+        width="1200"
+        height="750"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <!-- Dots -->
+    <div class="showcase-dots" id="showcase-dots" aria-hidden="true"></div>
+
+    <!-- Callouts -->
+    <div class="showcase-callouts">
+      <div class="showcase-callout">
+        <div class="showcase-callout__num">01</div>
+        <h4 class="showcase-callout__title">Sidebar con contexto siempre claro</h4>
+        <p class="showcase-callout__desc">
+          Inventario, operaciones y general agrupados como los piensas: por flujo de trabajo, no por
+          menú alfabético.
+        </p>
+      </div>
+      <div class="showcase-callout">
+        <div class="showcase-callout__num">02</div>
+        <h4 class="showcase-callout__title">Tablas que se leen en la finca</h4>
+        <p class="showcase-callout__desc">
+          Filas altas, números tabulares, estados con color. Encuentras el animal POR-006 antes de
+          que el toro se voltee.
+        </p>
+      </div>
+      <div class="showcase-callout">
+        <div class="showcase-callout__num">03</div>
+        <h4 class="showcase-callout__title">Alertas que importan, no notificaciones</h4>
+        <p class="showcase-callout__desc">
+          Vacunas vencidas, stock bajo, animales en tratamiento. Cuando TerraCore te avisa, es
+          porque hay que actuar.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const TABS: Record<string, string[]> = {
+    dashboard: ['/screens/dashboard-1.webp', '/screens/dashboard-2.webp'],
+    animales: ['/screens/animales.webp'],
+    insumos: ['/screens/insumos.webp'],
+    herramientas: ['/screens/herramientas.webp'],
+    produccion: ['/screens/produccion.webp'],
+    salud: [
+      '/screens/salud-animal-1.webp',
+      '/screens/salud-animal-2.webp',
+      '/screens/salud-animal-3.webp',
+    ],
+  };
+
+  const INTERVAL = 3000;
+  const FADE_MS = 120;
+
+  const tabBtns = document.querySelectorAll<HTMLButtonElement>('.showcase-tab');
+  const img = document.getElementById('showcase-img') as HTMLImageElement;
+  const frame = document.getElementById('showcase-frame')!;
+  const dotsEl = document.getElementById('showcase-dots')!;
+
+  let activeTab = 'dashboard';
+  let slideIdx = 0;
+  let timerId: ReturnType<typeof setInterval> | null = null;
+
+  function getLabel(tabId: string): string {
+    return [...tabBtns].find((b) => b.dataset.tab === tabId)?.textContent?.trim() ?? '';
+  }
+
+  function isSlider(tabId: string): boolean {
+    return (TABS[tabId]?.length ?? 0) > 1;
+  }
+
+  function fadeSwap(src: string, label: string) {
+    img.style.opacity = '0';
+    setTimeout(() => {
+      img.src = src;
+      img.alt = `TerraCore | ${label}`;
+      img.style.opacity = '';
+    }, FADE_MS);
+  }
+
+  function renderDots(tabId: string) {
+    dotsEl.innerHTML = '';
+    const images = TABS[tabId] ?? [];
+    if (images.length <= 1) return;
+    images.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'showcase-dot' + (i === slideIdx ? ' active' : '');
+      dot.setAttribute('aria-label', `Imagen ${i + 1}`);
+      dot.addEventListener('click', () => goToSlide(i, true));
+      dotsEl.appendChild(dot);
+    });
+  }
+
+  function updateDots() {
+    dotsEl.querySelectorAll('.showcase-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === slideIdx);
+    });
+  }
+
+  function stopAutoplay() {
+    if (timerId !== null) {
+      clearInterval(timerId);
+      timerId = null;
+    }
+  }
+
+  function startAutoplay() {
+    if (!isSlider(activeTab)) return;
+    stopAutoplay();
+    timerId = setInterval(() => goToSlide(slideIdx + 1), INTERVAL);
+  }
+
+  function goToSlide(index: number, resetTimer = false) {
+    const images = TABS[activeTab] ?? [];
+    slideIdx = ((index % images.length) + images.length) % images.length;
+    fadeSwap(images[slideIdx]!, getLabel(activeTab));
+    updateDots();
+    if (resetTimer) {
+      stopAutoplay();
+      startAutoplay();
+    }
+  }
+
+  function activateTab(tabId: string) {
+    stopAutoplay();
+    activeTab = tabId;
+    slideIdx = 0;
+    const images = TABS[tabId] ?? [];
+    fadeSwap(images[0]!, getLabel(tabId));
+    const slider = isSlider(tabId);
+    renderDots(tabId);
+    if (slider) startAutoplay();
+  }
+
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      activateTab(btn.dataset.tab!);
+    });
+  });
+
+  frame.addEventListener('mouseenter', stopAutoplay);
+  frame.addEventListener('mouseleave', () => {
+    if (isSlider(activeTab)) startAutoplay();
+  });
+
+  // Init
+  renderDots('dashboard');
+  startAutoplay();
+</script>
+
+<style>
+  .showcase {
+    background: var(--color-primary-active);
+    color: #fff;
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .showcase__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(800px 600px at 90% 20%, rgba(217, 119, 6, 0.18), transparent 60%),
+      radial-gradient(600px 400px at 0% 100%, rgba(60, 117, 86, 0.4), transparent 70%);
+    pointer-events: none;
+  }
+  .showcase__heading {
+    color: #fff;
+    margin-top: 16px;
+  }
+  .showcase__heading .accent {
+    color: var(--color-accent);
+  }
+  .showcase__lead {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* Tabs */
+  .showcase-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 36px 0 28px;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    width: fit-content;
+    flex-wrap: wrap;
+  }
+  .showcase-tab {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all var(--dur-base) var(--ease-standard);
+    cursor: pointer;
+  }
+  .showcase-tab:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .showcase-tab.active {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  /* Frame */
+  .showcase-frame {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    background: var(--color-bg);
+    aspect-ratio: 1200 / 750;
+  }
+  .showcase-frame img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: top;
+    transition: opacity 0.12s ease;
+  }
+
+  /* Dots */
+  .showcase-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    min-height: 12px;
+  }
+  :global(.showcase-dot) {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    transition:
+      background var(--dur-base) var(--ease-standard),
+      transform var(--dur-base) var(--ease-standard);
+    padding: 0;
+  }
+  :global(.showcase-dot.active) {
+    background: var(--color-accent);
+    transform: scale(1.25);
+  }
+  :global(.showcase-dot:hover) {
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Callouts */
+  .showcase-callouts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .showcase-callout {
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    padding-top: 16px;
+  }
+  .showcase-callout__num {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 8px;
+  }
+  .showcase-callout__title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .showcase-callout__desc {
+    font-size: 13px;
+    line-height: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .showcase-callouts {
+      grid-template-columns: 1fr;
+    }
+    .showcase {
+      padding: 72px 0;
+    }
+    .showcase-tabs {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

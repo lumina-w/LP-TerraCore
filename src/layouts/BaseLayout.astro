@@ -1,0 +1,157 @@
+---
+import '../styles/globals.css';
+import Header from '@organisms/Header.astro';
+import Footer from '@organisms/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  preloadImage?: string;
+}
+
+const {
+  title,
+  description = 'TerraCore | Control total de tu operación agroindustrial en Colombia.',
+  ogImage = '/terracore.png',
+  ogImageAlt = 'TerraCore — plataforma de gestión agroindustrial para el campo colombiano',
+  preloadImage,
+} = Astro.props;
+
+const siteBase = Astro.site ?? 'https://terracoreapp.co';
+const canonicalURL = new URL(Astro.url.pathname, siteBase);
+const ogImageURL = new URL(ogImage, siteBase);
+const gaId = import.meta.env.PUBLIC_GA_ID;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" href="/logo.ico" />
+
+    <!-- Preload LCP image when provided by page -->
+    {preloadImage && (
+      <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
+    )}
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;700&display=swap"
+    />
+
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TerraCore" />
+    <meta property="og:locale" content="es_CO" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+
+    <!-- Additional head (JSON-LD, page-specific meta) -->
+    <slot name="head" />
+
+    <title>{title}</title>
+
+    <!-- Google Analytics 4 -->
+    {gaId && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+        <script is:inline define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { window.dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', gaId);
+          window.trackEvent = function(name, params) { gtag('event', name, params || {}); };
+        </script>
+      </>
+    )}
+
+    <!-- Fallback: trackEvent no-op when GA not loaded -->
+    {!gaId && (
+      <script is:inline>window.trackEvent = function() {};</script>
+    )}
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+    <div id="page-loader" class="page-loader" aria-hidden="true" hidden>
+      <div class="page-loader__spinner"></div>
+    </div>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 180ms var(--ease-standard);
+    pointer-events: none;
+  }
+  .page-loader[hidden] { display: none; }
+  .page-loader.is-visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .page-loader__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: tc-spin 600ms linear infinite;
+  }
+  @keyframes tc-spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+  const loader = document.getElementById('page-loader') as HTMLElement | null;
+  if (loader) {
+    document.addEventListener('click', (e) => {
+      const a = (e.target as Element).closest('a');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (!href) return;
+      if (
+        href.startsWith('#') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:') ||
+        a.target === '_blank' ||
+        a.hasAttribute('download')
+      ) return;
+      try {
+        const url = new URL(href, location.href);
+        if (url.hostname !== location.hostname) return;
+        if (url.pathname === location.pathname) return;
+      } catch { return; }
+      loader.hidden = false;
+      requestAnimationFrame(() => loader.classList.add('is-visible'));
+    });
+  }
+</script>

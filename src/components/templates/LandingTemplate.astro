@@ -1,0 +1,30 @@
+---
+import Hero from '@organisms/Hero.astro';
+import ProofStrip from '@organisms/ProofStrip.astro';
+import Modules from '@organisms/Modules.astro';
+import Showcase from '@organisms/Showcase.astro';
+import Benefits from '@organisms/Benefits.astro';
+import Pricing from '@organisms/Pricing.astro';
+import SecuritySection from '@organisms/SecuritySection.astro';
+import FAQSection from '@organisms/FAQSection.astro';
+import CTAFooter from '@organisms/CTAFooter.astro';
+import WaitlistModal from '@organisms/WaitlistModal.astro';
+---
+
+<main id="main-content">
+  <Hero />
+  <ProofStrip />
+  <Modules />
+  <Showcase />
+  <Benefits />
+  <Pricing />
+  <SecuritySection />
+  <FAQSection />
+  <CTAFooter />
+</main>
+<WaitlistModal />
+
+<script>
+  import { initReveal } from '../../scripts/reveal';
+  initReveal();
+</script>

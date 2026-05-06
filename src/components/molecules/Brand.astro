@@ -1,0 +1,65 @@
+---
+interface Props {
+  mono?: boolean;
+  size?: number;
+  showCaption?: boolean;
+}
+const { mono = false, size = 28, showCaption = true } = Astro.props;
+---
+
+<div class:list={['brand', mono && 'brand--mono']}>
+  <img
+    src="/logo.ico"
+    alt="TerraCore"
+    width={size}
+    height={size}
+    class="brand__logo"
+    loading="eager"
+    decoding="sync"
+  />
+  <div>
+    <span class="brand__name">TerraCore</span>
+    {showCaption && <span class="brand__caption">Campo Inteligente</span>}
+  </div>
+</div>
+
+<style>
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+  .brand--mono {
+    color: #fff;
+  }
+
+  .brand__logo {
+    display: block;
+    width: var(--brand-size, 36px);
+    height: var(--brand-size, 36px);
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 100%;
+  }
+
+  .brand__name {
+    display: block;
+    line-height: 1;
+  }
+
+  .brand__caption {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-top: 1px;
+  }
+</style>

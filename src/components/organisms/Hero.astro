@@ -1,0 +1,464 @@
+---
+import FloatChip from '@molecules/FloatChip.astro';
+import { Icon } from 'astro-icon/components';
+
+const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
+---
+
+<section class="hero reveal" id="top">
+  <div class="hero__grid" aria-hidden="true"></div>
+  <div class="hero__bg" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="hero__inner">
+      <!-- Left: copy -->
+      <div class="hero__content">
+        <span class="hero-badge">
+          <span class="hero-badge__pill">Nuevo</span>
+          Salud Animal con alertas en tiempo real
+        </span>
+
+        <h1 class="hero__heading">
+          Tu finca en <em class="hero__em">un vistazo</em>.
+        </h1>
+
+        <p class="hero__lead">
+          Sin Excel. Sin cuadernos. Sin WhatsApp. Para fincas que merecen más que una hoja de
+          cálculo.
+        </p>
+
+        <div class="hero__ctas">
+          <a href={ctaUrl} rel="noopener noreferrer" class="btn btn-accent">
+            Solicita una demo
+            <Icon name="lucide:arrow-right" width={16} height={16} />
+          </a>
+          <!---<button class="btn btn-ghost-dark" id="video-open-btn" aria-label="Abrir demo en video">
+            <Icon name="lucide:play" width={14} height={14} />
+            Ver demo en video
+          </button> -->
+        </div>
+
+        <div class="hero__meta">
+          <div class="hero__stat">
+            <span class="hero__stat-v">
+              <span class="hero__stat-num" data-count-to="6">0</span>
+            </span>
+            <span class="hero__stat-l">módulos integrados</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-v">
+              <span class="hero__stat-num" data-count-to="100">0</span><span class="hero__stat-sup"
+                >%</span
+              >
+            </span>
+            <span class="hero__stat-l">tu información, privada</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-v">
+              <span class="hero__stat-num" data-count-to="24">0</span>/<span class="hero__stat-dim"
+              ></span>7
+            </span>
+            <span class="hero__stat-l">siempre accesible</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: visual -->
+      <div class="hero__visual" aria-hidden="true">
+        <div class="hero__frame">
+          <img
+            src="/screens/dashboard-2.webp"
+            alt="Dashboard de TerraCore"
+            width="900"
+            height="600"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+
+        <FloatChip
+          icon="lucide:check"
+          title="88 saludables"
+          sub="Toño, Rosa, Chucho…"
+          variant="success"
+          class="float-chip--pos-a"
+        />
+        <FloatChip
+          icon="lucide:alert-circle"
+          title="3 vacunas vencidas"
+          sub="Próximos 30 días"
+          variant="warning"
+          class="float-chip--pos-b"
+        />
+        <FloatChip
+          icon="lucide:trending-up"
+          title="+18% producción"
+          sub="vs. mes anterior"
+          variant="info"
+          class="float-chip--pos-c"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Video lightbox -->
+<div class="video-overlay" id="video-overlay" aria-modal="true" role="dialog" hidden>
+  <button class="video-overlay__close" id="video-close-btn" aria-label="Cerrar video">
+    <Icon name="lucide:x" width={24} height={24} />
+  </button>
+  <div class="video-overlay__backdrop" id="video-backdrop"></div>
+  <div class="video-overlay__wrap">
+    <video
+      id="demo-video"
+      src="/video/demo.mp4"
+      controls
+      preload="none"
+      class="video-overlay__player"></video>
+  </div>
+</div>
+
+<script>
+  // ── Counter animation ─────────────────────────────────────────
+  const nums = document.querySelectorAll<HTMLElement>('[data-count-to]');
+
+  function animateCount(el: HTMLElement, target: number, duration = 1200) {
+    const start = performance.now();
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+    const tick = (now: number) => {
+      const elapsed = Math.min((now - start) / duration, 1);
+      el.textContent = String(Math.round(easeOut(elapsed) * target));
+      if (elapsed < 1) requestAnimationFrame(tick);
+      else el.textContent = String(target);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const el = e.target as HTMLElement;
+          animateCount(el, Number(el.dataset.countTo));
+          io.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.5 },
+  );
+  nums.forEach((n) => io.observe(n));
+
+  // ── Video lightbox ────────────────────────────────────────────
+  const overlay = document.getElementById('video-overlay') as HTMLElement;
+  const video = document.getElementById('demo-video') as HTMLVideoElement;
+  const openBtn = document.getElementById('video-open-btn')!;
+  const closeBtn = document.getElementById('video-close-btn')!;
+  const backdrop = document.getElementById('video-backdrop')!;
+
+  function openVideo() {
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    video.focus();
+  }
+
+  function closeVideo() {
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+    video.pause();
+    video.currentTime = 0;
+  }
+
+  openBtn.addEventListener('click', openVideo);
+  closeBtn.addEventListener('click', closeVideo);
+  backdrop.addEventListener('click', closeVideo);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !overlay.hidden) closeVideo();
+  });
+</script>
+
+<style>
+  /* ── Hero shell ────────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    background: var(--color-primary-active);
+    color: #fff;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(13, 42, 31, 0.6) 0%, rgba(13, 42, 31, 0.92) 100%),
+      radial-gradient(900px 600px at 80% 20%, rgba(217, 119, 6, 0.32), transparent 60%),
+      var(--color-primary-active);
+  }
+
+  .hero__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(1200px 800px at 30% 40%, #000 30%, transparent 80%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* ── Inner layout ──────────────────────────────────────────── */
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 64px;
+    padding: 96px 0 120px;
+    align-items: center;
+  }
+  @media (max-width: 1024px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      padding: 64px 0 80px;
+      gap: 48px;
+    }
+  }
+
+  /* ── Badge ─────────────────────────────────────────────────── */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px 6px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 24px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .hero-badge__pill {
+    display: inline-flex;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── Heading ───────────────────────────────────────────────── */
+  .hero__heading {
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    margin: 0 0 28px;
+    text-wrap: balance;
+  }
+  .hero__em {
+    color: var(--color-accent);
+    font-style: normal;
+    position: relative;
+  }
+  .hero__em::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 6px;
+    background: var(--color-accent);
+    opacity: 0.18;
+    border-radius: 4px;
+  }
+
+  /* ── Lead ──────────────────────────────────────────────────── */
+  .hero__lead {
+    font-size: 19px;
+    line-height: 30px;
+    color: rgba(255, 255, 255, 0.78);
+    max-width: 52ch;
+    margin: 0 0 36px;
+  }
+
+  .hero__ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* ── Stats row ─────────────────────────────────────────────── */
+  .hero__meta {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 32px;
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    max-width: 560px;
+  }
+  .hero__stat-v {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+  .hero__stat-num {
+    color: var(--color-accent);
+  }
+  .hero__stat-l {
+    display: block;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 6px;
+    line-height: 14px;
+  }
+  .hero__stat-sup {
+    font-size: 18px;
+    color: var(--color-accent);
+  }
+  .hero__stat-dim {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* ── Visual side ───────────────────────────────────────────── */
+  .hero__visual {
+    position: relative;
+    perspective: 1600px;
+  }
+
+  .hero__frame {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 40px 80px rgba(0, 0, 0, 0.45),
+      0 16px 32px rgba(0, 0, 0, 0.35);
+    transform: rotateY(-6deg) rotateX(2deg);
+    background: #fff;
+  }
+  .hero__frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .hero__frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0) 50%, rgba(217, 119, 6, 0.06));
+    pointer-events: none;
+  }
+
+  /* ── Float chip positions ──────────────────────────────────── */
+  :global(.float-chip--pos-a) {
+    top: -5%;
+    left: 90px;
+    animation: floatA 5s var(--ease-standard) infinite;
+  }
+  :global(.float-chip--pos-b) {
+    bottom: 8%;
+    right: -28px;
+    animation: floatB 6s var(--ease-standard) infinite;
+  }
+  :global(.float-chip--pos-c) {
+    top: 62%;
+    left: -26px;
+    animation: floatA 7s var(--ease-standard) infinite;
+  }
+
+  /* Tablet (640–1024px): reposition inside frame, no overflow */
+  @media (min-width: 640px) and (max-width: 1024px) {
+    :global(.float-chip--pos-a) {
+      top: 10%;
+      left: 8px;
+    }
+    :global(.float-chip--pos-b) {
+      bottom: 10%;
+      right: 8px;
+    }
+    :global(.float-chip--pos-c) {
+      top: 50%;
+      left: 8px;
+    }
+  }
+
+  /* Mobile (<640px): hide */
+  @media (max-width: 639px) {
+    :global(.float-chip--pos-a),
+    :global(.float-chip--pos-b),
+    :global(.float-chip--pos-c) {
+      display: none;
+    }
+  }
+
+  /* ── Video lightbox ────────────────────────────────────────── */
+  .video-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-overlay[hidden] {
+    display: none;
+  }
+
+  .video-overlay__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    cursor: pointer;
+  }
+
+  .video-overlay__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 180ms var(--ease-standard);
+  }
+  .video-overlay__close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .video-overlay__wrap {
+    position: relative;
+    z-index: 1;
+    width: min(90vw, 960px);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+  }
+
+  .video-overlay__player {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #000;
+    aspect-ratio: 16 / 9;
+  }
+</style>

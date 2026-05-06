@@ -1,0 +1,175 @@
+---
+import Brand from '@molecules/Brand.astro';
+import { Icon } from 'astro-icon/components';
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-grid">
+      <!-- Brand col -->
+      <div>
+        <Brand mono size={44} />
+        <p class="foot-tagline">
+          Plataforma de gestión agroindustrial diseñada para el campo colombiano.
+        </p>
+      </div>
+
+      <!-- Producto -->
+      <div>
+        <h5 class="foot-col-title">Producto</h5>
+        <ul class="foot-links">
+          <li><a href="/#modulos">Módulos</a></li>
+          <li><a href="/#producto">Capturas</a></li>
+          <li><a href="/#precios">Precios</a></li>
+          <li><a href="/#preguntas">Preguntas</a></li>
+        </ul>
+      </div>
+
+      <!-- Compañía -->
+      <div>
+        <h5 class="foot-col-title">Compañía</h5>
+        <ul class="foot-links">
+          <li>
+            <a href="https://luminaw.co" target="_blank" rel="noopener noreferrer"
+              >Sobre Lúmina W</a>
+          </li>
+          <li>
+            <a href="https://luminaw.co/#contact" target="_blank" rel="noopener noreferrer"
+              >Contacto</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contacto -->
+      <div>
+        <h5 class="foot-col-title">Contacto</h5>
+        <ul class="foot-links foot-links--contact">
+          <li>
+            <Icon name="lucide:mail" width={20} height={20} />
+            <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a>
+          </li>
+          <li>
+            <Icon name="lucide:phone" width={20} height={20} />
+            +57 310 828 3088
+          </li>
+          <li>
+            <Icon name="simple-icons:whatsapp" width={18} height={18} />
+            <a href="https://wa.me/573108283088" target="_blank" rel="noopener noreferrer"
+              >WhatsApp</a
+            >
+          </li>
+          <li>
+            <Icon name="lucide:map-pin" width={20} height={20} />
+            Antioquia, Colombia
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span>© 2026 TerraCore · Lúmina W. Todos los derechos reservados.</span>
+      <span class="foot-legal">
+        <a href="/terminos">Términos</a>
+        <a href="/privacidad">Privacidad</a>
+        <a href="/habeas-data">Habeas Data</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-primary-active);
+    color: rgba(255, 255, 255, 0.65);
+    padding: 64px 0 32px;
+  }
+
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 880px) {
+    .foot-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+  }
+  @media (max-width: 540px) {
+    .foot-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .foot-tagline {
+    font-size: 14px;
+    line-height: 22px;
+    max-width: 32ch;
+    margin: 16px 0 0;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  /* Column titles */
+  .foot-col-title {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 16px;
+    font-weight: 600;
+  }
+
+  /* Links */
+  .foot-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+  .foot-links a:hover {
+    color: var(--color-accent);
+    transform: scale(1.05);
+  }
+  .foot-links--contact li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .foot-links--contact li :global(svg) {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+  .foot-links--contact a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .foot-links--contact a:hover {
+    color: var(--color-accent);
+    transform: scale(1.05);
+  }
+
+  /* Bottom bar */
+  .foot-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .foot-legal {
+    display: flex;
+    gap: 16px;
+  }
+  .foot-legal a:hover {
+    color: var(--color-accent);
+    transform: scale(1.05);
+  }
+</style>
