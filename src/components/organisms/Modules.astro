@@ -2,61 +2,69 @@
 import Eyebrow from '@atoms/Eyebrow.astro';
 import { Icon } from 'astro-icon/components';
 
-const modules = [
+type Cell = string | { text: string; badge: 'ok' | 'warn' | 'error' };
+const modules: Array<{
+  num: string;
+  name: string;
+  icon: string;
+  desc: string;
+  table: { cols: string[]; rows: Cell[][] };
+}> = [
   {
     num: '02',
     name: 'Animales',
     icon: 'lucide:leaf',
     desc: 'Registro y seguimiento del ganado: ID, raza, peso, salud, ubicación.',
-    rows: [
-      ['ANI-001', 'La Canela', 'Brahman', 'Sano'],
-      ['ANI-002', 'Estrella', 'Holstein', 'Tratamiento'],
-      ['ANI-003', 'El Rocío', 'Cebú', 'Sano'],
-    ],
+    table: {
+      cols: ['ID', 'Nombre', 'Raza', 'Peso', 'Ubicación'],
+      rows: [
+        ['ANI-001', 'La Canela', 'Brahman', '480 kg', 'Potrero Norte'],
+        ['ANI-002', 'Estrella', 'Holstein', '512 kg', 'Corral 2'],
+        ['ANI-003', 'El Rocío', 'Cebú', '390 kg', 'Potrero Sur'],
+      ],
+    },
   },
   {
     num: '03',
     name: 'Insumos',
     icon: 'lucide:box',
     desc: 'Alimentos, medicamentos y suministros con stock mínimo y proveedor.',
-    rows: [
-      ['Concentrado Lechero', 'Alimentación', '340 kg'],
-      ['Vacuna Triple Bovina', 'Sanidad', '18 dosis'],
-      ['Sal Mineralizada', 'Suplemento', '85 kg'],
-    ],
+    table: {
+      cols: ['Nombre', 'Categoría', 'Cantidad', 'Mínimo', 'Proveedor'],
+      rows: [
+        ['Concentrado Lechero', 'Alimentación', '340 kg', '200 kg', 'Agroveterinaria Urabá'],
+        ['Vacuna Triple Bovina', 'Sanidad', '18 dosis', '10 dosis', 'Vetco Colombia'],
+        ['Sal Mineralizada', 'Suplemento', '85 kg', '50 kg', 'Nutril Agro'],
+      ],
+    },
   },
   {
     num: '04',
     name: 'Herramientas',
     icon: 'lucide:wrench',
     desc: 'Equipos, maquinaria e implementos con estado y mantenimiento.',
-    rows: [
-      ['Aspersora 20 L', 'Operativa'],
-      ['Báscula ganadera', 'Operativa'],
-      ['Bomba de agua 2HP', 'En revisión'],
-    ],
+    table: {
+      cols: ['Nombre', 'Condición', 'Notas'],
+      rows: [
+        ['Aspersora 20 L', 'Buena', 'Lista para uso'],
+        ['Báscula ganadera', 'Buena', 'Calibrada'],
+        ['Bomba de agua 2HP', 'Regular', 'Revisar sello'],
+      ],
+    },
   },
   {
     num: '05',
     name: 'Producción',
     icon: 'lucide:bar-chart-2',
     desc: 'Bitácora de lotes (cultivo, leche, huevos), insumos y horas.',
-    rows: [
-      ['PRD-041', 'Leche cruda', '380 L'],
-      ['PRD-042', 'Leche cruda', '362 L'],
-      ['PRD-043', 'Leche cruda', '395 L'],
-    ],
-  },
-  {
-    num: '06',
-    name: 'Salud Animal',
-    icon: 'lucide:stethoscope',
-    desc: 'Vacunas, alertas, historial sanitario y vista por animal.',
-    rows: [
-      ['La Canela', 'Triple Bovina', 'Al día'],
-      ['Estrella', 'Aftosa', 'Al día'],
-      ['El Rocío', 'Brucelosis', 'Al día'],
-    ],
+    table: {
+      cols: ['Lote', 'Producto', 'Cantidad', 'Insumos'],
+      rows: [
+        ['PRD-041', 'Leche cruda', '380 L', 'Concentrado 12 kg'],
+        ['PRD-042', 'Leche cruda', '362 L', 'Concentrado 12 kg'],
+        ['PRD-043', 'Leche cruda', '395 L', 'Concentrado 14 kg'],
+      ],
+    },
   },
 ];
 ---
@@ -94,7 +102,7 @@ const modules = [
         </div>
         <div class="demo-mini">
           <div class="demo-mini__stat">
-            <Icon name="lucide:paw-print" width={32} height={32} class="kpi-icon" />
+            <Icon name="lucide:paw-print" width={48} height={48} class="kpi-icon" />
             <div class="demo-mini__text">
               <div class="demo-mini__val">88</div>
               <div class="demo-mini__label">Animales activos</div>
@@ -102,7 +110,7 @@ const modules = [
             </div>
           </div>
           <div class="demo-mini__stat">
-            <Icon name="lucide:droplets" width={32} height={32} class="kpi-icon" />
+            <Icon name="lucide:droplets" width={48} height={48} class="kpi-icon" />
             <div class="demo-mini__text">
               <div class="demo-mini__val">3.202</div>
               <div class="demo-mini__label">Producción mensual</div>
@@ -110,7 +118,7 @@ const modules = [
             </div>
           </div>
           <div class="demo-mini__stat">
-            <Icon name="lucide:package" width={32} height={32} class="kpi-icon" />
+            <Icon name="lucide:package" width={48} height={48} class="kpi-icon" />
             <div class="demo-mini__text">
               <div class="demo-mini__val">9.274</div>
               <div class="demo-mini__label">Insumos disponibles</div>
@@ -118,7 +126,7 @@ const modules = [
             </div>
           </div>
           <div class="demo-mini__stat">
-            <Icon name="lucide:alert-triangle" width={32} height={32} class="kpi-icon kpi-icon--accent" />
+            <Icon name="lucide:alert-triangle" width={48} height={48} class="kpi-icon kpi-icon--accent" />
             <div class="demo-mini__text">
               <div class="demo-mini__val demo-mini__val--accent">6</div>
               <div class="demo-mini__label">Alertas stock bajo</div>
@@ -126,7 +134,7 @@ const modules = [
             </div>
           </div>
           <div class="demo-mini__stat">
-            <Icon name="lucide:plus-circle" width={32} height={32} class="kpi-icon" />
+            <Icon name="lucide:plus-circle" width={48} height={48} class="kpi-icon" />
             <div class="demo-mini__text">
               <div class="demo-mini__val">12</div>
               <div class="demo-mini__label">Nuevos este mes</div>
@@ -134,7 +142,7 @@ const modules = [
             </div>
           </div>
           <div class="demo-mini__stat">
-            <Icon name="lucide:banknote" width={32} height={32} class="kpi-icon kpi-icon--accent" />
+            <Icon name="lucide:banknote" width={48} height={48} class="kpi-icon kpi-icon" />
             <div class="demo-mini__text">
               <div class="demo-mini__val">$3.431.200</div>
               <div class="demo-mini__label">Ingresos estimados</div>
@@ -159,17 +167,50 @@ const modules = [
               <p class="bento-tile__desc">{m.desc}</p>
             </div>
             <div class="bento-preview">
-              {m.rows.map((row) => (
-                <div class="bento-preview__row">
-                  {row.map((cell) => (
-                    <span>{cell}</span>
+              <table class="mini-table">
+                <thead>
+                  <tr>{m.table.cols.map((col) => <th>{col}</th>)}</tr>
+                </thead>
+                <tbody>
+                  {m.table.rows.map((row) => (
+                    <tr>
+                      {row.map((cell) =>
+                        typeof cell === 'string'
+                          ? <td>{cell}</td>
+                          : <td><span class={`badge badge--${cell.badge}`}>{cell.text}</span></td>
+                      )}
+                    </tr>
                   ))}
-                </div>
-              ))}
+                </tbody>
+              </table>
             </div>
           </div>
         ))
       }
+
+      <!-- Salud Animal — sub-tabs -->
+      <div class="bento-tile">
+        <span class="bento-tile__num">06 / 06</span>
+        <div>
+          <div class="bento-tile__header">
+            <div class="bento-tile__icon-sq">
+              <Icon name="lucide:stethoscope" width={22} height={22} />
+            </div>
+            <h3 class="bento-tile__name">Salud Animal</h3>
+          </div>
+          <p class="bento-tile__desc">Vacunas, alertas, historial sanitario y vista por animal.</p>
+        </div>
+        <div class="bento-preview">
+          <table class="mini-table">
+            <thead><tr><th>Animal</th><th>Vacuna</th><th>Fecha</th><th>Veterinario</th></tr></thead>
+            <tbody>
+              <tr><td>La Canela</td><td>Triple Bovina</td><td>15 abr 2026</td><td>Dr. Ramírez</td></tr>
+              <tr><td>Estrella</td><td>Aftosa</td><td>20 abr 2026</td><td>Dr. Ramírez</td></tr>
+              <tr><td>El Rocío</td><td>Brucelosis</td><td>28 feb 2026</td><td>Dr. Ramírez</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <!-- Wide integration tile -->
       <div class="bento-tile bento-tile--wide bento-integration">
@@ -454,27 +495,116 @@ const modules = [
     overflow: hidden;
     font-size: 11px;
   }
-  .bento-preview__row {
-    display: flex;
-    gap: 8px;
-    padding: 5px 10px;
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    align-items: center;
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
   }
-  .bento-preview__row:last-child {
+  .mini-table th {
+    padding: 5px 8px;
+    text-align: left;
+    font-size: 9px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+  .mini-table td {
+    padding: 5px 8px;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+  .mini-table tr:last-child td {
     border-bottom: none;
   }
-  .bento-preview__row span:first-child {
+  .mini-table td:first-child {
     color: var(--color-text);
-    font-weight: 600;
-    flex-shrink: 0;
+    font-weight: 500;
     font-variant-numeric: tabular-nums;
   }
-  .bento-preview__row span:last-child {
-    margin-left: auto;
-    flex-shrink: 0;
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .badge--ok {
+    background: var(--color-success-bg);
+    color: var(--color-success-fg);
+  }
+  .badge--warn {
+    background: rgba(217, 119, 6, 0.12);
+    color: var(--color-accent);
+  }
+  .badge--error {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+  }
+  /* Salud Animal sub-tabs */
+  .salud-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 6px 6px 0;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .salud-tab {
+    padding: 4px 10px;
+    border-radius: 4px 4px 0 0;
+    font-size: 10px;
+    font-weight: 600;
     color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all 120ms ease;
+  }
+  .salud-tab:hover {
+    color: var(--color-text);
+  }
+  .salud-tab.active {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+    border-bottom-color: var(--color-surface);
+    margin-bottom: -1px;
+  }
+  .salud-panel {
+    display: none;
+  }
+  .salud-panel.active {
+    display: block;
+  }
+  /* Animal info ficha */
+  .animal-info {
+    padding: 4px 0;
+  }
+  .animal-info__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 11px;
+    gap: 8px;
+  }
+  .animal-info__row:last-child {
+    border-bottom: none;
+  }
+  .animal-info__key {
+    color: var(--color-text-muted);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    flex-shrink: 0;
   }
 
   /* Responsive */
