@@ -89,68 +89,79 @@ const plans = [
       </p>
     </div>
 
-    <div class="plans">
-      {
-        plans.map((p) => (
-          <div class:list={['plan', p.featured && 'plan--featured']}>
-            {p.featured && <div class="plan-tag">Más popular</div>}
-            <div class="plan-header">
-              <div class="plan-name">{p.name}</div>
-              <h3 class="plan__title">{p.desc}</h3>
-            </div>
-            <div class="price-row">
-              {p.priceIsLabel ? (
-                <span class="price-label">{p.priceMain}</span>
-              ) : (
-                <>
-                  <span class="price-amount">{p.priceMain}</span>
-                  <span class="price-suffix">{p.priceSub}</span>
-                </>
-              )}
-            </div>
-            <hr class="plan-divider" />
-            <ul class="plan-features">
-              {p.features.map((f) => (
-                <li>
-                  <Icon name="lucide:check" width={16} height={16} />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            {p.waitlist ? (
-              <div class="waitlist-block">
-                <div class="coming-badge">Próximamente</div>
-                <form class="waitlist-form" data-plan={p.name}>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="tu@email.com"
-                    required
-                    class="waitlist-input"
-                  />
-                  <button
-                    type="submit"
-                    class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'waitlist-btn']}
-                  >
-                    Notifícame
-                  </button>
-                </form>
-                <p class="waitlist-confirm" hidden>Te avisamos cuando esté disponible</p>
-              </div>
-            ) : (
-              <a
-                href={ctaUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'plan-cta']}
-              >
-                {p.cta}
-                <Icon name="lucide:arrow-right" width={14} height={14} />
-              </a>
-            )}
+    <div class="plans-slider">
+      <div class="slider-body">
+        <button class="slider-arrow slider-arrow--prev" aria-label="Plan anterior">
+          <Icon name="lucide:chevron-left" width={20} height={20} />
+        </button>
+        <div class="plans-track">
+          <div class="plans">
+            {
+              plans.map((p) => (
+                <div class:list={['plan', p.featured && 'plan--featured']}>
+                  <div class="plan-header">
+                    <div class="plan-name">{p.name}</div>
+                    <h3 class="plan__title">{p.desc}</h3>
+                  </div>
+                  <div class="price-row">
+                    {p.priceIsLabel ? (
+                      <span class="price-label">{p.priceMain}</span>
+                    ) : (
+                      <>
+                        <span class="price-amount">{p.priceMain}</span>
+                        <span class="price-suffix">{p.priceSub}</span>
+                      </>
+                    )}
+                  </div>
+                  <hr class="plan-divider" />
+                  <ul class="plan-features">
+                    {p.features.map((f) => (
+                      <li>
+                        <Icon name="lucide:check" width={16} height={16} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  {p.waitlist ? (
+                    <div class="waitlist-block">
+                      <div class="coming-badge">Próximamente</div>
+                      <form class="waitlist-form" data-plan={p.name}>
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder="tu@email.com"
+                          required
+                          class="waitlist-input"
+                        />
+                        <button
+                          type="submit"
+                          class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'waitlist-btn']}
+                        >
+                          Notifícame
+                        </button>
+                      </form>
+                      <p class="waitlist-confirm" hidden>Te avisamos cuando esté disponible</p>
+                    </div>
+                  ) : (
+                    <a
+                      href={ctaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'plan-cta']}
+                    >
+                      {p.cta}
+                      <Icon name="lucide:arrow-right" width={14} height={14} />
+                    </a>
+                  )}
+                </div>
+              ))
+            }
           </div>
-        ))
-      }
+        </div>
+        <button class="slider-arrow slider-arrow--next" aria-label="Plan siguiente">
+          <Icon name="lucide:chevron-right" width={20} height={20} />
+        </button>
+      </div>
     </div>
 
     <p class="pricing-foot">
@@ -161,6 +172,152 @@ const plans = [
 </section>
 
 <script>
+  // ── Infinite slider (clone-based) ──────────────────────────────────────────
+  //
+  // DOM after initSlider():
+  //   [clone_last, card0, card1, card2, clone_first]
+  //   idx:    0       1      2      3        4
+  //
+  // currentIndex stays in [1, TOTAL].
+  // Landing on 0 → snap to TOTAL. Landing on TOTAL+1 → snap to 1.
+
+  const TOTAL = 3;
+
+  const plansEl = document.querySelector<HTMLElement>('.plans');
+  const plansTrack = document.querySelector<HTMLElement>('.plans-track');
+  const prevBtn = document.querySelector<HTMLButtonElement>('.slider-arrow--prev');
+  const nextBtn = document.querySelector<HTMLButtonElement>('.slider-arrow--next');
+  const origCards = Array.from(plansEl?.querySelectorAll<HTMLElement>(':scope > .plan') ?? []);
+
+  let currentIndex = 1;
+  let sliderInited = false;
+  let isTransitioning = false;
+  let timer: number | undefined;
+  let resizeTimer: number | undefined;
+  let safetyTimeout: number | undefined;
+
+  const mqDesktop = window.matchMedia('(min-width: 1200px)');
+  const mqMobile = window.matchMedia('(max-width: 639px)');
+
+  function isSliderActive() {
+    return !mqDesktop.matches && !mqMobile.matches;
+  }
+
+  function getCardW() {
+    return plansTrack?.offsetWidth || 320;
+  }
+
+  function setPos(idx: number, animate: boolean) {
+    if (!plansEl) return;
+    if (!animate) plansEl.style.transition = 'none';
+    plansEl.style.transform = `translateX(-${getCardW() * idx}px)`;
+    if (!animate) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (plansEl) plansEl.style.transition = '';
+        });
+      });
+    }
+  }
+
+  function goToIndex(idx: number) {
+    if (isTransitioning || !plansEl) return;
+    currentIndex = idx;
+    setPos(currentIndex, true);
+    isTransitioning = true;
+    if (safetyTimeout !== undefined) clearTimeout(safetyTimeout);
+    safetyTimeout = window.setTimeout(() => { isTransitioning = false; }, 500);
+  }
+
+  function initSlider() {
+    if (sliderInited || !plansEl || origCards.length !== TOTAL) return;
+
+    const cloneLast = origCards[TOTAL - 1].cloneNode(true) as HTMLElement;
+    cloneLast.dataset.sliderClone = 'true';
+    cloneLast.setAttribute('aria-hidden', 'true');
+    plansEl.insertBefore(cloneLast, origCards[0]);
+
+    const cloneFirst = origCards[0].cloneNode(true) as HTMLElement;
+    cloneFirst.dataset.sliderClone = 'true';
+    cloneFirst.setAttribute('aria-hidden', 'true');
+    plansEl.appendChild(cloneFirst);
+
+    sliderInited = true;
+    currentIndex = 1;
+    setPos(currentIndex, false);
+  }
+
+  function destroySlider() {
+    if (!sliderInited || !plansEl) return;
+    plansEl.querySelectorAll('[data-slider-clone]').forEach(c => c.remove());
+    plansEl.style.transform = '';
+    plansEl.style.transition = '';
+    sliderInited = false;
+    isTransitioning = false;
+  }
+
+  function startTimer() {
+    if (timer !== undefined) clearInterval(timer);
+    timer = window.setInterval(() => {
+      if (isSliderActive()) goToIndex(currentIndex + 1);
+    }, 5000);
+  }
+
+  function stopTimer() {
+    if (timer !== undefined) { clearInterval(timer); timer = undefined; }
+  }
+
+  plansEl?.addEventListener('transitionend', (e) => {
+    if (e.target !== plansEl || (e as TransitionEvent).propertyName !== 'transform') return;
+    isTransitioning = false;
+    if (safetyTimeout !== undefined) clearTimeout(safetyTimeout);
+    if (!plansEl || !sliderInited) return;
+
+    if (currentIndex === 0) {
+      currentIndex = TOTAL;
+      setPos(currentIndex, false);
+    } else if (currentIndex === TOTAL + 1) {
+      currentIndex = 1;
+      setPos(currentIndex, false);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (!isSliderActive() || !plansEl || !sliderInited) return;
+    if (resizeTimer !== undefined) clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => setPos(currentIndex, false), 100);
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    if (!isSliderActive()) return;
+    goToIndex(currentIndex - 1);
+    startTimer();
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    if (!isSliderActive()) return;
+    goToIndex(currentIndex + 1);
+    startTimer();
+  });
+
+  function onBreakpointChange() {
+    if (isSliderActive()) {
+      initSlider();
+      startTimer();
+    } else {
+      stopTimer();
+      destroySlider();
+    }
+  }
+
+  mqDesktop.addEventListener('change', onBreakpointChange);
+  mqMobile.addEventListener('change', onBreakpointChange);
+
+  if (isSliderActive()) {
+    initSlider();
+    startTimer();
+  }
+
   document.querySelectorAll<HTMLFormElement>('.waitlist-form').forEach((form) => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -203,38 +360,64 @@ const plans = [
   .accent-text {
     color: var(--color-accent);
   }
+
   .pricing {
     background: var(--color-surface-sunken);
   }
 
+  /* ── Slider shell ── */
+
+  .plans-slider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .slider-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .plans-track {
+    overflow: visible;
+  }
+
+  /* Mobile base: single column, stacked */
   .plans {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 16px;
+    transition: transform 400ms ease;
   }
 
-  @media (max-width: 1199px) {
-    .plans {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .plan:last-child {
-      grid-column: 1 / -1;
-      max-width: calc(50% - 8px);
-      margin-inline: auto;
-    }
+  /* Arrow buttons — hidden by default (mobile) */
+  .slider-arrow {
+    display: none;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background 200ms,
+      border-color 200ms;
   }
 
-  @media (max-width: 639px) {
-    .plans {
-      grid-template-columns: 1fr;
-    }
-    .plan:last-child {
-      grid-column: auto;
-      max-width: none;
-      margin-inline: 0;
-    }
+  .slider-arrow:hover {
+    background: var(--color-surface-raised, var(--color-surface));
+    border-color: var(--color-border-strong);
   }
+
+  /* ── Plan card (base — must come before media queries so overrides work) ── */
 
   .plan {
     background: var(--color-surface);
@@ -245,7 +428,76 @@ const plans = [
     flex-direction: column;
     gap: 28px;
     position: relative;
+    min-width: 320px;
+    max-width: 500px;
+    width: 100%;
   }
+
+  .plan[data-slider-clone] {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* ── Slider: 640px–1199px ── */
+  @media (min-width: 640px) and (max-width: 1199px) {
+    .slider-body {
+      gap: 16px;
+    }
+
+    .plans-track {
+      /* flex: 1 1 0 lets track fill space between arrows, capped at 500px */
+      flex: 1 1 0;
+      min-width: 320px;
+      max-width: 500px;
+      overflow: hidden;
+    }
+
+    .plans {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 0;
+      flex-wrap: nowrap;
+      /* explicit width makes flex-basis: 100% on cards resolve to track width */
+      width: 100%;
+    }
+
+    /* each card = exactly the track width; transform step = getCardW() */
+    .plan {
+      flex: 0 0 100%;
+      width: 100%;
+      min-width: unset;
+      max-width: unset;
+    }
+
+    .slider-arrow {
+      display: flex;
+    }
+  }
+
+  /* ── Desktop: ≥1200px — three columns ── */
+  @media (min-width: 1200px) {
+    .plans-track {
+      overflow: visible;
+      flex: none;
+      /* fill container up to 3×500px + 2×gap; slider-body centers it */
+      width: 100%;
+      max-width: calc(3 * 500px + 2 * 24px);
+    }
+
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(320px, 1fr));
+      align-items: stretch;
+      gap: 24px;
+    }
+
+    .plan {
+      width: auto;
+      min-width: unset;
+      flex: none;
+    }
+  }
+
   .plan--featured {
     background: var(--color-primary-active);
     border-color: var(--color-primary-active);
@@ -289,6 +541,7 @@ const plans = [
     color: var(--color-text);
     line-height: 1.25;
   }
+
   .plan--featured .plan__title {
     color: #fff;
   }
@@ -298,6 +551,7 @@ const plans = [
     align-items: baseline;
     gap: 8px;
   }
+
   .price-amount {
     font-family: var(--font-display);
     font-size: 22px;
@@ -307,16 +561,20 @@ const plans = [
     color: var(--color-text);
     line-height: 1;
   }
+
   .plan--featured .price-amount {
     color: #fff;
   }
+
   .price-suffix {
     font-size: 14px;
     color: var(--color-text-muted);
   }
+
   .plan--featured .price-suffix {
     color: rgba(255, 255, 255, 0.6);
   }
+
   .price-label {
     font-family: var(--font-display);
     font-size: 22px;
@@ -324,6 +582,7 @@ const plans = [
     color: var(--color-text);
     line-height: 1;
   }
+
   .plan--featured .price-label {
     color: #fff;
   }
@@ -333,6 +592,7 @@ const plans = [
     border-top: 1px solid var(--color-border);
     margin: 0;
   }
+
   .plan--featured .plan-divider {
     border-color: rgba(255, 255, 255, 0.12);
   }
@@ -346,6 +606,7 @@ const plans = [
     gap: 12px;
     flex: 1;
   }
+
   .plan-features li {
     display: flex;
     gap: 10px;
@@ -354,14 +615,17 @@ const plans = [
     color: var(--color-text);
     align-items: flex-start;
   }
+
   .plan--featured .plan-features li {
     color: rgba(255, 255, 255, 0.78);
   }
+
   .plan-features li :global(svg) {
     flex: 0 0 auto;
     color: var(--color-success);
     margin-top: 3px;
   }
+
   .plan--featured .plan-features li :global(svg) {
     color: var(--color-accent);
   }
@@ -371,7 +635,8 @@ const plans = [
     justify-content: center;
   }
 
-  /* Waitlist block */
+  /* ── Waitlist block ── */
+
   .waitlist-block {
     display: flex;
     flex-direction: column;
@@ -408,17 +673,21 @@ const plans = [
     outline: none;
     transition: border-color 0.15s;
   }
+
   .waitlist-input:focus {
     border-color: var(--color-accent);
   }
+
   .plan--featured .waitlist-input {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
     color: #fff;
   }
+
   .plan--featured .waitlist-input::placeholder {
     color: rgba(255, 255, 255, 0.45);
   }
+
   .plan--featured .waitlist-input:focus {
     border-color: var(--color-accent);
   }
@@ -433,6 +702,7 @@ const plans = [
     color: var(--color-success);
     margin: 0;
   }
+
   .plan--featured .waitlist-confirm {
     color: var(--color-accent);
   }

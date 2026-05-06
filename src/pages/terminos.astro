@@ -2,100 +2,353 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Términos y Condiciones | TerraCore" description="Términos y condiciones de uso de TerraCore, plataforma de gestión agroindustrial.">
-  <div class="legal-page">
-    <div class="container">
-      <h1 class="legal-title">Términos y Condiciones de Uso</h1>
-      <p class="legal-updated">Última actualización: mayo de 2026</p>
-
-      <div class="legal-body">
-        <h2>1. Aceptación de los términos</h2>
-        <p>Al acceder y utilizar TerraCore, usted acepta quedar vinculado por estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, no podrá acceder al servicio.</p>
-
-        <h2>2. Descripción del servicio</h2>
-        <p>TerraCore es una plataforma de gestión agroindustrial desarrollada por Lúmina W SAS, diseñada para fincas medianas en Colombia. El servicio permite gestionar animales, insumos, producción, salud animal, herramientas y finanzas operativas.</p>
-
-        <h2>3. Uso aceptable</h2>
-        <p>Usted se compromete a utilizar TerraCore únicamente para fines lícitos relacionados con la gestión de su operación agroindustrial. Está prohibido:</p>
-        <ul>
-          <li>Compartir credenciales de acceso con terceros no autorizados.</li>
-          <li>Intentar acceder a datos de otros usuarios o clientes.</li>
-          <li>Realizar ingeniería inversa, descompilar o modificar el software.</li>
-          <li>Usar el servicio para actividades fraudulentas o ilegales.</li>
-        </ul>
-
-        <h2>4. Cuentas de usuario</h2>
-        <p>Usted es responsable de mantener la confidencialidad de sus credenciales de acceso y de todas las actividades que ocurran bajo su cuenta. Notifique inmediatamente a <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a> ante cualquier uso no autorizado.</p>
-
-        <h2>5. Propiedad intelectual</h2>
-        <p>TerraCore y todos sus contenidos, características y funcionalidades son propiedad exclusiva de Lúmina W SAS y están protegidos por las leyes de propiedad intelectual de Colombia. Usted recibe una licencia limitada, no exclusiva e intransferible para usar el servicio.</p>
-
-        <h2>6. Datos del cliente</h2>
-        <p>Los datos que usted ingresa en TerraCore (animales, registros, inventarios, finanzas) son de su propiedad. Lúmina W no venderá ni transferirá sus datos a terceros sin su consentimiento expreso. Consulte nuestra <a href="/privacidad">Política de Privacidad</a> para más detalles.</p>
-
-        <h2>7. Disponibilidad del servicio</h2>
-        <p>TerraCore se presta bajo un modelo SaaS alojado en servidores Hostinger VPS en Europa. Nos esforzamos por mantener una disponibilidad del 99,5%, pero no garantizamos un servicio ininterrumpido. Las interrupciones programadas para mantenimiento serán comunicadas con antelación.</p>
-
-        <h2>8. Planes y pagos</h2>
-        <p>Los precios y condiciones de cada plan están descritos en la página de precios. Los planes se facturan según el período seleccionado. El incumplimiento de pago puede resultar en la suspensión temporal del acceso.</p>
-
-        <h2>9. Limitación de responsabilidad</h2>
-        <p>Lúmina W no será responsable por daños indirectos, incidentales, especiales o consecuentes derivados del uso o la imposibilidad de uso del servicio. La responsabilidad máxima de Lúmina W en cualquier caso estará limitada al monto pagado por el usuario en los últimos tres (3) meses.</p>
-
-        <h2>10. Terminación</h2>
-        <p>Cualquiera de las partes puede terminar el servicio en cualquier momento. Tras la terminación, usted podrá solicitar la exportación de sus datos dentro de los 30 días siguientes. Pasado ese plazo, los datos podrán ser eliminados.</p>
-
-        <h2>11. Cambios en los términos</h2>
-        <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios materiales serán notificados por correo electrónico con al menos 15 días de anticipación.</p>
-
-        <h2>12. Ley aplicable</h2>
-        <p>Estos términos se rigen por las leyes de la República de Colombia. Cualquier disputa será resuelta ante los tribunales competentes del municipio de Medellín, Antioquia.</p>
-
-        <h2>13. Contacto</h2>
-        <p>Para preguntas sobre estos términos, contáctenos en <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a> o al <a href="tel:+573108283088">+57 310 828 3088</a>.</p>
+<BaseLayout
+  title="Términos y Condiciones — TerraCore"
+  description="Términos y condiciones de uso de la plataforma TerraCore de gestión agroindustrial. Lúmina W SAS, Antioquia, Colombia."
+>
+  <main>
+    <div class="legal-hero">
+      <div class="container">
+        <p class="legal-eyebrow">Documento legal</p>
+        <h1 class="legal-title">Términos y Condiciones</h1>
+        <p class="legal-meta">Última actualización: mayo de 2026 &nbsp;·&nbsp; Lúmina W SAS</p>
       </div>
     </div>
-  </div>
+
+    <div class="legal-body">
+      <div class="container">
+        <div class="legal-layout">
+          <nav class="legal-toc" aria-label="Tabla de contenidos">
+            <p class="toc-label">Contenido</p>
+            <ol class="toc-list">
+              <li><a href="#aceptacion">1. Aceptación</a></li>
+              <li><a href="#servicio">2. Descripción del servicio</a></li>
+              <li><a href="#uso-aceptable">3. Uso aceptable</a></li>
+              <li><a href="#cuenta">4. Cuentas de usuario</a></li>
+              <li><a href="#propiedad">5. Propiedad intelectual</a></li>
+              <li><a href="#datos">6. Datos del cliente</a></li>
+              <li><a href="#disponibilidad">7. Disponibilidad</a></li>
+              <li><a href="#pagos">8. Planes y pagos</a></li>
+              <li><a href="#responsabilidad">9. Limitación de responsabilidad</a></li>
+              <li><a href="#terminacion">10. Terminación</a></li>
+              <li><a href="#cambios">11. Cambios en los términos</a></li>
+              <li><a href="#ley">12. Ley aplicable</a></li>
+              <li><a href="#contacto">13. Contacto</a></li>
+            </ol>
+          </nav>
+
+          <article class="legal-content">
+            <p class="legal-intro">
+              Al acceder y utilizar <strong>TerraCore</strong>, operado por <strong>Lúmina W SAS</strong>
+              (Antioquia, Colombia), usted acepta quedar vinculado por estos Términos y Condiciones. Si no está
+              de acuerdo con alguna parte, no podrá acceder al servicio.
+            </p>
+
+            <section id="aceptacion">
+              <h2>1. Aceptación de los términos</h2>
+              <p>Al acceder y utilizar TerraCore, usted acepta quedar vinculado por estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, no podrá acceder al servicio.</p>
+            </section>
+
+            <section id="servicio">
+              <h2>2. Descripción del servicio</h2>
+              <p>TerraCore es una plataforma de gestión agroindustrial desarrollada por Lúmina W SAS, diseñada para fincas medianas en Colombia. El servicio permite gestionar animales, insumos, producción, salud animal, herramientas y finanzas operativas bajo un modelo SaaS.</p>
+              <p>Lúmina W se reserva el derecho de modificar, ampliar o descontinuar funcionalidades del servicio con previo aviso razonable a los usuarios activos.</p>
+            </section>
+
+            <section id="uso-aceptable">
+              <h2>3. Uso aceptable</h2>
+              <p>Usted se compromete a utilizar TerraCore únicamente para fines lícitos relacionados con la gestión de su operación agroindustrial. Está prohibido:</p>
+              <ul>
+                <li>Compartir credenciales de acceso con terceros no autorizados.</li>
+                <li>Intentar acceder a datos de otros usuarios o clientes.</li>
+                <li>Realizar ingeniería inversa, descompilar o modificar el software.</li>
+                <li>Usar el servicio para actividades fraudulentas o ilegales.</li>
+                <li>Sobrecargar deliberadamente la infraestructura del servicio.</li>
+              </ul>
+            </section>
+
+            <section id="cuenta">
+              <h2>4. Cuentas de usuario</h2>
+              <p>Usted es responsable de mantener la confidencialidad de sus credenciales de acceso y de todas las actividades que ocurran bajo su cuenta. Notifique inmediatamente a <a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a> ante cualquier uso no autorizado.</p>
+              <p>No está permitido compartir credenciales entre usuarios. Cada licencia corresponde a un usuario individual.</p>
+            </section>
+
+            <section id="propiedad">
+              <h2>5. Propiedad intelectual</h2>
+              <p>TerraCore y todos sus contenidos, características y funcionalidades son propiedad exclusiva de Lúmina W SAS y están protegidos por la Ley 23 de 1982 y demás normas de propiedad intelectual de Colombia. Usted recibe una licencia limitada, no exclusiva e intransferible para usar el servicio durante la vigencia del contrato.</p>
+            </section>
+
+            <section id="datos">
+              <h2>6. Datos del cliente</h2>
+              <p>Los datos que usted ingresa en TerraCore (animales, registros, inventarios, finanzas) son de su propiedad. Lúmina W no venderá ni transferirá sus datos a terceros sin su consentimiento expreso. Consulte nuestra <a href="/privacidad">Política de Privacidad</a> para más detalles.</p>
+            </section>
+
+            <section id="disponibilidad">
+              <h2>7. Disponibilidad del servicio</h2>
+              <p>TerraCore se presta bajo un modelo SaaS alojado en servidores Hostinger VPS en Europa. Nos esforzamos por mantener una disponibilidad del 99,5%, pero no garantizamos un servicio ininterrumpido. Las interrupciones programadas para mantenimiento serán comunicadas con antelación.</p>
+            </section>
+
+            <section id="pagos">
+              <h2>8. Planes y pagos</h2>
+              <p>Los precios y condiciones de cada plan están descritos en la página de precios. Los planes se facturan según el período seleccionado. El incumplimiento de pago puede resultar en la suspensión temporal del acceso.</p>
+              <ul>
+                <li>Los precios pueden ajustarse con un preaviso mínimo de 30 días.</li>
+                <li>No se realizan reembolsos por períodos parciales, salvo acuerdo expreso.</li>
+              </ul>
+            </section>
+
+            <section id="responsabilidad">
+              <h2>9. Limitación de responsabilidad</h2>
+              <p>Lúmina W no será responsable por daños indirectos, incidentales, especiales o consecuentes derivados del uso o la imposibilidad de uso del servicio. La responsabilidad máxima de Lúmina W en cualquier caso estará limitada al monto pagado por el usuario en los últimos tres (3) meses.</p>
+              <p>Esta limitación no aplica en casos de dolo o culpa grave de Lúmina W.</p>
+            </section>
+
+            <section id="terminacion">
+              <h2>10. Terminación</h2>
+              <p>Cualquiera de las partes puede terminar el servicio en cualquier momento con 30 días de anticipación, sin penalidad. Tras la terminación, usted podrá solicitar la exportación de sus datos dentro de los 30 días siguientes. Pasado ese plazo, los datos podrán ser eliminados de forma segura.</p>
+            </section>
+
+            <section id="cambios">
+              <h2>11. Cambios en los términos</h2>
+              <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios materiales serán notificados por correo electrónico con al menos 15 días de anticipación. El uso continuado del servicio tras la entrada en vigor constituye aceptación.</p>
+            </section>
+
+            <section id="ley">
+              <h2>12. Ley aplicable</h2>
+              <p>Estos términos se rigen por las leyes de la República de Colombia. Cualquier disputa que no pueda resolverse amigablemente será sometida ante los tribunales competentes del municipio de Medellín, Antioquia.</p>
+            </section>
+
+            <section id="contacto">
+              <h2>13. Contacto</h2>
+              <p>Para preguntas sobre estos términos:</p>
+              <div class="contact-block">
+                <p><strong>Lúmina W SAS</strong></p>
+                <p>Antioquia, Colombia</p>
+                <p><a href="mailto:hola@terracoreapp.co">hola@terracoreapp.co</a></p>
+                <p><a href="https://wa.me/573108283088" target="_blank" rel="noopener">WhatsApp: +57 310 828 3088</a></p>
+              </div>
+            </section>
+
+            <div class="legal-links">
+              <a href="/privacidad">Política de Privacidad →</a>
+              <a href="/habeas-data">Habeas Data →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </main>
 </BaseLayout>
 
 <style>
-  .legal-page {
-    padding: 80px 0 120px;
-    min-height: 70vh;
+  .legal-hero {
+    background: var(--color-primary-active);
+    padding: 72px 0 56px;
+    color: #fff;
   }
+
+  .legal-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 14px;
+  }
+
   .legal-title {
-    font-size: clamp(28px, 4vw, 40px);
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 52px);
     font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: 8px;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 14px;
   }
-  .legal-updated {
+
+  .legal-meta {
     font-size: 14px;
-    color: var(--color-text-muted);
-    margin-bottom: 48px;
+    color: rgba(255, 255, 255, 0.45);
   }
+
   .legal-body {
-    max-width: 720px;
-    line-height: 1.75;
-    color: var(--color-text-secondary);
+    padding: 64px 0 96px;
+    background: var(--color-bg);
   }
-  .legal-body h2 {
+
+  .legal-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 880px) {
+    .legal-layout {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+
+  /* TOC */
+  .legal-toc {
+    position: sticky;
+    top: 24px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 22px 20px;
+  }
+
+  .toc-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .toc-list li a {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-standard);
+    display: block;
+    padding: 3px 0;
+    line-height: 1.4;
+  }
+
+  .toc-list li a:hover {
+    color: var(--color-primary);
+  }
+
+  /* Content */
+  .legal-content {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 48px 52px;
+  }
+
+  @media (max-width: 600px) {
+    .legal-content {
+      padding: 28px 20px;
+    }
+  }
+
+  .legal-intro {
+    font-size: 16px;
+    line-height: 26px;
+    color: var(--color-text-secondary);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 18px;
+    margin-bottom: 40px;
+  }
+
+  .legal-content section {
+    margin-bottom: 36px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .legal-content section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 32px;
+    padding-bottom: 0;
+  }
+
+  .legal-content h2 {
+    font-family: var(--font-display);
     font-size: 18px;
     font-weight: 700;
-    color: var(--color-primary);
-    margin: 40px 0 12px;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    scroll-margin-top: 80px;
   }
-  .legal-body p,
-  .legal-body li {
+
+  .legal-content p {
     font-size: 15px;
+    line-height: 24px;
+    color: var(--color-text-secondary);
     margin-bottom: 12px;
   }
-  .legal-body ul {
-    padding-left: 20px;
-    margin-bottom: 12px;
+
+  .legal-content p:last-child {
+    margin-bottom: 0;
   }
-  .legal-body a {
-    color: var(--color-accent);
+
+  .legal-content ul {
+    margin: 10px 0 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .legal-content li {
+    font-size: 15px;
+    line-height: 23px;
+    color: var(--color-text-secondary);
+  }
+
+  .legal-content a {
+    color: var(--color-text-link);
     text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .legal-content a:hover {
+    color: var(--color-text-link-hover);
+  }
+
+  .legal-content strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .contact-block {
+    background: var(--color-surface-sunken);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  .contact-block p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .legal-links {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .legal-links a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-link);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-standard);
+  }
+
+  .legal-links a:hover {
+    color: var(--color-text-link-hover);
   }
 </style>
