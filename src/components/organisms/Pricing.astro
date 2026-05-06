@@ -2,7 +2,7 @@
 import Eyebrow from '@atoms/Eyebrow.astro';
 import { Icon } from 'astro-icon/components';
 
-const ctaUrl = import.meta.env.MAIN_CTA_URL ?? 'https://calendly.com/wavival/30min';
+const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
 
 const plans = [
   {
@@ -210,11 +210,29 @@ const plans = [
   .plans {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
     gap: 16px;
   }
-  @media (max-width: 880px) {
+
+  @media (max-width: 1199px) {
+    .plans {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .plan:last-child {
+      grid-column: 1 / -1;
+      max-width: calc(50% - 8px);
+      margin-inline: auto;
+    }
+  }
+
+  @media (max-width: 639px) {
     .plans {
       grid-template-columns: 1fr;
+    }
+    .plan:last-child {
+      grid-column: auto;
+      max-width: none;
+      margin-inline: 0;
     }
   }
 

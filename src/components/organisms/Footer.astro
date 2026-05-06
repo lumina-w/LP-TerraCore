@@ -1,7 +1,7 @@
 ---
 import Brand from '@molecules/Brand.astro';
 import { Icon } from 'astro-icon/components';
-const ctaUrl = import.meta.env.MAIN_CTA_URL ?? 'https://calendly.com/wavival/30min';
+const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
 ---
 
 <footer class="site-footer">
@@ -73,12 +73,6 @@ const ctaUrl = import.meta.env.MAIN_CTA_URL ?? 'https://calendly.com/wavival/30m
           </li>
         </ul>
       </div>
-    </div>
-
-    <!-- CTA strip -->
-    <div class="foot-cta">
-      <p class="foot-cta-text">¿Listo para ordenar tu operación?</p>
-      <a href={ctaUrl} class="foot-cta-btn" target="_blank" rel="noopener">Agendar demo</a>
     </div>
 
     <div class="foot-bottom">
