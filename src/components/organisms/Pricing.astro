@@ -11,6 +11,7 @@ const plans = [
     priceMain: 'Desde $10M',
     priceSub: '/mes',
     priceIsLabel: false,
+    priceNote: '* Precio especial de lanzamiento — contáctanos para negociar',
     features: [
       '1 sede · hasta 5 usuarios',
       'Módulos base incluidos',
@@ -30,6 +31,7 @@ const plans = [
     priceMain: 'Solicitar precio',
     priceSub: '',
     priceIsLabel: true,
+    priceNote: '',
     features: [
       'Hasta 3 sedes · hasta 15 usuarios',
       'Todo de Semilla',
@@ -52,6 +54,7 @@ const plans = [
     priceMain: 'Solicitar precio',
     priceSub: '',
     priceIsLabel: true,
+    priceNote: '',
     features: [
       'Sedes ilimitadas · usuarios ilimitados',
       'Todo de Profesional',
@@ -108,11 +111,12 @@ const plans = [
                       <span class="price-label">{p.priceMain}</span>
                     ) : (
                       <>
-                        <span class="price-amount">{p.priceMain}</span>
+                        <span class="price-amount">{p.priceMain}<sup>*</sup></span>
                         <span class="price-suffix">{p.priceSub}</span>
                       </>
                     )}
                   </div>
+                  {p.priceNote && <p class="price-note">{p.priceNote}</p>}
                   <hr class="plan-divider" />
                   <ul class="plan-features">
                     {p.features.map((f) => (
@@ -323,7 +327,6 @@ const plans = [
       e.preventDefault();
       const input = form.querySelector<HTMLInputElement>('input[name="email"]')!;
       const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-      const confirmEl = form.nextElementSibling as HTMLElement;
       const email = input.value.trim();
       if (!email) return;
 
@@ -338,19 +341,21 @@ const plans = [
         });
 
         if (res.ok) {
-          form.hidden = true;
-          window.dispatchEvent(new CustomEvent('waitlist:success'));
+          btn.textContent = '¡Listo!';
+          input.value = '';
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = 'Notifícame';
+          }, 2000);
         } else {
           btn.disabled = false;
-          btn.textContent = 'Notifícame';
-          confirmEl.textContent = 'Algo salió mal. Intenta de nuevo.';
-          confirmEl.hidden = false;
+          btn.textContent = 'Intentar de nuevo';
+          setTimeout(() => { btn.textContent = 'Notifícame'; }, 2000);
         }
       } catch {
         btn.disabled = false;
-        btn.textContent = 'Notifícame';
-        confirmEl.textContent = 'Algo salió mal. Intenta de nuevo.';
-        confirmEl.hidden = false;
+        btn.textContent = 'Intentar de nuevo';
+        setTimeout(() => { btn.textContent = 'Notifícame'; }, 2000);
       }
     });
   });
@@ -569,6 +574,16 @@ const plans = [
   .price-suffix {
     font-size: 14px;
     color: var(--color-text-muted);
+  }
+
+  .price-note {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: -20px 0 0;
+  }
+
+  .plan--featured .price-note {
+    color: rgba(255, 255, 255, 0.55);
   }
 
   .plan--featured .price-suffix {

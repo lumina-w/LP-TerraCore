@@ -189,6 +189,10 @@ const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
       padding: 8px 14px !important;
       font-size: 13px !important;
     }
+    .nav :global(.brand__name),
+    .nav :global(.brand__caption) {
+      display: none;
+    }
   }
 
   /* ── Mobile drawer ─────────────────────────────────────────── */
