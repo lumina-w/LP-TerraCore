@@ -63,9 +63,7 @@ export const POST: APIRoute = async ({ request }) => {
         headers: jsonHeaders,
       });
     }
-
-    const errBody = await res.text();
-    console.error('Brevo response:', res.status, errBody);
+    
     return new Response(JSON.stringify({ error: 'Failed to add contact' }), {
       status: 502,
       headers: jsonHeaders,
