@@ -153,7 +153,7 @@ Barra de navegación sticky. Desktop: links + CTA. Mobile (<1000px): hamburger +
 
 - Links internos: anclajes `/#seccion`
 - CTA "Solicita demo": usa `MAIN_CTA_URL`
-- CTA "Iniciar sesión": enlace externo a `https://terracoreapp.co/login`
+- CTA "Iniciar sesión": enlace externo a `https://app.terracoreapp.co/login`
 - Accesibilidad: `aria-label`, `aria-expanded`, `aria-controls` en hamburger; `aria-hidden` en drawer
 
 ---
