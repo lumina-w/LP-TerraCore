@@ -11,7 +11,7 @@ const plans = [
     priceMain: '$2.5M',
     priceSub: '/mes',
     priceIsLabel: false,
-    priceNote: '* 15 días gratis (sin tarjeta)',
+    priceNote: 'Acceso completo por 30 días',
     features: [
       '1 sede · 5 usuarios',
       'Gestión de Animales (CRUD completo + estado de salud)',
@@ -21,7 +21,8 @@ const plans = [
       'Dashboard (4 KPI principales)',
       'Autenticación (Admin + Operario)',
     ],
-    cta: 'Agendar demo',
+    cta: 'Comenzar trial gratis',
+    ctaHref: '/auth/register?plan=semilla',
     featured: false,
     waitlist: false,
   },
@@ -31,7 +32,7 @@ const plans = [
     priceMain: '$5M',
     priceSub: '/mes',
     priceIsLabel: false,
-    priceNote: '* 30 días gratis (sin tarjeta)',
+    priceNote: null,
     features: [
       '3 sedes · 15 usuarios',
       'Todo lo de Semilla +',
@@ -42,9 +43,10 @@ const plans = [
       'Importación CSV en bulk',
       'WhatsApp + videollamada ≤4h + revisión mensual',
     ],
-    cta: 'Agendar demo',
+    cta: 'Mejorar plan',
+    ctaHref: '#comparativa',
     featured: true,
-    waitlist: true,
+    waitlist: false,
   },
   {
     name: 'Enterprise',
@@ -63,9 +65,10 @@ const plans = [
       'Reportes gerenciales',
       'Prioritario SLA ≤2h + 99.9%',
     ],
-    cta: 'Agendar demo',
+    cta: 'Contactar ventas',
+    ctaHref: 'mailto:contact@luminaw.co?subject=Información%20Enterprise',
     featured: false,
-    waitlist: true,
+    waitlist: false,
   },
 ];
 ---
@@ -149,7 +152,7 @@ const plans = [
                     </div>
                   ) : (
                     <a
-                      href={ctaUrl}
+                      href={p.ctaHref}
                       rel="noopener noreferrer"
                       class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'plan-cta']}
                     >
