@@ -2,8 +2,6 @@
 import Eyebrow from '@atoms/Eyebrow.astro';
 import { Icon } from 'astro-icon/components';
 
-const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
-
 const plans = [
   {
     name: 'Semilla',
@@ -22,9 +20,8 @@ const plans = [
       'Autenticación (Admin + Operario)',
     ],
     cta: 'Comenzar trial gratis',
-    ctaHref: '/auth/register?plan=semilla',
+    ctaHref: 'https://app.terracoreapp.co/login',
     featured: false,
-    waitlist: false,
   },
   {
     name: 'Profesional',
@@ -43,10 +40,8 @@ const plans = [
       'Importación CSV en bulk',
       'WhatsApp + videollamada ≤4h + revisión mensual',
     ],
-    cta: 'Mejorar plan',
-    ctaHref: '#comparativa',
     featured: true,
-    waitlist: false,
+    waitlist: true,
   },
   {
     name: 'Enterprise',
@@ -66,9 +61,8 @@ const plans = [
       'Prioritario SLA ≤2h + 99.9%',
     ],
     cta: 'Contactar ventas',
-    ctaHref: 'mailto:contact@luminaw.co?subject=Información%20Enterprise',
+    ctaHref: 'mailto:contact@luminaw.co?subject=Información%20sobre%20Plan%20Enterprise%20de%20TerraCore',
     featured: false,
-    waitlist: false,
   },
 ];
 ---
@@ -124,7 +118,7 @@ const plans = [
                       </li>
                     ))}
                   </ul>
-                  {p.waitlist ? (
+                  {'waitlist' in p && p.waitlist ? (
                     <div class="waitlist-block">
                       <div class="coming-badge">Próximamente</div>
                       <form class="waitlist-form" data-plan={p.name}>
