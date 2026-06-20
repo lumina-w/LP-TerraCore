@@ -36,6 +36,10 @@
   --color-accent-hover: #b36110;
   --color-accent-active: #92500b;
   --color-accent-fg: #ffffff;
+  /* AA-safe variants: fill = white text on accent bg (>=4.5:1); on-dark = accent text on dark green (>=4.5:1) */
+  --color-accent-fill: #a85a0a;
+  --color-accent-fill-hover: #92500b;
+  --color-accent-on-dark: #f59e0b;
 
   --color-bg: #f9f7f4;
   --color-surface: #ffffff;
@@ -44,7 +48,7 @@
 
   --color-text: #0f3d2a;
   --color-text-secondary: #5a615c;
-  --color-text-muted: #7a8079;
+  --color-text-muted: #5f655e;
   --color-text-on-dark: #ffffff;
   --color-text-link: #d97706;
   --color-text-link-hover: #b36110;
@@ -115,6 +119,19 @@
     top: 0;
   }
 
+  /* Visually hidden, available to assistive tech */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   *,
   *::before,
   *::after {
@@ -126,6 +143,26 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* Firefox — thin, brand-colored scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-surface-sunken);
+  }
+
+  /* WebKit/Chromium — thin, brand-colored scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface-sunken);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 999px;
+    border: 2px solid var(--color-surface-sunken);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
   }
 
   body {
@@ -209,10 +246,10 @@
     background: var(--color-text-muted);
   }
   .eyebrow--dark {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.78);
   }
   .eyebrow--dark .dot {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.6);
   }
 
   /* Display headings */
@@ -272,11 +309,11 @@
   }
 
   .btn-accent {
-    background: var(--color-accent);
+    background: var(--color-accent-fill);
     color: var(--color-accent-fg);
   }
   .btn-accent:hover {
-    background: var(--color-accent-hover);
+    background: var(--color-accent-fill-hover);
   }
 
   .btn-ghost {
@@ -406,5 +443,20 @@
   }
   50% {
     transform: translateY(8px);
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

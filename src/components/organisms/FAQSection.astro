@@ -47,15 +47,20 @@ const qs = [
 
       <div class="faq-list">
         {
-          qs.map((it) => (
+          qs.map((it, i) => (
             <div class="faq-item" data-faq>
-              <button class="faq-q" aria-expanded="false">
+              <button
+                class="faq-q"
+                aria-expanded="false"
+                aria-controls={`faq-a-${i}`}
+                id={`faq-q-${i}`}
+              >
                 <span>{it.q}</span>
                 <span class="faq-plus" aria-hidden="true">
-                  <Icon name="lucide:plus" width={14} height={14} />
+                  <Icon name="lucide:plus" width={14} height={14} aria-hidden="true" />
                 </span>
               </button>
-              <div class="faq-a">
+              <div class="faq-a" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} hidden>
                 <div class="faq-a-inner">{it.a}</div>
               </div>
             </div>
@@ -73,8 +78,20 @@ const qs = [
     el.classList.remove('faq-item--open');
     const b = el.querySelector<HTMLButtonElement>('.faq-q')!;
     const a = el.querySelector<HTMLElement>('.faq-a')!;
+    const wasOpen = b.getAttribute('aria-expanded') === 'true';
     b.setAttribute('aria-expanded', 'false');
     a.style.height = '0';
+    if (wasOpen) {
+      a.addEventListener(
+        'transitionend',
+        () => {
+          if (b.getAttribute('aria-expanded') === 'false') a.hidden = true;
+        },
+        { once: true },
+      );
+    } else {
+      a.hidden = true;
+    }
   }
 
   items.forEach((item) => {
@@ -84,9 +101,12 @@ const qs = [
       const isOpen = btn.getAttribute('aria-expanded') === 'true';
       items.forEach(closeItem);
       if (!isOpen) {
+        answer.hidden = false;
         item.classList.add('faq-item--open');
         btn.setAttribute('aria-expanded', 'true');
-        answer.style.height = answer.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+          answer.style.height = answer.scrollHeight + 'px';
+        });
       }
     });
   });

@@ -13,7 +13,7 @@ const {
 
 <div class="lead" data-lead>
   <form class="lead-form" data-lead-form novalidate>
-    <div class="field">
+    <div class="field field--text">
       <label for="lead-nombre">Nombre completo <span class="req">*</span></label>
       <input
         id="lead-nombre"
@@ -28,7 +28,7 @@ const {
       />
     </div>
 
-    <div class="field">
+    <div class="field field--text">
       <label for="lead-whatsapp">WhatsApp <span class="req">*</span></label>
       <input
         id="lead-whatsapp"
@@ -42,21 +42,48 @@ const {
       />
     </div>
 
-    <div class="field">
-      <label for="lead-tipo">Tipo de operación <span class="req">*</span></label>
-      <select id="lead-tipo" name="tipo_operacion" required>
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="Ganadería bovina (carne)">Ganadería bovina (carne)</option>
-        <option value="Ganadería bovina (leche)">Ganadería bovina (leche)</option>
-        <option value="Porcicultura">Porcicultura</option>
-        <option value="Avicultura">Avicultura</option>
-        <option value="Cultivos">Cultivos</option>
-        <option value="Mixta">Mixta</option>
-        <option value="Otro">Otro</option>
-      </select>
-    </div>
+    <fieldset class="field group group--tipo">
+      <legend><span class="legend-text">Tipo de operación <span class="req">*</span></span></legend>
+      <div class="options">
+        <label class="opt">
+          <input type="radio" name="tipo_operacion" value="Ganadería bovina (carne)" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Ganadería bovina (carne)</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="tipo_operacion" value="Ganadería bovina (leche)" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Ganadería bovina (leche)</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="tipo_operacion" value="Porcicultura" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Porcicultura</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="tipo_operacion" value="Avicultura" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Avicultura</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="tipo_operacion" value="Cultivos" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Cultivos</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="tipo_operacion" value="Mixta" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Mixta</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="tipo_operacion" value="Otro" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Otro</span>
+        </label>
+      </div>
+    </fieldset>
 
-    <div class="field">
+    <div class="field field--text">
       <label for="lead-tamano">Tamaño de la operación <span class="req">*</span></label>
       <input
         id="lead-tamano"
@@ -69,35 +96,69 @@ const {
       />
     </div>
 
-    <fieldset class="field radios">
-      <legend>¿En qué etapa estás? <span class="req">*</span></legend>
-      <label class="radio">
-        <input type="radio" name="etapa" value="Explorando, sin urgencia" required />
-        <span>Explorando, sin urgencia</span>
-      </label>
-      <label class="radio">
-        <input type="radio" name="etapa" value="Evaluando opciones activamente" required />
-        <span>Evaluando opciones activamente</span>
-      </label>
-      <label class="radio">
-        <input type="radio" name="etapa" value="Listo para empezar pronto" required />
-        <span>Listo para empezar pronto</span>
-      </label>
+    <fieldset class="field group group--etapa">
+      <legend><span class="legend-text">¿En qué etapa estás? <span class="req">*</span></span></legend>
+      <div class="options options--stack">
+        <label class="opt">
+          <input type="radio" name="etapa" value="Explorando, sin urgencia" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Explorando, sin urgencia</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="etapa" value="Evaluando opciones activamente" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Evaluando opciones activamente</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="etapa" value="Listo para empezar pronto" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Listo para empezar pronto</span>
+        </label>
+      </div>
     </fieldset>
 
-    <div class="field">
-      <label for="lead-fuente">¿Cómo nos encontraste? <span class="req">*</span></label>
-      <select id="lead-fuente" name="como_nos_encontro" required>
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="Instagram / redes sociales">Instagram / redes sociales</option>
-        <option value="Recomendación de un conocido">Recomendación de un conocido</option>
-        <option value="Google">Google</option>
-        <option value="Evento o feria agropecuario">Evento o feria agropecuario</option>
-        <option value="Otro">Otro</option>
-      </select>
-    </div>
+    <fieldset class="field group group--fuente">
+      <legend><span class="legend-text">¿Cómo nos encontraste? <span class="req">*</span></span></legend>
+      <div class="options">
+        <label class="opt">
+          <input
+            type="radio"
+            name="como_nos_encontro"
+            value="Instagram / redes sociales"
+            required
+          />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Instagram / redes sociales</span>
+        </label>
+        <label class="opt">
+          <input
+            type="radio"
+            name="como_nos_encontro"
+            value="Recomendación de un conocido"
+            required
+          />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Recomendación de un conocido</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="como_nos_encontro" value="Google" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Google</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="como_nos_encontro" value="Evento o feria agropecuario" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Evento o feria agropecuario</span>
+        </label>
+        <label class="opt">
+          <input type="radio" name="como_nos_encontro" value="Otro" required />
+          <span class="opt-mark" aria-hidden="true"></span>
+          <span class="opt-label">Otro</span>
+        </label>
+      </div>
+    </fieldset>
 
-    <div class="field">
+    <div class="field field--text field--msg">
       <label for="lead-mensaje">Cuéntanos sobre tu operación <span class="req">*</span></label>
       <textarea
         id="lead-mensaje"
@@ -110,34 +171,38 @@ const {
       ></textarea>
     </div>
 
-    <button type="submit" class="btn btn-accent lead-submit" data-lead-submit>
+    <button type="submit" class="btn btn-accent lead-submit" data-lead-submit disabled>
       <span data-submit-label>Quiero mi diagnóstico gratis</span>
-      <Icon name="lucide:arrow-right" width={16} height={16} />
+      <Icon name="lucide:arrow-right" width={16} height={16} aria-hidden="true" />
     </button>
 
-    <p class="lead-error" data-lead-error hidden>
+    <p class="lead-error" data-lead-error role="alert" hidden>
       Algo salió mal. Intenta de nuevo o escríbenos directo por WhatsApp.
     </p>
 
-    <p class="lead-alt">¿Prefieres escribir directo?</p>
+    <div class="lead-divider" aria-hidden="true">
+      <span>¿Prefieres escribir directo?</span>
+    </div>
     <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn btn-ghost-dark">
-      <Icon name="simple-icons:whatsapp" width={18} height={18} />
       Hablar por WhatsApp
+      <Icon name="simple-icons:whatsapp" width={18} height={18} aria-hidden="true" />
+      <span class="sr-only">(abre en una pestaña nueva)</span>
     </a>
   </form>
 
-  <div class="lead-success" data-lead-success hidden>
-    <div class="lead-success__check">
+  <div class="lead-success" data-lead-success role="status" hidden>
+    <div class="lead-success__check" aria-hidden="true">
       <Icon name="lucide:check" width={28} height={28} />
     </div>
-    <h3>¡Listo, <span data-success-name>!</span></h3>
+    <h3 tabindex="-1" data-success-heading>¡Listo, <span data-success-name>!</span></h3>
     <p>
       Te contactamos por WhatsApp pronto.<br />
       Mientras tanto, si tienes una pregunta urgente:
     </p>
     <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn btn-accent">
-      <Icon name="simple-icons:whatsapp" width={18} height={18} />
       Hablar por WhatsApp
+      <Icon name="simple-icons:whatsapp" width={18} height={18} aria-hidden="true" />
+      <span class="sr-only">(abre en una pestaña nueva)</span>
     </a>
   </div>
 </div>
@@ -157,12 +222,22 @@ const {
   if (form && submitBtn && submitLabel && errorEl && successEl) {
     const defaultLabel = submitLabel.textContent ?? 'Quiero mi diagnóstico gratis';
 
+    // Enable submit only when every required field is valid
+    const syncSubmitState = () => {
+      if (submitLabel.textContent === 'Enviando…') return;
+      submitBtn.disabled = !form.checkValidity();
+    };
+    form.addEventListener('input', syncSubmitState);
+    form.addEventListener('change', syncSubmitState);
+    syncSubmitState();
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!form.reportValidity()) return;
 
       errorEl.hidden = true;
       submitBtn.disabled = true;
+      form.setAttribute('aria-busy', 'true');
       submitLabel.textContent = 'Enviando…';
 
       const data = new FormData(form);
@@ -199,11 +274,15 @@ const {
         window.trackEvent?.('submit_lead', { tipo_operacion: payload.tipo_operacion });
 
         if (successName) successName.textContent = `${nombre}!`;
+        form.removeAttribute('aria-busy');
         form.hidden = true;
         successEl.hidden = false;
         successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const heading = successEl.querySelector<HTMLElement>('[data-success-heading]');
+        heading?.focus();
       } catch {
         errorEl.hidden = false;
+        form.removeAttribute('aria-busy');
         submitBtn.disabled = false;
         submitLabel.textContent = defaultLabel;
       }
@@ -212,136 +291,273 @@ const {
 </script>
 
 <style>
+  /* ── Card shell ─────────────────────────────────────────────
+     The form lives on a dark section. We give it a subtle elevated
+     "panel" treatment so it reads as a designed surface, not a bare
+     stack of inputs. */
   .lead {
-    max-width: 520px;
+    max-width: 560px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow:
+      0 24px 64px rgba(13, 42, 31, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
+
   .lead-form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 22px;
   }
+
+  /* ── 2-column layout (tablet + desktop) ──────────────────────
+     Short text inputs pair up on a row. Radio groups span the full
+     width, but their options flow across two columns so the whole
+     form reads as one cohesive 2-col design. Textarea, button, error,
+     divider and the WhatsApp action span full width. */
+  @media (min-width: 768px) {
+    .lead {
+      max-width: 820px;
+      padding: 40px;
+    }
+    .lead-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 28px;
+      row-gap: 26px;
+      align-items: start;
+    }
+    .lead-form > .group,
+    .lead-form > .field--msg,
+    .lead-form > .lead-submit,
+    .lead-form > .lead-error,
+    .lead-form > .lead-divider,
+    .lead-form > .btn-ghost-dark {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ── Field base ─────────────────────────────────────────────── */
   .field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 9px;
     border: 0;
     padding: 0;
     margin: 0;
+    min-width: 0;
   }
-  .field label,
-  .field legend {
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
+
+  /* Input labels: refined, uppercase micro-label rhythm */
+  .field--text > label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
     padding: 0;
+    margin: 0;
   }
+
   .req {
-    color: #ff8a6b;
+    color: var(--tc-amber-400);
     font-weight: 700;
   }
 
+  /* ── Text inputs / textarea ─────────────────────────────────── */
   .field input[type='text'],
   .field input[type='tel'],
-  .field textarea,
-  .field select {
+  .field textarea {
     width: 100%;
     font-family: var(--font-sans);
     font-size: 15px;
+    line-height: 1.45;
     color: #fff;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 10px;
-    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    padding: 13px 15px;
     transition:
-      border-color 0.18s ease,
-      box-shadow 0.18s ease,
-      background 0.18s ease;
+      border-color var(--dur-base) var(--ease-standard),
+      box-shadow var(--dur-base) var(--ease-standard),
+      background var(--dur-base) var(--ease-standard);
   }
   .field textarea {
     resize: vertical;
-    min-height: 84px;
-    line-height: 1.5;
+    min-height: 96px;
   }
   .field input::placeholder,
   .field textarea::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.38);
+  }
+  .field input:hover,
+  .field textarea:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.07);
   }
   .field input:focus,
-  .field textarea:focus,
-  .field select:focus {
+  .field textarea:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.1);
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.28);
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.3);
   }
 
-  /* ── Styled dropdown (custom chevron + UI-colored menu) ── */
-  .field select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-    padding-right: 42px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%23d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 14px center;
+  /* ── Question groups (radio "checklists") ───────────────────── */
+  .group {
+    gap: 14px;
   }
-  .field select:focus {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%23d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>');
+
+  /* Distinct, larger, divider-style legend with an accent marker */
+  .group > legend {
+    width: 100%;
+    padding: 0 0 12px;
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
-  /* Native option menu styled to the UI palette (where the browser allows it) */
-  .field select option {
-    background: var(--color-surface);
-    color: var(--color-text);
-    font-weight: 500;
-  }
-  .field select option:checked {
-    background: var(--color-accent);
+  .group > legend .legend-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     color: #fff;
   }
-  .field select option[disabled] {
-    color: var(--color-text-muted);
-  }
-  /* Placeholder state: dim until a real option is picked */
-  .field select:invalid {
-    color: rgba(255, 255, 255, 0.5);
+  /* Accent marker bar before each group heading */
+  .group > legend .legend-text::before {
+    content: '';
+    width: 4px;
+    height: 19px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    flex: 0 0 auto;
   }
 
-  /* Radio group — plain rows, no input box/border */
-  .radios {
-    gap: 12px;
-    margin-top: 2px;
+  /* Option grid: two columns so long groups stay balanced and the
+     whole form keeps its 2-col rhythm. */
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
-  .radio {
+  /* The 3-option "etapa" group reads cleaner as full-width rows */
+  .options--stack {
+    grid-template-columns: 1fr;
+  }
+  @media (max-width: 519px) {
+    .options {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Selectable tile — a real radio input, styled as a checklist row */
+  .opt {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    padding: 13px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.035);
     font-size: 14px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.82);
     cursor: pointer;
+    transition:
+      border-color var(--dur-base) var(--ease-standard),
+      background var(--dur-base) var(--ease-standard),
+      color var(--dur-base) var(--ease-standard),
+      box-shadow var(--dur-base) var(--ease-standard);
   }
-  .radio input {
-    accent-color: var(--color-accent);
-    width: 18px;
-    height: 18px;
-    flex: 0 0 auto;
-    cursor: pointer;
-  }
-  .radio:has(input:checked) {
+  .opt:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.06);
     color: #fff;
   }
 
-  .lead-submit {
-    margin-top: 4px;
-    justify-content: center;
-    width: 100%;
-  }
-  .lead-submit:disabled {
-    opacity: 0.7;
-    cursor: progress;
+  /* Visually hidden native input — keeps a11y + form value intact */
+  .opt input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    pointer-events: none;
   }
 
+  /* Custom radio dot */
+  .opt-mark {
+    flex: 0 0 auto;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    background: transparent;
+    transition:
+      border-color var(--dur-base) var(--ease-standard),
+      box-shadow var(--dur-base) var(--ease-standard);
+    position: relative;
+  }
+  .opt-mark::after {
+    content: '';
+    position: absolute;
+    inset: 50%;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform var(--dur-base) var(--ease-emphasized);
+  }
+  .opt-label {
+    line-height: 1.35;
+  }
+
+  /* Selected state */
+  .opt:has(input:checked) {
+    border-color: var(--color-accent);
+    background: rgba(217, 119, 6, 0.14);
+    color: #fff;
+  }
+  .opt:has(input:checked) .opt-mark {
+    border-color: var(--color-accent);
+  }
+  .opt:has(input:checked) .opt-mark::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Keyboard focus ring on the tile */
+  .opt:has(input:focus-visible) {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.3);
+  }
+
+  /* ── Submit ─────────────────────────────────────────────────── */
+  .lead-submit {
+    margin-top: 2px;
+    justify-content: center;
+    width: 100%;
+    padding: 16px 22px;
+    font-size: 16px;
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(217, 119, 6, 0.32);
+  }
+  .lead-submit:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .lead-submit:disabled:hover {
+    transform: none;
+  }
+
+  /* ── Error ──────────────────────────────────────────────────── */
   .lead-error {
     margin: 0;
     font-size: 13px;
@@ -349,32 +565,48 @@ const {
     color: #ffd9b3;
     background: rgba(217, 119, 6, 0.16);
     border: 1px solid rgba(217, 119, 6, 0.4);
-    border-radius: 10px;
-    padding: 10px 12px;
+    border-radius: 12px;
+    padding: 12px 14px;
   }
 
-  .lead-alt {
-    margin: 8px 0 0;
+  /* ── "Or write directly" divider ────────────────────────────── */
+  .lead-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 2px 0;
+    color: rgba(255, 255, 255, 0.55);
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
-    text-align: center;
   }
+  .lead-divider::before,
+  .lead-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .lead-divider span {
+    flex: 0 0 auto;
+  }
+
   .lead-form > .btn-ghost-dark {
     width: 100%;
     justify-content: center;
+    padding: 14px 22px;
+    border-radius: 12px;
   }
   .lead-form > .btn-ghost-dark :global(svg) {
     color: #25d366;
   }
 
-  /* Success state */
+  /* ── Success state ──────────────────────────────────────────── */
   .lead-success {
     text-align: center;
-    padding: 12px 0;
+    padding: 16px 0;
   }
   .lead-success__check {
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: rgba(217, 119, 6, 0.18);
     border: 1px solid rgba(217, 119, 6, 0.45);
@@ -398,5 +630,12 @@ const {
     line-height: 24px;
     color: rgba(255, 255, 255, 0.78);
     margin: 0 0 22px;
+  }
+
+  /* ── Reduced motion ─────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .opt-mark::after {
+      transition: none;
+    }
   }
 </style>
