@@ -41,8 +41,10 @@ Copiar `.env.example` y completar:
 ```env
 PUBLIC_GA_ID=G-XXXXXXXXXX        # Google Analytics 4 (opcional; tracking desactivado si está vacío)
 PUBLIC_SITE_URL=https://terracoreapp.co
-MAIN_CTA_URL=https://calendly.com/...   # URL destino de todos los botones CTA
+MAIN_CTA_URL=/#demo                      # URL destino de los botones CTA (default /#demo)
 CONTACT_WHATSAPP=573001234567           # Número WhatsApp sin +
+PUBLIC_SUPABASE_URL=https://xxxx.supabase.co   # Form #demo (ContactForm.astro)
+PUBLIC_SUPABASE_ANON_KEY=eyJ...                # Form #demo
 BREVO_API_KEY=xkeysib-...              # API key de Brevo (solo server-side)
 BREVO_LIST_ID=1                        # ID de lista en Brevo
 ```
@@ -73,9 +75,10 @@ No existe suite de tests. `typecheck` es el gate de corrección antes de hacer m
 ```
 src/
 ├── components/
+│   ├── ContactForm.astro   # Form #demo (Supabase)
 │   ├── atoms/          # Eyebrow
 │   ├── molecules/      # Brand, FloatChip
-│   ├── organisms/      # Secciones de página y Header/Footer
+│   ├── organisms/      # Secciones de página, Header/Footer y WaitlistModal
 │   └── templates/      # LandingTemplate (ensambla todos los organismos)
 ├── layouts/
 │   ├── BaseLayout.astro    # Head, GA4, skip link, Header, Footer
@@ -87,18 +90,21 @@ src/
 │   ├── habeas-data.astro   # Habeas Data
 │   └── api/
 │       └── waitlist.ts     # POST /api/waitlist (server-side, Brevo)
+├── scripts/
+│   └── reveal.ts           # IntersectionObserver para la clase .reveal
 ├── styles/
 │   └── globals.css         # Tokens de diseño, reset, utilidades globales
 └── utils/
     ├── constants.ts        # Datos estáticos: PLANS, FAQ, PROBLEMS, FEATURES
-    └── analytics.ts        # Wrapper tipado para window.trackEvent
+    ├── analytics.ts        # Wrapper tipado para window.trackEvent
+    └── cn.ts               # Helper para concatenar clases
 public/
 ├── logo.ico
-├── terracore.png           # OG image por defecto
+├── terracore.jpg           # OG image por defecto (1200×630)
 ├── robots.txt
 ├── screens/                # Capturas de pantalla del dashboard (.webp)
-├── images/                 # Foto de finca (.webp)
-└── video/
+├── images/                 # Foto de finca (terracore.webp)
+└── videos/
     └── demo.mp4
 ```
 
@@ -133,4 +139,5 @@ El sitemap se genera automáticamente en `dist/sitemap-index.xml` durante `npm r
 
 - `BaseLayout.astro` está excluido de Prettier (`.prettierignore`) porque Prettier 3 rompe la sintaxis `is:inline`. Editar manualmente.
 - Existen `tailwind.config.mjs` y `tailwind.config.ts` — Astro usa el `.mjs`. No borrar el `.ts`.
-- `src/utils/constants.ts` existe pero actualmente los componentes tienen los datos inline. `constants.ts` puede ser la fuente de verdad si se consolidan los datos.
+- `src/utils/constants.ts` define `PLANS`, `PROBLEMS`, `FEATURES` y `FAQ`. Solo `FAQ` se consume hoy (en `index.astro`, para el JSON-LD de FAQPage); las secciones aún tienen su copy inline. `constants.ts` puede ser la fuente de verdad si se consolidan los datos.
+- `MetricsBand`, `CaseStudies` y `Testimonials` están en `LandingTemplate` pero ocultos (`display:none`) hasta tener datos reales de validación.
