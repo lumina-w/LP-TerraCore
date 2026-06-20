@@ -1,14 +1,12 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
 import sitemap from '@astrojs/sitemap';
 import netlify from '@astrojs/netlify';
 
 export default defineConfig({
-  output: 'hybrid',
+  output: 'static',
   adapter: netlify(),
   integrations: [
-    tailwind({ applyBaseStyles: false }),
     icon(),
     sitemap({
       changefreq: 'monthly',
