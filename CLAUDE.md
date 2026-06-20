@@ -19,7 +19,7 @@ No test suite exists. Typecheck is the primary correctness gate.
 
 ## Architecture
 
-Astro `hybrid` output, no React. Static pages plus one server endpoint. Routes: `index.astro` (landing), `terminos.astro`, `privacidad.astro`, `habeas-data.astro`, `404.astro`, and `api/waitlist.ts` (server-rendered POST). Deployed via `@astrojs/netlify` adapter.
+Astro `static` output with a server adapter, no React. Static pages plus one server endpoint (`api/waitlist.ts` opts in via `export const prerender = false`). Routes: `index.astro` (landing), `terminos.astro`, `privacidad.astro`, `habeas-data.astro`, `404.astro`, and `api/waitlist.ts` (server-rendered POST). Deployed via `@astrojs/netlify` adapter.
 
 **Render path:**
 `index.astro` → `BaseLayout.astro` (head, GA4, fonts, Header, Footer, skip link) → `LandingTemplate.astro` (assembles all sections) → organisms/molecules/atoms. Legal pages use `LegalLayout.astro`, which wraps `BaseLayout`.
@@ -40,7 +40,7 @@ Hero → ProofStrip → Modules → Impacto → Showcase → Benefits → Securi
 **Styling approach:**
 
 - `src/styles/globals.css` — all CSS custom properties (design tokens). Always use token names, never raw hex values. Imported once in BaseLayout via `@layer base/components/utilities`.
-- Tailwind v3 configured in `tailwind.config.mjs` — extends tokens from globals.css into Tailwind's theme. Prefer CSS custom properties over Tailwind utility classes for colors/spacing in component `<style>` blocks.
+- Tailwind v3 configured in `tailwind.config.mjs`, processed via `postcss.config.mjs` (no `@astrojs/tailwind` integration; dropped in the Astro 6 upgrade). The `@tailwind base/components/utilities` directives live at the top of globals.css. Extends tokens from globals.css into Tailwind's theme. Prefer CSS custom properties over Tailwind utility classes for colors/spacing in component `<style>` blocks.
 - Scoped `<style>` blocks in each component. Use `:global()` only for child selectors that cross component boundaries (e.g., float chip positioning from Hero.astro affecting FloatChip.astro).
 - Keyframes `floatA` / `floatB` defined in globals.css, referenced in Hero.astro.
 
@@ -89,5 +89,5 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 - `src/layouts/BaseLayout.astro` is excluded from Prettier (`.prettierignore`) because Prettier 3 mangles `is:inline` script syntax. Edit it manually.
 - `BaseLayout.astro` is also excluded from ESLint auto-fix for the same reason.
 - No React, no client-side framework. All interactivity must be vanilla JS in `<script>` blocks.
-- `tailwind.config.mjs` and `tailwind.config.ts` both exist — `astro.config.mjs` uses the `.mjs` version via `@astrojs/tailwind`.
+- `tailwind.config.mjs` and `tailwind.config.ts` both exist — `postcss.config.mjs` loads the `.mjs` version (PostCSS resolves `tailwind.config.mjs` by convention).
 - NEVER use the em-dash character (`—`) in user-facing UI copy (headings, leads, labels, button text, FAQ, plan descriptions, any rendered string). Use a comma, colon, period, or parentheses instead. This rule applies only to UI copy — em-dashes are fine in code comments and docs like this file.
