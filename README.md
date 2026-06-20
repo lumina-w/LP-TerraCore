@@ -11,7 +11,7 @@ Landing page de **TerraCore** — plataforma colombiana de gestión agroindustri
 | Astro            | 4.16    | Framework SSG/hybrid           |
 | Tailwind CSS     | 3.4     | Utilidades de estilos          |
 | astro-icon       | 1.x     | Íconos (Lucide + Simple Icons) |
-| @astrojs/node    | 8.x     | Adapter para SSR del API       |
+| @astrojs/netlify | 5.x     | Adapter para SSR del API       |
 | @astrojs/sitemap | 3.x     | Genera `sitemap-index.xml`     |
 | TypeScript       | 5.6     | Tipado estático                |
 
@@ -117,14 +117,13 @@ public/
 
 ## Deploy
 
-El proyecto usa el adapter `@astrojs/node` en modo `standalone`. El build genera un servidor Node en `dist/`.
+El proyecto usa el adapter `@astrojs/netlify`. El build genera las páginas estáticas en `dist/` y la función SSR de `/api/waitlist` en `.netlify/`.
 
 ```bash
 npm run build
-node dist/server/entry.mjs
 ```
 
-Variables de entorno deben estar disponibles en el servidor en producción.
+Netlify ejecuta el build y despliega automáticamente. Las variables de entorno deben configurarse en el panel de Netlify (Site settings → Environment variables): `PUBLIC_GA_ID`, `PUBLIC_SITE_URL`, `CONTACT_WHATSAPP`, `MAIN_CTA_URL`, `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `BREVO_API_KEY`, `BREVO_LIST_ID`.
 
 El sitemap se genera automáticamente en `dist/sitemap-index.xml` durante `npm run build`.
 
