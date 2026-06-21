@@ -1,6 +1,6 @@
 # LP-TerraCore-App
 
-Landing page de **TerraCore** — plataforma colombiana de gestión agroindustrial para fincas medianas. Construida con Astro 4, Tailwind v3, sin framework de UI.
+Landing page de **TerraCore** — plataforma colombiana de gestión agroindustrial para fincas medianas. Construida con Astro 6, Tailwind v3, sin framework de UI.
 
 ---
 
@@ -40,9 +40,7 @@ Copiar `.env.example` y completar:
 
 ```env
 PUBLIC_GA_ID=G-XXXXXXXXXX        # Google Analytics 4 (opcional; tracking desactivado si está vacío)
-PUBLIC_SITE_URL=https://terracoreapp.co
 MAIN_CTA_URL=/#demo                      # URL destino de los botones CTA (default /#demo)
-CONTACT_WHATSAPP=573001234567           # Número WhatsApp sin +
 PUBLIC_SUPABASE_URL=https://xxxx.supabase.co   # Form #demo (ContactForm.astro)
 PUBLIC_SUPABASE_ANON_KEY=eyJ...                # Form #demo
 BREVO_API_KEY=xkeysib-...              # API key de Brevo (solo server-side)
@@ -95,13 +93,14 @@ src/
 ├── styles/
 │   └── globals.css         # Tokens de diseño, reset, utilidades globales
 └── utils/
-    ├── constants.ts        # Datos estáticos: PLANS, FAQ, PROBLEMS, FEATURES
+    ├── constants.ts        # Datos estáticos: PLANS, PROBLEMS, FEATURES, FAQ
     ├── analytics.ts        # Wrapper tipado para window.trackEvent
     └── cn.ts               # Helper para concatenar clases
 public/
 ├── logo.ico
 ├── terracore.jpg           # OG image por defecto (1200×630)
 ├── robots.txt
+├── llms.txt                # Resumen de producto/sitio para crawlers LLM
 ├── screens/                # Capturas de pantalla del dashboard (.webp)
 ├── images/                 # Foto de finca (terracore.webp)
 └── videos/
@@ -129,7 +128,7 @@ El proyecto usa el adapter `@astrojs/netlify`. El build genera las páginas est�
 npm run build
 ```
 
-Netlify ejecuta el build y despliega automáticamente. Las variables de entorno deben configurarse en el panel de Netlify (Site settings → Environment variables): `PUBLIC_GA_ID`, `PUBLIC_SITE_URL`, `CONTACT_WHATSAPP`, `MAIN_CTA_URL`, `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `BREVO_API_KEY`, `BREVO_LIST_ID`.
+Netlify ejecuta el build y despliega automáticamente. Las variables de entorno deben configurarse en el panel de Netlify (Site settings → Environment variables): `PUBLIC_GA_ID`, `MAIN_CTA_URL`, `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `BREVO_API_KEY`, `BREVO_LIST_ID`.
 
 El sitemap se genera automáticamente en `dist/sitemap-index.xml` durante `npm run build`.
 
@@ -139,5 +138,5 @@ El sitemap se genera automáticamente en `dist/sitemap-index.xml` durante `npm r
 
 - `BaseLayout.astro` está excluido de Prettier (`.prettierignore`) porque Prettier 3 rompe la sintaxis `is:inline`. Editar manualmente.
 - Existen `tailwind.config.mjs` y `tailwind.config.ts` — Astro usa el `.mjs`. No borrar el `.ts`.
-- `src/utils/constants.ts` define `PLANS`, `PROBLEMS`, `FEATURES` y `FAQ`. Solo `FAQ` se consume hoy (en `index.astro`, para el JSON-LD de FAQPage); las secciones aún tienen su copy inline. `constants.ts` puede ser la fuente de verdad si se consolidan los datos.
+- `src/utils/constants.ts` define `PLANS`, `PROBLEMS`, `FEATURES` y `FAQ` (en ese orden). Solo `FAQ` se consume hoy (en `index.astro`, para el JSON-LD de FAQPage); las secciones aún tienen su copy inline. `constants.ts` puede ser la fuente de verdad si se consolidan los datos.
 - `MetricsBand`, `CaseStudies` y `Testimonials` están en `LandingTemplate` pero ocultos (`display:none`) hasta tener datos reales de validación.

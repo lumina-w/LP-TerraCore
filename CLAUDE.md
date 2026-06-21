@@ -63,9 +63,7 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 **Environment variables** (see `.env.example`):
 
 - `PUBLIC_GA_ID` — GA4 measurement ID (optional; tracking disabled if absent)
-- `PUBLIC_SITE_URL` — used for canonical/OG URLs
 - `MAIN_CTA_URL` — primary CTA href (falls back to `/#demo` if absent)
-- `CONTACT_WHATSAPP` — WhatsApp number without `+`
 - `PUBLIC_SUPABASE_URL` / `PUBLIC_SUPABASE_ANON_KEY` — used by the `#demo` lead form (ContactForm.astro)
 - `BREVO_API_KEY` / `BREVO_LIST_ID` — server-side only, used by `/api/waitlist`
 
@@ -79,6 +77,7 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 - `/screens/` — dashboard screenshot WebPs (dashboard-1/2, animales-1..3, insumos-1..5, produccion-1..4, salud-animal-1..6)
 - `/videos/demo.mp4` — product demo video, H.264/AAC, faststart (referenced in Hero lightbox)
 - `/robots.txt` — points crawlers at `sitemap-index.xml`
+- `/llms.txt` — plain-text product/site summary for LLM crawlers
 
 ## Build & Deploy
 
