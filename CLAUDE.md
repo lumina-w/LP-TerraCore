@@ -63,9 +63,7 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 **Environment variables** (see `.env.example`):
 
 - `PUBLIC_GA_ID` — GA4 measurement ID (optional; tracking disabled if absent)
-- `PUBLIC_SITE_URL` — used for canonical/OG URLs
 - `MAIN_CTA_URL` — primary CTA href (falls back to `/#demo` if absent)
-- `CONTACT_WHATSAPP` — WhatsApp number without `+`
 - `PUBLIC_SUPABASE_URL` / `PUBLIC_SUPABASE_ANON_KEY` — used by the `#demo` lead form (ContactForm.astro)
 - `BREVO_API_KEY` / `BREVO_LIST_ID` — server-side only, used by `/api/waitlist`
 
