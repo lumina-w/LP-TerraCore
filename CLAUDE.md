@@ -77,6 +77,7 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 - `/screens/` — dashboard screenshot WebPs (dashboard-1/2, animales-1..3, insumos-1..5, produccion-1..4, salud-animal-1..6)
 - `/videos/demo.mp4` — product demo video, H.264/AAC, faststart (referenced in Hero lightbox)
 - `/robots.txt` — points crawlers at `sitemap-index.xml`
+- `/llms.txt` — plain-text product/site summary for LLM crawlers
 
 ## Build & Deploy
 
