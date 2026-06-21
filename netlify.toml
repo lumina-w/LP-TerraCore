@@ -4,3 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # PUBLIC_SITE_URL and CONTACT_WHATSAPP are public values (site domain +
+  # public WhatsApp shown on the page), not secrets. They are also unused in
+  # code. Excluded from Netlify secrets scanning to unblock the build.
+  SECRETS_SCAN_OMIT_KEYS = "PUBLIC_SITE_URL,CONTACT_WHATSAPP"
