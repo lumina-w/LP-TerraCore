@@ -4,5 +4,7 @@ node_modules/
 .agents/
 .cursor/
 .netlify/
+# Lockfile has its own canonical format
+pnpm-lock.yaml
 # Layout has is:inline scripts that prettier misformats
 src/layouts/BaseLayout.astro

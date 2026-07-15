@@ -139,45 +139,16 @@ const plans = [
                       </li>
                     ))}
                   </ul>
-                  {'waitlist' in p && p.waitlist ? (
-                    <div class="waitlist-block">
-                      <div class="coming-badge">Próximamente</div>
-                      <form class="waitlist-form" data-plan={p.name}>
-                        <input
-                          type="email"
-                          name="email"
-                          placeholder="tu@email.com"
-                          required
-                          class="waitlist-input"
-                          aria-label="Correo electrónico para la lista de espera"
-                        />
-                        <button
-                          type="submit"
-                          class:list={[
-                            'btn',
-                            p.featured ? 'btn-accent' : 'btn-ghost',
-                            'waitlist-btn',
-                          ]}
-                        >
-                          Notifícame
-                        </button>
-                      </form>
-                      <p class="waitlist-confirm" hidden>
-                        Te avisamos cuando esté disponible
-                      </p>
-                    </div>
-                  ) : (
-                    <a
-                      href={p.ctaHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${p.cta}, plan ${p.name} (abre en una pestaña nueva)`}
-                      class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'plan-cta']}
-                    >
-                      {p.cta}
-                      <Icon name="lucide:arrow-right" width={14} height={14} aria-hidden="true" />
-                    </a>
-                  )}
+                  <a
+                    href={p.ctaHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${p.cta}, plan ${p.name} (abre en una pestaña nueva)`}
+                    class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'plan-cta']}
+                  >
+                    {p.cta}
+                    <Icon name="lucide:arrow-right" width={14} height={14} aria-hidden="true" />
+                  </a>
                 </div>
               ))
             }
@@ -395,49 +366,6 @@ const plans = [
     if (pauseBtn) pauseBtn.hidden = false;
     startTimer();
   }
-
-  document.querySelectorAll<HTMLFormElement>('.waitlist-form').forEach((form) => {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const input = form.querySelector<HTMLInputElement>('input[name="email"]')!;
-      const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-      const email = input.value.trim();
-      if (!email) return;
-
-      btn.disabled = true;
-      btn.textContent = 'Enviando…';
-
-      try {
-        const res = await fetch('/api/waitlist', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
-        });
-
-        if (res.ok) {
-          btn.textContent = '¡Listo!';
-          input.value = '';
-          window.dispatchEvent(new CustomEvent('waitlist:success'));
-          setTimeout(() => {
-            btn.disabled = false;
-            btn.textContent = 'Notifícame';
-          }, 2000);
-        } else {
-          btn.disabled = false;
-          btn.textContent = 'Intentar de nuevo';
-          setTimeout(() => {
-            btn.textContent = 'Notifícame';
-          }, 2000);
-        }
-      } catch {
-        btn.disabled = false;
-        btn.textContent = 'Intentar de nuevo';
-        setTimeout(() => {
-          btn.textContent = 'Notifícame';
-        }, 2000);
-      }
-    });
-  });
 </script>
 
 <style>
@@ -849,78 +777,6 @@ const plans = [
   .plan-cta {
     width: 100%;
     justify-content: center;
-  }
-
-  /* ── Waitlist block ── */
-
-  .waitlist-block {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .coming-badge {
-    display: inline-flex;
-    align-self: flex-start;
-    background: var(--color-accent);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 999px;
-  }
-
-  .waitlist-form {
-    display: flex;
-    gap: 8px;
-  }
-
-  .waitlist-input {
-    flex: 1;
-    min-width: 0;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-    color: var(--color-text);
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-
-  .waitlist-input:focus {
-    border-color: var(--color-accent);
-  }
-
-  .plan--featured .waitlist-input {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-  }
-
-  .plan--featured .waitlist-input::placeholder {
-    color: rgba(255, 255, 255, 0.45);
-  }
-
-  .plan--featured .waitlist-input:focus {
-    border-color: var(--color-accent);
-  }
-
-  .waitlist-btn {
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-
-  .waitlist-confirm {
-    font-size: 13px;
-    color: var(--color-success);
-    margin: 0;
-  }
-
-  .plan--featured .waitlist-confirm {
-    color: var(--color-accent);
   }
 
   .pricing-foot {

@@ -6,8 +6,6 @@ interface ImportMetaEnv {
   readonly MAIN_CTA_URL: string;
   readonly PUBLIC_SUPABASE_URL: string;
   readonly PUBLIC_SUPABASE_ANON_KEY: string;
-  readonly BREVO_API_KEY: string;
-  readonly BREVO_LIST_ID: string;
 }
 
 interface ImportMeta {

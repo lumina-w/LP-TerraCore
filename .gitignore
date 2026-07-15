@@ -32,3 +32,12 @@ Thumbs.db
 .lighthouseci/
 *.report.html
 *.report.json
+
+# Test artifacts
+coverage/
+test-results/
+playwright-report/
+blob-report/
+
+# Claude Code local settings
+.claude/settings.local.json
