@@ -1,37 +1,10 @@
 ---
 import Eyebrow from '@atoms/Eyebrow.astro';
 import { Icon } from 'astro-icon/components';
+import { FAQ } from '@utils/constants';
 
-const qs = [
-  {
-    q: '¿Cuánto demora poner mi finca en TerraCore?',
-    a: 'En marcha en tu primera semana. Importas tu inventario desde Excel, defines usuarios y arrancas. Si tu operación es grande, te acompañamos con sesiones de onboarding hasta que estés cómodo.',
-  },
-  {
-    q: '¿Funciona si en mi finca no hay buena señal?',
-    a: 'Sí. La app web guarda todo lo que registres sin internet y sincroniza cuando vuelva la señal. El dashboard web requiere conexión, pero los registros del campo nunca se pierden.',
-  },
-  {
-    q: '¿Puedo migrar desde Excel?',
-    a: 'Sí. Tenemos plantillas de importación para animales, insumos, herramientas e historiales sanitarios. La migración está incluida en planes Profesional y Enterprise. En Semilla te damos las plantillas y lo haces tú mismo.',
-  },
-  {
-    q: '¿Qué tipos de finca soporta?',
-    a: 'Si produces en ella, TerraCore lo registra. Bovino (carne y leche), porcino, equino, ovino, caprino, avícola y cultivos asociados como plátano, cacao y maíz. Si tu operación combina varios, mejor, todo queda en el mismo lugar.',
-  },
-  {
-    q: '¿Qué pasa con mis datos si dejo de usar TerraCore?',
-    a: 'Te entregamos un export completo en CSV en máximo 48 horas y borramos tu información de nuestros servidores. Sin trampas, sin "datos rehén".',
-  },
-  {
-    q: '¿Tiene aplicación móvil?',
-    a: 'TerraCore es una PWA (Progressive Web App) optimizada para mobile. La instalas desde el navegador en Android o iOS, sin pasar por el App Store. Funciona offline, con botones grandes y captura rápida pensada para usarla en el campo.',
-  },
-  {
-    q: '¿De dónde viene la cifra del 42%?',
-    a: 'El 42% proviene de datos iniciales de operaciones piloto en la región de Urabá durante 2026. Este impacto varía según tamaño de la operación, complejidad de la cadena de suministro y nivel de adopción del equipo. Compartimos estos números de forma transparente para dar contexto real del producto.',
-  },
-];
+// Shared source of truth with the FAQPage JSON-LD schema in index.astro.
+const qs = FAQ;
 ---
 
 <section class="section-pad reveal" id="preguntas">
