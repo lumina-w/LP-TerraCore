@@ -120,18 +120,41 @@ export const FEATURES: Feature[] = [
   },
 ];
 
+// Single source of truth for the FAQ: rendered by FAQSection.astro (visible
+// accordion) and by index.astro (FAQPage JSON-LD schema). Keep visible copy and
+// schema in sync by editing here only.
 export const FAQ: FaqItem[] = [
   {
-    q: '¿Funciona si en mi finca no hay buena señal?',
-    a: 'Sí. Sabemos que en zonas como Urabá la conectividad falla. TerraCore funciona sin internet: registras en el corral y se sincroniza automáticamente cuando vuelve la señal.',
-  },
-  {
-    q: '¿Es complicado de implementar?',
-    a: 'No. La mayoría de empresas están operando en menos de 30 minutos. Te acompañamos en cada paso.',
+    q: '¿Cuánto tiempo toma implementar TerraCore?',
+    a: 'Depende del plan. En Semilla arrancas en 24 horas: importas tu inventario desde Excel, defines usuarios y empiezas a registrar. En Profesional toma de 3 a 5 días, con sesiones de onboarding y migración de tus historiales. En Enterprise el despliegue es personalizado según el número de sedes e integraciones que necesites.',
   },
   {
     q: '¿Cuánto cuesta?',
-    a: 'Desde $2.5M COP/mes dependiendo del tamaño de tu operación. Agenda una llamada y armamos un presupuesto exacto.',
+    a: 'Desde $2.5M COP/mes según el tamaño de tu operación. El precio definitivo se confirma en una llamada, cuando conocemos tu número de sedes, usuarios y módulos. Pago mensual, sin permanencia forzada.',
+  },
+  {
+    q: '¿Qué diferencia hay entre los planes?',
+    a: 'Semilla (1 sede, 5 usuarios) cubre animales, salud, producción, inventario y dashboard básico. Profesional (3 sedes, 15 usuarios) suma herramientas, costos y rentabilidad por lote, proveedores, dashboard avanzado, importación CSV y soporte prioritario. Enterprise añade sedes y usuarios ilimitados, vista consolidada multifinca, trazabilidad GlobalG.A.P., API y SLA prioritario. El detalle completo está en la sección de Planes.',
+  },
+  {
+    q: '¿Puedo cancelar en cualquier momento?',
+    a: 'Sí. Sin penalidades ni letras pequeñas: solo avísanos con 30 días de anticipación y te entregamos toda tu información antes de cerrar la cuenta.',
+  },
+  {
+    q: '¿Funciona si en mi finca no hay buena señal?',
+    a: 'Sí. La app web guarda todo lo que registres sin internet y sincroniza cuando vuelva la señal. El dashboard web requiere conexión, pero los registros del campo nunca se pierden.',
+  },
+  {
+    q: '¿Puedo migrar desde Excel?',
+    a: 'Sí. Tenemos plantillas de importación para animales, insumos, herramientas e historiales sanitarios. La migración está incluida en planes Profesional y Enterprise. En Semilla te damos las plantillas y lo haces tú mismo.',
+  },
+  {
+    q: '¿Qué tipos de finca soporta?',
+    a: 'Si produces en ella, TerraCore lo registra. Bovino (carne y leche), porcino, equino, ovino, caprino, avícola y cultivos asociados como plátano, cacao y maíz. Si tu operación combina ganadería y cultivos, mejor: animales, lotes, insumos compartidos y herramientas quedan en la misma cuenta.',
+  },
+  {
+    q: '¿Tiene aplicación móvil?',
+    a: 'TerraCore es una PWA (Progressive Web App) optimizada para mobile. La instalas desde el navegador en Android o iOS, sin pasar por el App Store. Funciona offline, con botones grandes y captura rápida pensada para usarla en el campo.',
   },
   {
     q: '¿Cómo adoptan TerraCore los operarios de campo?',
@@ -142,15 +165,15 @@ export const FAQ: FaqItem[] = [
     a: 'No. Tu información no se usa para publicidad, no se comparte con terceros y no entrena ningún modelo de inteligencia artificial. Trabajamos bajo la Ley 1581 de 2012. Tus datos son tuyos, y punto.',
   },
   {
-    q: '¿Funciona para fincas mixtas (ganadería + cultivos)?',
-    a: 'Sí. Puedes tener animales, lotes de cultivo, insumos compartidos y herramientas en la misma cuenta. TerraCore registra todo en un solo lugar, independiente del tipo de producción.',
+    q: '¿Qué pasa con mis datos si dejo de usar TerraCore?',
+    a: 'Te entregamos un export completo en CSV en máximo 48 horas y borramos tu información de nuestros servidores. Sin trampas, sin "datos rehén".',
   },
   {
     q: '¿El soporte es en español?',
     a: 'Sí. Nuestro equipo está en Colombia y entiende el contexto agroindustrial local.',
   },
   {
-    q: '¿Qué pasa si quiero cancelar?',
-    a: 'Sin penalidades ni letras pequeñas. Solo avísanos con 30 días de anticipación.',
+    q: '¿De dónde viene la cifra del 42%?',
+    a: 'Del piloto con fincas reales. Al centralizar registros, alertas y reportes en TerraCore, los administradores redujeron casi a la mitad el tiempo dedicado a tareas administrativas. Es el promedio de esas operaciones, no una promesa: tu mejora depende de cómo esté hoy tu finca.',
   },
 ];
