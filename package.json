@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:e2e": "serve dist -l 4321 --no-clipboard --no-port-switching",
     "astro": "astro",
     "typecheck": "astro check",
     "format": "prettier --write .",
@@ -15,7 +16,9 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@astrojs/netlify": "^8.1.2",
@@ -28,6 +31,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
@@ -39,6 +43,7 @@
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
+    "serve": "^14.2.6",
     "typescript": "^5.6.0",
     "vitest": "^4.1.10"
   }

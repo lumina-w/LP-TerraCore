@@ -16,9 +16,11 @@ pnpm run format:check # Prettier check (CI)
 pnpm run test          # Vitest unit tests (run once)
 pnpm run test:watch    # Vitest in watch mode
 pnpm run test:coverage # Vitest with coverage report
+pnpm run test:e2e      # Playwright E2E (builds + previews the site first)
+pnpm run test:e2e:ui   # Playwright E2E in UI mode
 ```
 
-Typecheck and unit tests are correctness gates; CI runs both (see `.github/workflows/ci.yml`).
+Typecheck, unit tests and E2E are all correctness gates; CI runs all three (see `.github/workflows/ci.yml`).
 
 ## Architecture
 
@@ -55,7 +57,7 @@ All JS is vanilla, written in Astro `<script>` blocks (no framework). Key patter
 - Mobile nav toggle in Header.astro uses `drawer.dataset.open` + aria attributes
 
 **Static data:**
-`src/utils/constants.ts` exports typed interfaces and arrays: `PLANS`, `PROBLEMS`, `FEATURES`, `FAQ`. Only `FAQ` is currently consumed (by `index.astro` to build the FAQPage JSON-LD); the section components still hold their copy inline. No CMS.
+`src/utils/constants.ts` is the source of truth for section data: it exports typed interfaces and arrays consumed by the sections that render them. `PLANS` → `Pricing.astro` (pricing cards), `IMPACT_ROWS` → `Impacto.astro` (before/after table), `BENEFITS` → `Benefits.astro` (why-TerraCore grid), and `FAQ` → `index.astro` (FAQPage JSON-LD). Note `FAQSection.astro` still holds its own visible FAQ copy inline, so `FAQ` in constants must stay in sync with it. No CMS.
 
 **Lead capture:**
 The `#demo` lead form (`ContactForm.astro`) submits directly to Supabase via the public anon key; no server endpoint involved. (A separate Brevo-backed waitlist endpoint + form used to live at `api/waitlist.ts` / `Pricing.astro`'s `.waitlist-form`, but no pricing plan ever enabled it, so it was removed as dead code.)
@@ -86,7 +88,8 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 - Unit tests (Vitest, `vitest.config.ts` uses Astro's `getViteConfig` so `@utils/*` aliases and `import.meta.env` resolve the same way they do in the app): colocated as `*.test.ts` next to the source file, e.g. `src/utils/cn.test.ts`.
 - If a test ever needs to cover a file under `src/pages/` (there are currently none there worth unit testing), don't colocate it as a sibling `*.test.ts`: Astro treats every file under `src/pages/` as a route, so a sibling test file gets built as a page and breaks the build. Put it in a `__tests__/` subfolder instead, Astro ignores paths starting with `_`.
 - DOM-dependent tests (anything touching `window`/`document`, e.g. `src/scripts/reveal.test.ts`, `src/utils/analytics.test.ts`) need a `// @vitest-environment jsdom` pragma at the top of the file; the default environment is `node`.
-- Unit tests run in CI (`.github/workflows/ci.yml`) in the `quality` job.
+- E2E tests (Playwright, `playwright.config.ts`) live in `e2e/*.spec.ts`. The config's `webServer` runs `pnpm run build && pnpm run preview` automatically, no need to start a server manually. Desktop-viewport specs run on the `chromium` project; `e2e/mobile-nav.spec.ts` is scoped to the `mobile-chromium` project (`testMatch`/`testIgnore` in the config) since the hamburger menu only exists below the `1000px` breakpoint.
+- Both suites run in CI (`.github/workflows/ci.yml`): unit tests in the `quality` job, E2E in its own `e2e` job (needs `playwright install --with-deps chromium`).
 
 ## Build & Deploy
 
@@ -99,3 +102,12 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 - No React, no client-side framework. All interactivity must be vanilla JS in `<script>` blocks.
 - `tailwind.config.mjs` and `tailwind.config.ts` both exist — `postcss.config.mjs` loads the `.mjs` version (PostCSS resolves `tailwind.config.mjs` by convention).
 - NEVER use the em-dash character (`—`) in user-facing UI copy (headings, leads, labels, button text, FAQ, plan descriptions, any rendered string). Use a comma, colon, period, or parentheses instead. This rule applies only to UI copy — em-dashes are fine in code comments and docs like this file.
+
+## Git conventions
+
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): description`, where the description is lowercase and in the imperative mood. The `scope` is optional but encouraged. There is no tooling that enforces this (no commitlint, husky, or commit hooks) — it is a convention, so keep to it manually.
+
+- Allowed `type` values seen in the history: `feat`, `fix`, `refactor`, `chore`, `docs`, `ci`, `seo`, `a11y`, `perf`, `test`, `style`, `build`.
+- Common scopes: the area touched (`pricing`, `data`, `env`, `deps`), lowercase kebab-case.
+- Examples: `feat(pricing): actualizar precios y planes`, `chore: migrate to pnpm`, `ci: fix prettier README error`.
+- Branch names follow `type/kebab-description` (e.g. `chore/pnpm-migration`, `chore/astro-v6-upgrade`).
