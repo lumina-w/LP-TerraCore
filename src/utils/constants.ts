@@ -15,7 +15,7 @@ export interface FaqItem {
 export const PLANS: Plan[] = [
   {
     name: 'Semilla',
-    target: 'Para fincas que quieren dejar de operar a ciegas.',
+    target: 'Para validar TerraCore en tu finca y dejar de operar a ciegas.',
     features: [
       '1 sede · 5 usuarios',
       'Gestión de Animales (CRUD + estado de salud)',
@@ -30,7 +30,8 @@ export const PLANS: Plan[] = [
   },
   {
     name: 'Profesional',
-    target: 'Para operaciones que necesitan saber qué genera y qué cuesta cada área.',
+    target:
+      'Para operaciones mixtas complejas que necesitan saber qué genera y qué cuesta cada área.',
     features: [
       'Todo lo de Semilla',
       '3 sedes · 15 usuarios',
@@ -47,7 +48,7 @@ export const PLANS: Plan[] = [
   },
   {
     name: 'Enterprise',
-    target: 'Para grupos empresariales y cooperativas.',
+    target: 'Para empresas con múltiples sedes, grupos empresariales y cooperativas.',
     features: [
       'Todo lo de Profesional',
       'Sedes y usuarios ilimitados',
