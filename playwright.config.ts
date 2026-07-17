@@ -23,9 +23,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // The @astrojs/netlify adapter does not support `astro preview`, so serve
-    // the static `dist/` output with `serve` instead. `serve` also streams
-    // dist/404.html for unknown routes (matching the deployed 404 behavior).
+    // `astro preview` serves its own generic 404 page for unmatched routes
+    // instead of the site's actual `dist/404.html` (verified: even with no
+    // adapter, `output: 'static'` still does this). `serve` streams the real
+    // `dist/404.html` instead, matching production Netlify hosting behavior.
     command: 'pnpm run build && pnpm run preview:e2e',
     url: 'http://localhost:4321/',
     reuseExistingServer: !process.env.CI,

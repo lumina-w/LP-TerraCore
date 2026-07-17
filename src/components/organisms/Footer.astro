@@ -1,6 +1,7 @@
 ---
 import Brand from '@molecules/Brand.astro';
 import { Icon } from 'astro-icon/components';
+import { WHATSAPP_NUMBER, WHATSAPP_DISPLAY, waLink } from '@utils/constants';
 ---
 
 <footer class="site-footer">
@@ -17,7 +18,7 @@ import { Icon } from 'astro-icon/components';
         <p class="foot-col-title">Navegación</p>
         <ul class="foot-links">
           <li><a href="/">Inicio</a></li>
-          <li><a href="/#beneficios">Features</a></li>
+          <li><a href="/#beneficios">Beneficios</a></li>
           <li><a href="/#precios">Precios</a></li>
           <li><a href="/#preguntas">Preguntas</a></li>
           <li><a href="/#demo">Contacto</a></li>
@@ -50,11 +51,11 @@ import { Icon } from 'astro-icon/components';
           <li>
             <Icon name="lucide:phone" width={20} height={20} aria-hidden="true" />
             <span class="sr-only">Teléfono: </span>
-            <a href="tel:+573108283088">+57 310 828 3088</a>
+            <a href={`tel:+${WHATSAPP_NUMBER}`}>{WHATSAPP_DISPLAY}</a>
           </li>
           <li>
             <Icon name="simple-icons:whatsapp" width={18} height={18} aria-hidden="true" />
-            <a href="https://wa.me/573108283088" target="_blank" rel="noopener noreferrer"
+            <a href={waLink()} target="_blank" rel="noopener noreferrer"
               >WhatsApp<span class="sr-only"> (abre en una pestaña nueva)</span></a
             >
           </li>

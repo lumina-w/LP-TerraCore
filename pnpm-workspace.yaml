@@ -2,3 +2,9 @@ allowBuilds:
   '@parcel/watcher': true
   esbuild: true
   sharp: true
+
+overrides:
+  # astro itself pulls unstorage -> @netlify/blobs -> @opentelemetry/core@2.7.1
+  # (a session-storage driver, unrelated to the @astrojs/netlify adapter we
+  # removed), vulnerable to GHSA-8988-4f7v-96qf. Force the patched line.
+  '@opentelemetry/core': '>=2.8.0'

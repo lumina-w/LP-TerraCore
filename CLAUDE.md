@@ -24,13 +24,13 @@ Typecheck, unit tests and E2E are all correctness gates; CI runs all three (see 
 
 ## Architecture
 
-Astro `static` output, no React. "Static" describes how the HTML is produced (pre-rendered at build time, no per-request server render), not whether the page has forms or interactivity, `ContactForm.astro`'s `#demo` form is fully functional on a static page because it POSTs client-side straight to Supabase's REST API with the public anon key; it never needed a server route. All routes are fully static: `index.astro` (landing), `terminos.astro`, `privacidad.astro`, `habeas-data.astro`, `404.astro`. Deployed via `@astrojs/netlify` adapter. Note: the adapter is currently configured but there are no `prerender = false` routes left in the app (the last one, `api/waitlist.ts`, was removed as dead code, see git history, it needed a server route specifically because it used a secret Brevo API key that can't be exposed client-side); the adapter is kept in case a future route needs SSR again, otherwise consider dropping it for a plain static deploy.
+Astro `static` output, no React, no adapter. "Static" describes how the HTML is produced (pre-rendered at build time, no per-request server render), not whether the page has forms or interactivity, `ContactForm.astro`'s `#demo` form is fully functional on a static page because it submits via Netlify Forms (detected at build time from the `data-netlify` attribute, no server route or third-party backend involved). All routes are fully static: `index.astro` (landing), `terminos.astro`, `privacidad.astro`, `habeas-data.astro`, `404.astro`. Deployed as a plain static site; there is no Astro adapter configured. (`@astrojs/netlify` was removed: the app has zero `prerender = false` routes — the last one, `api/waitlist.ts`, was removed as dead code, see git history, it needed a server route specifically because it used a secret Brevo API key that can't be exposed client-side — and Netlify Forms works from static HTML output alone, no adapter required. Note `astro` itself still pulls in `unstorage` → `@netlify/blobs` as an optional session-storage driver regardless of adapter, which is why `pnpm-workspace.yaml` still carries an `@opentelemetry/core` override for a known CVE in that chain.)
 
 **Render path:**
 `index.astro` → `BaseLayout.astro` (head, GA4, fonts, Header, Footer, skip link) → `LandingTemplate.astro` (assembles all sections) → organisms/molecules/atoms. Legal pages use `LegalLayout.astro`, which wraps `BaseLayout`.
 
 **Section order** (LandingTemplate):
-Hero → ProofStrip → Modules → Impacto → Showcase → Benefits → SecuritySection → Pricing → MetricsBand → CaseStudies → Testimonials → FAQSection → CTAFooter. MetricsBand, CaseStudies and Testimonials are validation-stage placeholders hidden (`display:none`) until real data exists.
+Hero → Impacto → ProofStrip → Modules → Showcase → Benefits → MetricsBand → CaseStudies → Testimonials → SecuritySection → Pricing → FAQSection → CTAFooter. Deliberate conversion-funnel ordering: hook (Hero) → agitate the pain (Impacto) → quick trust signal (ProofStrip) → explain the solution (Modules) → show it (Showcase) → differentiators (Benefits) → social proof (Metrics/CaseStudies/Testimonials, placed right before the price ask) → address the security/trust objection (SecuritySection) → price (Pricing, now trust-primed) → mop up remaining objections (FAQSection) → close (CTAFooter). MetricsBand, CaseStudies and Testimonials are validation-stage placeholders hidden (`display:none`) until real data exists.
 
 **Atomic design layers** — import aliases enforce the hierarchy:
 
@@ -57,10 +57,14 @@ All JS is vanilla, written in Astro `<script>` blocks (no framework). Key patter
 - Mobile nav toggle in Header.astro uses `drawer.dataset.open` + aria attributes
 
 **Static data:**
-`src/utils/constants.ts` is the source of truth for section data: it exports typed interfaces and arrays consumed by the sections that render them. `PLANS` → `Pricing.astro` (pricing cards), `IMPACT_ROWS` → `Impacto.astro` (before/after table), `BENEFITS` → `Benefits.astro` (why-TerraCore grid), and `FAQ` → `index.astro` (FAQPage JSON-LD). Note `FAQSection.astro` still holds its own visible FAQ copy inline, so `FAQ` in constants must stay in sync with it. No CMS.
+`src/utils/constants.ts` is the source of truth for section data: it exports typed interfaces and arrays consumed by the sections that render them. `PLANS` → `Pricing.astro` (pricing cards), `IMPACT_ROWS` → `Impacto.astro` (before/after table), `BENEFITS` → `Benefits.astro` (why-TerraCore grid), and `FAQ` → both `FAQSection.astro` (visible accordion, imports `FAQ` directly, no separate copy to keep in sync) and `index.astro` (FAQPage JSON-LD). It also exports `WHATSAPP_NUMBER`/`WHATSAPP_DISPLAY`/`waLink()`, the single source of truth for the contact WhatsApp number (see Environment variables below), consumed by every component that links to WhatsApp. No CMS.
 
 **Lead capture:**
-The `#demo` lead form (`ContactForm.astro`) submits directly to Supabase via the public anon key; no server endpoint involved. (A separate Brevo-backed waitlist endpoint + form used to live at `api/waitlist.ts` / `Pricing.astro`'s `.waitlist-form`, but no pricing plan ever enabled it, so it was removed as dead code.)
+The `#demo` lead form (`ContactForm.astro`) submits via Netlify Forms: the `<form>` carries `data-netlify="true"`, a hidden `form-name` input, and `data-netlify-honeypot="bot-field"`; submissions are handled entirely by Netlify (dashboard + email notifications), no server endpoint or third-party database involved. The form is submitted via `fetch()` (AJAX) rather than a native browser POST, so the JS also implements a client-side honeypot check and a minimum-fill-time check as a first line of defense before the request ever reaches Netlify. (A separate Brevo-backed waitlist endpoint + form used to live at `api/waitlist.ts` / `Pricing.astro`'s `.waitlist-form`, but no pricing plan ever enabled it, so it was removed as dead code. The form previously posted directly to Supabase; that was replaced by Netlify Forms since the project's Supabase backend was no longer active.)
+
+All three `PLANS` CTAs (`Pricing.astro`) route to `/#demo` (unified funnel, all leads land in the Netlify Forms dashboard). Each plan's `operationSize` field matches a `tamano_operacion` radio value in `ContactForm.astro` exactly; a delegated click listener on `.plans` (not the individual `.plan-cta` links, since the desktop-tablet breakpoint clones cards into an infinite slider) preselects that radio when a plan's CTA is clicked, so the demo request arrives pre-scoped to the plan the visitor was looking at.
+
+A `WhatsAppFloat.astro` organism renders in `BaseLayout.astro`, so it appears on every page (landing, legal pages, 404): a fixed-position button linking to `waLink('Hola, estoy interesado en TerraCore')` from `constants.ts`.
 
 **Analytics:**
 GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see `.prettierignore`). `window.trackEvent(name, params)` is available globally. `src/utils/analytics.ts` exports a typed `trackEvent` wrapper for use inside `<script>` blocks.
@@ -69,7 +73,8 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 
 - `PUBLIC_GA_ID` — GA4 measurement ID (optional; tracking disabled if absent)
 - `MAIN_CTA_URL` — primary CTA href (falls back to `/#demo` if absent)
-- `PUBLIC_SUPABASE_URL` / `PUBLIC_SUPABASE_ANON_KEY` — used by the `#demo` lead form (ContactForm.astro)
+- `PUBLIC_SITE_URL` — canonical site URL, read at build time in `astro.config.mjs` (falls back to `https://terracoreapp.co` if absent)
+- `CONTACT_WHATSAPP` — contact WhatsApp number, digits only with country code, no `+` (falls back to `573108283088` if absent). Single source of truth is `WHATSAPP_NUMBER`/`waLink()` in `src/utils/constants.ts`, consumed by `ContactForm.astro`, `Footer.astro`, the `Pricing.astro` plan CTAs, and the three legal pages, so the number is never hardcoded per-component.
 
 **Icons:** `astro-icon` with `@iconify-json/lucide` and `@iconify-json/simple-icons`. Usage: `<Icon name="lucide:check" width={18} height={18} />`; brand marks use the `simple-icons:` prefix (e.g. `simple-icons:whatsapp`).
 
@@ -82,6 +87,7 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 - `/videos/demo.mp4` — product demo video, H.264/AAC, faststart (referenced in Hero lightbox)
 - `/robots.txt` — points crawlers at `sitemap-index.xml`
 - `/llms.txt` — plain-text product/site summary for LLM crawlers
+- `/fonts/` — self-hosted Inter, JetBrains Mono, and Poppins woff2 files (latin + latin-ext subsets only). Declared via `@font-face` at the top of `globals.css`; replaced the previous Google Fonts CDN links in `BaseLayout.astro` to cut two extra origins off the critical rendering path. Re-fetch from `fonts.googleapis.com/css2` with a modern browser UA and re-download the referenced `.woff2` files if a font weight/style is ever added or changed.
 
 **Testing:**
 
@@ -93,9 +99,9 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 
 ## Build & Deploy
 
-`@astrojs/netlify` adapter; `netlify.toml` sets `command = "pnpm run build"`, `publish = "dist"`, `NODE_VERSION = 22`. `pnpm run build` emits static pages to `dist/`; the adapter still bundles its own internal SSR function under `.netlify/` (router fallback/middleware) even though the app has no `prerender = false` routes of its own, see Architecture above. `@astrojs/sitemap` generates `dist/sitemap-index.xml` during build. Set env vars in the Netlify panel. Package manager is pnpm (`pnpm-lock.yaml`, `packageManager` field in `package.json`); native build scripts (esbuild, sharp, @parcel/watcher) are allowlisted in `pnpm-workspace.yaml`.
+No Astro adapter; `netlify.toml` sets `command = "pnpm run build"`, `publish = "dist"`, `NODE_VERSION = 22`. `pnpm run build` emits plain static pages to `dist/`, Netlify serves them directly with no SSR function bundling. `@astrojs/sitemap` generates `dist/sitemap-index.xml` during build. Set env vars in the Netlify panel. Package manager is pnpm (`pnpm-lock.yaml`, `packageManager` field in `package.json`); native build scripts (esbuild, sharp, @parcel/watcher) are allowlisted in `pnpm-workspace.yaml`.
 
-The Playwright E2E `webServer` runs `pnpm run build && pnpm run preview:e2e`, **not** `pnpm run preview`: the `@astrojs/netlify` adapter refuses to run `astro preview` (the built-in command errors out under the adapter), so `preview:e2e` serves the static `dist/` with the `serve` package (`serve dist -l 4321`) instead, which the E2E `webServer` can start reliably.
+The Playwright E2E `webServer` runs `pnpm run build && pnpm run preview:e2e`, **not** `pnpm run preview`: `astro preview` serves its own generic 404 page for unmatched routes instead of the site's actual `dist/404.html`, so `preview:e2e` serves the static `dist/` with the `serve` package (`serve dist -l 4321`) instead, which streams the real `dist/404.html` and matches production Netlify hosting behavior.
 
 ## Key Constraints
 

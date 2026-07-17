@@ -5,6 +5,23 @@
 [build.environment]
   NODE_VERSION = "22"
   # PUBLIC_SITE_URL and CONTACT_WHATSAPP are public values (site domain +
-  # public WhatsApp shown on the page), not secrets. They are also unused in
-  # code. Excluded from Netlify secrets scanning to unblock the build.
+  # public WhatsApp shown on the page), not secrets, but their values are
+  # intentionally baked into the static build output (astro.config.mjs,
+  # src/utils/constants.ts), which trips Netlify's secrets scanner. Excluded
+  # from scanning to unblock the build.
   SECRETS_SCAN_OMIT_KEYS = "PUBLIC_SITE_URL,CONTACT_WHATSAPP"
+
+# Security headers for every response. script-src/style-src need 'unsafe-inline'
+# because the site has inline GA4 snippets, per-component inline event handlers
+# (onclick/onload), and inline style="" attributes throughout — nonces/hashes
+# aren't practical for a pre-rendered static build. Still meaningfully restricts
+# framing, plugins, and which origins can be loaded/connected to.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; media-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"

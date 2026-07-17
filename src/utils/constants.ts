@@ -5,6 +5,19 @@
 //   BENEFITS    -> Benefits.astro      (why-TerraCore grid)
 //   FAQ         -> FAQSection.astro (copy) + index.astro (FAQPage JSON-LD)
 
+// Single source of truth for the contact WhatsApp number, read at build time.
+export const WHATSAPP_NUMBER = import.meta.env.CONTACT_WHATSAPP || '573108283088';
+export const waLink = (text?: string) =>
+  text
+    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
+    : `https://wa.me/${WHATSAPP_NUMBER}`;
+// Human-readable "+57 XXX XXX XXXX" form for Colombian mobile numbers; falls
+// back to a plain "+<number>" if the value doesn't match that shape.
+const coMobileMatch = /^57(\d{3})(\d{3})(\d{4})$/.exec(WHATSAPP_NUMBER);
+export const WHATSAPP_DISPLAY = coMobileMatch
+  ? `+57 ${coMobileMatch[1]} ${coMobileMatch[2]} ${coMobileMatch[3]}`
+  : `+${WHATSAPP_NUMBER}`;
+
 export interface Plan {
   /** Plan name shown as the card eyebrow (e.g. "Semilla"). */
   name: string;
@@ -24,10 +37,13 @@ export interface Plan {
   features: string[];
   /** CTA button label. */
   cta: string;
-  /** CTA destination (external link). */
+  /** CTA destination. All plans route to the #demo lead form. */
   ctaHref: string;
   /** Highlights the card as "Recomendado". Exactly one plan should set this. */
   featured: boolean;
+  /** Must match a `tamano_operacion` radio value in ContactForm.astro exactly;
+   *  preselected when this plan's CTA is clicked. */
+  operationSize: string;
 }
 
 export const PLANS: Plan[] = [
@@ -52,9 +68,10 @@ export const PLANS: Plan[] = [
       'Dashboard (4 KPI principales)',
       'Implementación en 24 horas',
     ],
-    cta: 'Comenzar trial gratis',
-    ctaHref: 'https://app.terracoreapp.co/login',
+    cta: 'Quiero mi trial gratis',
+    ctaHref: '/#demo',
     featured: false,
+    operationSize: 'Pequeña (1 sede, hasta 5 personas)',
   },
   {
     name: 'Profesional',
@@ -74,10 +91,10 @@ export const PLANS: Plan[] = [
       'Dashboard avanzado (comparativos, tendencias)',
       'Implementación en 3 a 5 días',
     ],
-    cta: 'Quiero saber más',
-    ctaHref:
-      'https://wa.me/573108283088?text=Hola%2C%20quiero%20saber%20m%C3%A1s%20sobre%20el%20plan%20Profesional%20de%20TerraCore',
+    cta: 'Quiero el plan Profesional',
+    ctaHref: '/#demo',
     featured: true,
+    operationSize: 'Mediana (2 a 3 sedes, hasta 15 personas)',
   },
   {
     name: 'Enterprise',
@@ -99,10 +116,10 @@ export const PLANS: Plan[] = [
       'Revisiones trimestrales de optimización y roadmap',
       'Plazo de implementación personalizado',
     ],
-    cta: 'Contáctanos',
-    ctaHref:
-      'https://wa.me/573108283088?text=Hola%2C%20quiero%20conocer%20el%20plan%20Enterprise%20de%20TerraCore%20para%20mi%20operaci%C3%B3n',
+    cta: 'Quiero el plan Enterprise',
+    ctaHref: '/#demo',
     featured: false,
+    operationSize: 'Grande (varias sedes o grupo empresarial)',
   },
 ];
 
@@ -191,7 +208,7 @@ export const FAQ: FaqItem[] = [
   },
   {
     q: '¿Qué diferencia hay entre los planes?',
-    a: 'Semilla (1 sede, 5 usuarios) cubre animales, salud, producción, inventario y dashboard básico. Profesional (3 sedes, 15 usuarios) suma herramientas, costos y rentabilidad por lote, proveedores, dashboard avanzado, importación CSV y soporte prioritario. Enterprise añade sedes y usuarios ilimitados, vista consolidada multifinca, trazabilidad GlobalG.A.P., API y SLA prioritario. El detalle completo está en la sección de Planes.',
+    a: 'Semilla (1 sede, 5 usuarios) cubre animales, salud, producción, inventario y dashboard básico. Profesional (hasta 5 sedes, hasta 10 usuarios) suma herramientas, costos y rentabilidad por lote, proveedores y dashboard avanzado. Enterprise añade sedes y usuarios ilimitados, vista consolidada multifinca, reportes a medida, API y soporte prioritario. El detalle completo está en la sección de Planes.',
   },
   {
     q: '¿Puedo cancelar en cualquier momento?',

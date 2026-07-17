@@ -1,7 +1,11 @@
 ---
+import { getImage } from 'astro:assets';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import LandingTemplate from '@templates/LandingTemplate.astro';
 import { FAQ } from '@utils/constants';
+import dashboardScreenshot from '../assets/screens/dashboard-2.webp';
+
+const dashboardImage = await getImage({ src: dashboardScreenshot, width: 900 });
 
 const jsonLd = JSON.stringify([
   {
@@ -46,69 +50,69 @@ const jsonLd = JSON.stringify([
       'Plataforma de gestión agroindustrial para reducir pérdidas, controlar costos y decidir con datos reales. Funciona sin internet. En operaciones piloto en Urabá durante 2026, las fincas reportan reducciones de pérdidas de hasta el 42% en los primeros 6 meses; resultados iniciales que varían según el tamaño de la operación, la complejidad de la cadena de suministro y el nivel de adopción del equipo.',
     inLanguage: 'es-CO',
     image: 'https://terracoreapp.co/terracore.jpg',
-    screenshot: 'https://terracoreapp.co/screens/dashboard-2.webp',
+    screenshot: `https://terracoreapp.co${dashboardImage.src}`,
     cancellationNoticeRequired: 'P30D',
     provider: {
       '@type': 'Organization',
       name: 'TerraCore',
       url: 'https://terracoreapp.co',
     },
-    offers: {
-      '@type': 'AggregateOffer',
-      lowPrice: '2500000',
-      highPrice: '10000000',
-      priceCurrency: 'COP',
-      offerCount: 3,
-      description:
-        'Tres planes mensuales desde COP $2.500.000/mes según el tamaño de la operación.',
-      url: 'https://terracoreapp.co/#precios',
-      offers: [
-        {
-          '@type': 'Offer',
-          name: 'Plan Semilla',
+    offers: [
+      {
+        '@type': 'AggregateOffer',
+        lowPrice: '2500000',
+        highPrice: '10000000',
+        priceCurrency: 'COP',
+        offerCount: 3,
+        description:
+          'Tres planes mensuales desde COP $2.500.000/mes según el tamaño de la operación.',
+        url: 'https://terracoreapp.co/#precios',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Plan Semilla',
+        priceCurrency: 'COP',
+        price: '2500000',
+        category: 'subscription',
+        implementationTime: 'PT24H',
+        url: 'https://terracoreapp.co/#precios',
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
           priceCurrency: 'COP',
           price: '2500000',
-          category: 'subscription',
-          implementationTime: 'PT24H',
-          url: 'https://terracoreapp.co/#precios',
-          priceSpecification: {
-            '@type': 'UnitPriceSpecification',
-            priceCurrency: 'COP',
-            price: '2500000',
-            billingDuration: 'P1M',
-          },
+          billingDuration: 'P1M',
         },
-        {
-          '@type': 'Offer',
-          name: 'Plan Profesional',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Plan Profesional',
+        priceCurrency: 'COP',
+        price: '5000000',
+        category: 'subscription',
+        implementationTime: 'P5D',
+        url: 'https://terracoreapp.co/#precios',
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
           priceCurrency: 'COP',
           price: '5000000',
-          category: 'subscription',
-          implementationTime: 'P5D',
-          url: 'https://terracoreapp.co/#precios',
-          priceSpecification: {
-            '@type': 'UnitPriceSpecification',
-            priceCurrency: 'COP',
-            price: '5000000',
-            billingDuration: 'P1M',
-          },
+          billingDuration: 'P1M',
         },
-        {
-          '@type': 'Offer',
-          name: 'Plan Enterprise',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Plan Enterprise',
+        priceCurrency: 'COP',
+        price: '10000000',
+        category: 'subscription',
+        url: 'https://terracoreapp.co/#precios',
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
           priceCurrency: 'COP',
           price: '10000000',
-          category: 'subscription',
-          url: 'https://terracoreapp.co/#precios',
-          priceSpecification: {
-            '@type': 'UnitPriceSpecification',
-            priceCurrency: 'COP',
-            price: '10000000',
-            billingDuration: 'P1M',
-          },
+          billingDuration: 'P1M',
         },
-      ],
-    },
+      },
+    ],
   },
   {
     '@context': 'https://schema.org',
@@ -127,9 +131,9 @@ const jsonLd = JSON.stringify([
 ---
 
 <BaseLayout
-  title="TerraCore: Gestión agroindustrial para fincas medianas en Colombia"
+  title="TerraCore: software de gestión agroindustrial en Colombia"
   description="Centraliza la gestión de tu finca, funciona sin internet y convierte las pérdidas evitadas en retorno real. Diseñada para fincas medianas en Colombia."
-  preloadImage="/screens/dashboard-2.webp"
+  preloadImage={dashboardImage.src}
 >
   <script slot="head" is:inline type="application/ld+json" set:html={jsonLd} />
   <LandingTemplate />

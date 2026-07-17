@@ -2,6 +2,7 @@
 import '../styles/globals.css';
 import Header from '@organisms/Header.astro';
 import Footer from '@organisms/Footer.astro';
+import WhatsAppFloat from '@organisms/WhatsAppFloat.astro';
 
 interface Props {
   title: string;
@@ -40,27 +41,19 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     />
     <meta name="theme-color" content="#1b4332" />
     <link rel="icon" href="/logo.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Preload LCP image when provided by page -->
     {preloadImage && (
       <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
     )}
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;700&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;700&display=swap"
-      />
-    </noscript>
+    <!-- Self-hosted fonts (see globals.css @font-face) -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-normal-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-700-latin.woff2" crossorigin />
 
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
@@ -117,6 +110,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <Header />
     <slot />
     <Footer />
+    <WhatsAppFloat />
   </body>
 </html>
 

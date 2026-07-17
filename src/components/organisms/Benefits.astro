@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import Eyebrow from '@atoms/Eyebrow.astro';
 import { Icon } from 'astro-icon/components';
 import { BENEFITS as items } from '@utils/constants';
+import terracorePhoto from '../../assets/images/terracore.webp';
 ---
 
 <section class="section-pad benefits reveal" id="beneficios">
@@ -10,8 +12,8 @@ import { BENEFITS as items } from '@utils/constants';
       <div>
         <Eyebrow num="03">Por qué TerraCore</Eyebrow>
         <h2 class="display lg" style="margin-top:16px">
-          Construido desde el campo.<br />Para que pierdas <span style="color:var(--color-accent)"
-            >menos</span
+          Construido desde el campo.<br />Para que pierdas <span
+            style="color:var(--color-text-link)">menos</span
           > y controles más.
         </h2>
       </div>
@@ -41,12 +43,12 @@ import { BENEFITS as items } from '@utils/constants';
     <div class="split">
       <div>
         <div class="photo-card">
-          <img
-            src="/images/terracore.webp"
+          <Image
+            src={terracorePhoto}
             alt="TerraCore en la finca"
             class="photo-img"
-            width="821"
-            height="909"
+            widths={[400, 600, 821]}
+            sizes="(min-width: 880px) 500px, 100vw"
             loading="lazy"
             decoding="async"
           />
@@ -56,7 +58,7 @@ import { BENEFITS as items } from '@utils/constants';
       <div>
         <Eyebrow num="·">Resultado</Eyebrow>
         <h3 class="display md" style="margin:16px 0">
-          Menos planilla. <span style="color:var(--color-accent)">Más finca.</span>
+          Menos planilla. <span style="color:var(--color-text-link)">Más finca.</span>
         </h3>
         <p class="lead" style="margin-bottom:24px">
           El tiempo que se va en cuadernos, recibos y llamadas puede volver al campo. TerraCore
