@@ -110,7 +110,7 @@ Org-wide repository governance (branch protection / rulesets model, CI/CD harden
 
 ## Git conventions
 
-Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): description`, where the description is lowercase and in the imperative mood. The `scope` is optional but encouraged. There is no tooling that enforces this (no commitlint, husky, or commit hooks) — it is a convention, so keep to it manually.
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): description`, where the description is lowercase and in the imperative mood. The `scope` is optional but encouraged. This is enforced by `commitlint` in a `commit-msg` hook (via `lefthook`, config in `commitlint.config.js`), and PR titles are checked in CI (`.github/workflows/pr-title.yml`) since PRs are squash-merged. Git hooks install automatically on `pnpm install` (the `prepare` script runs `lefthook install`); `lefthook.yml` also wires a pre-commit hook that runs Prettier + ESLint on staged files.
 
 - Allowed `type` values seen in the history: `feat`, `fix`, `refactor`, `chore`, `docs`, `ci`, `seo`, `a11y`, `perf`, `test`, `style`, `build`.
 - Common scopes: the area touched (`pricing`, `data`, `env`, `deps`), lowercase kebab-case.
