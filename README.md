@@ -17,7 +17,7 @@ Landing page de **TerraCore** — plataforma colombiana de gestión agroindustri
 | Vitest           | 4.x     | Tests unitarios                             |
 | Playwright       | 1.x     | Tests E2E                                   |
 
-Output: `static`, todas las páginas son estáticas, sin adapter de Astro. "Estático" describe cómo se genera el HTML (pre-renderado en build, sin servidor armándolo por request), no si la página tiene forms o interactividad: el form `#demo` (`ContactForm.astro`) sigue funcionando normal porque se envía vía Netlify Forms (detectado en build a partir del atributo `data-netlify`), nunca necesitó ruta de servidor ni base de datos de terceros. No hay ninguna ruta `prerender = false` en la app (la única que había, `/api/waitlist`, necesitaba servidor porque usaba una API key secreta de Brevo que no se puede exponer en el cliente), así que se quitó el adapter `@astrojs/netlify`: Netlify sirve `dist/` directo, sin función SSR de por medio.
+Output: `static`, todas las páginas son estáticas, sin adapter de Astro. "Estático" describe cómo se genera el HTML (pre-renderado en build, sin servidor armándolo por request), no si la página tiene forms o interactividad: el form `#demo` (`ContactForm.astro`) sigue funcionando normal porque se envía vía Netlify Forms (detectado en build a partir del atributo `data-netlify`), nunca necesitó ruta de servidor ni base de datos de terceros. No hay ninguna ruta `prerender = false` en la app (la única que había, `/api/waitlist`, necesitaba servidor porque usaba una API key secreta de Brevo que no se puede exponer en el cliente), así que se quitó el adapter `@astrojs/netlify`: Netlify sirve `dist/` directo, sin función SSR de por medio. Si a futuro hace falta SSR, se re-agrega un adapter con `astro add netlify`.
 
 ---
 
@@ -100,11 +100,7 @@ src/
 │   └── globals.css         # Tokens de diseño, reset, utilidades globales
 └── utils/
     ├── constants.ts        # Datos estáticos: PLANS, PROBLEMS, FEATURES, FAQ
-    ├── constants.test.ts
-    ├── analytics.ts        # Wrapper tipado para window.trackEvent
-    ├── analytics.test.ts
-    ├── cn.ts               # Helper para concatenar clases
-    └── cn.test.ts
+    └── constants.test.ts
 e2e/                         # Tests E2E (Playwright)
 ├── landing.spec.ts
 ├── faq.spec.ts
@@ -138,7 +134,7 @@ public/
 
 - **Unit (Vitest)**: colocados como `*.test.ts` junto al archivo que prueban. Si algún día hay que testear algo bajo `src/pages/`, no lo coloques como `*.test.ts` hermano: Astro trata cualquier archivo suelto en `src/pages/` como una ruta y lo compilaría como página. Usa una carpeta `__tests__/` (empieza con `_`, que Astro ignora al enrutar).
 - Los tests que tocan `window`/`document` necesitan el pragma `// @vitest-environment jsdom` al inicio del archivo (el entorno por defecto es `node`).
-- **E2E (Playwright)**: en `e2e/*.spec.ts`. `playwright.config.ts` levanta el sitio solo (`pnpm run build && pnpm run preview`), no hace falta un servidor corriendo a mano. Antes de correrlos una vez: `pnpm exec playwright install chromium`.
+- **E2E (Playwright)**: en `e2e/*.spec.ts`. `playwright.config.ts` levanta el sitio solo (`pnpm run build && pnpm run preview:e2e`, no `pnpm run preview`: `astro preview` sirve su propia página 404 genérica en vez de `dist/404.html`, `preview:e2e` usa `serve` que sí sirve el 404 real, igual que Netlify en producción), no hace falta un servidor corriendo a mano. Antes de correrlos una vez: `pnpm exec playwright install chromium`.
 - CI corre ambas suites en `.github/workflows/ci.yml`: unitarios dentro del job `quality`, E2E en su propio job `e2e`.
 
 ---
@@ -160,6 +156,5 @@ El sitemap se genera automáticamente en `dist/sitemap-index.xml` durante `pnpm 
 ## Notas de configuración
 
 - `BaseLayout.astro` está excluido de Prettier (`.prettierignore`) porque Prettier 3 rompe la sintaxis `is:inline`. Editar manualmente.
-- Existen `tailwind.config.mjs` y `tailwind.config.ts` — Astro usa el `.mjs`. No borrar el `.ts`.
 - `src/utils/constants.ts` define `PLANS`, `PROBLEMS`, `FEATURES` y `FAQ` (en ese orden). Solo `FAQ` se consume hoy (en `index.astro`, para el JSON-LD de FAQPage); las secciones aún tienen su copy inline. `constants.ts` puede ser la fuente de verdad si se consolidan los datos.
 - `MetricsBand`, `CaseStudies` y `Testimonials` están en `LandingTemplate` pero ocultos (`display:none`) hasta tener datos reales de validación.
