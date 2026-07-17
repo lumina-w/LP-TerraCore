@@ -2,3 +2,9 @@ allowBuilds:
   '@parcel/watcher': true
   esbuild: true
   sharp: true
+
+# Force a patched @opentelemetry/core (>=2.8.0) into astro's transitive
+# dependency tree (astro > unstorage > @netlify/blobs > @netlify/otel).
+# Fixes GHSA-8988-4f7v-96qf (moderate DoS in W3C Baggage propagation).
+overrides:
+  '@opentelemetry/core': '>=2.8.0'
