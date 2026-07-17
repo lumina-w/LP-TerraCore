@@ -24,7 +24,7 @@ Typecheck, unit tests and E2E are all correctness gates; CI runs all three (see 
 
 ## Architecture
 
-Astro `static` output, no React. "Static" describes how the HTML is produced (pre-rendered at build time, no per-request server render), not whether the page has forms or interactivity, `ContactForm.astro`'s `#demo` form is fully functional on a static page because it POSTs client-side straight to Supabase's REST API with the public anon key; it never needed a server route. All routes are fully static: `index.astro` (landing), `terminos.astro`, `privacidad.astro`, `habeas-data.astro`, `404.astro`. Deployed via `@astrojs/netlify` adapter. Note: the adapter is currently configured but there are no `prerender = false` routes left in the app (the last one, `api/waitlist.ts`, was removed as dead code, see git history, it needed a server route specifically because it used a secret Brevo API key that can't be exposed client-side); the adapter is kept in case a future route needs SSR again, otherwise consider dropping it for a plain static deploy.
+Astro `static` output, no React. "Static" describes how the HTML is produced (pre-rendered at build time, no per-request server render), not whether the page has forms or interactivity, `ContactForm.astro`'s `#demo` form is fully functional on a static page because it POSTs client-side straight to Supabase's REST API with the public anon key; it never needed a server route. All routes are fully static: `index.astro` (landing), `terminos.astro`, `privacidad.astro`, `habeas-data.astro`, `404.astro`. Deployed as a plain static site (no adapter): `pnpm run build` emits static HTML to `dist/`, which Netlify publishes directly. The app has no `prerender = false` routes; the last one (`api/waitlist.ts`) was removed as dead code, see git history, it needed a server route specifically because it used a secret Brevo API key that can't be exposed client-side. The `@astrojs/netlify` adapter was dropped once that route was gone; if a future route needs SSR again, re-add an adapter (`astro add netlify`).
 
 **Render path:**
 `index.astro` → `BaseLayout.astro` (head, GA4, fonts, Header, Footer, skip link) → `LandingTemplate.astro` (assembles all sections) → organisms/molecules/atoms. Legal pages use `LegalLayout.astro`, which wraps `BaseLayout`.
@@ -39,7 +39,7 @@ Hero → ProofStrip → Modules → Impacto → Showcase → Benefits → Securi
 - `@organisms/*` — all page sections, including Hero, Header, Footer, FAQSection, CTAFooter
 - `@components/*` — catch-all root (ContactForm lives here)
 - `@templates/*` — LandingTemplate
-- `@utils/*` — constants, analytics, cn
+- `@utils/*` — constants
 - `@layouts/*` — BaseLayout, LegalLayout
 
 **Styling approach:**
@@ -63,7 +63,7 @@ All JS is vanilla, written in Astro `<script>` blocks (no framework). Key patter
 The `#demo` lead form (`ContactForm.astro`) submits directly to Supabase via the public anon key; no server endpoint involved. (A separate Brevo-backed waitlist endpoint + form used to live at `api/waitlist.ts` / `Pricing.astro`'s `.waitlist-form`, but no pricing plan ever enabled it, so it was removed as dead code.)
 
 **Analytics:**
-GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see `.prettierignore`). `window.trackEvent(name, params)` is available globally. `src/utils/analytics.ts` exports a typed `trackEvent` wrapper for use inside `<script>` blocks.
+GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see `.prettierignore`). `window.trackEvent(name, params)` is available globally (defined inline in `BaseLayout.astro`, with a no-op fallback when GA is absent); components call `window.trackEvent?.(...)` directly.
 
 **Environment variables** (see `.env.example`):
 
@@ -85,7 +85,7 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 
 **Testing:**
 
-- Unit tests (Vitest, `vitest.config.ts` uses Astro's `getViteConfig` so `@utils/*` aliases and `import.meta.env` resolve the same way they do in the app): colocated as `*.test.ts` next to the source file, e.g. `src/utils/cn.test.ts`.
+- Unit tests (Vitest, `vitest.config.ts` uses Astro's `getViteConfig` so `@utils/*` aliases and `import.meta.env` resolve the same way they do in the app): colocated as `*.test.ts` next to the source file, e.g. `src/utils/constants.test.ts`.
 - If a test ever needs to cover a file under `src/pages/` (there are currently none there worth unit testing), don't colocate it as a sibling `*.test.ts`: Astro treats every file under `src/pages/` as a route, so a sibling test file gets built as a page and breaks the build. Put it in a `__tests__/` subfolder instead, Astro ignores paths starting with `_`.
 - DOM-dependent tests (anything touching `window`/`document`, e.g. `src/scripts/reveal.test.ts`, `src/utils/analytics.test.ts`) need a `// @vitest-environment jsdom` pragma at the top of the file; the default environment is `node`.
 - E2E tests (Playwright, `playwright.config.ts`) live in `e2e/*.spec.ts`. The config's `webServer` runs `pnpm run build && pnpm run preview` automatically, no need to start a server manually. Desktop-viewport specs run on the `chromium` project; `e2e/mobile-nav.spec.ts` is scoped to the `mobile-chromium` project (`testMatch`/`testIgnore` in the config) since the hamburger menu only exists below the `1000px` breakpoint.
@@ -93,16 +93,15 @@ GA4 wired in BaseLayout via `is:inline` scripts (excluded from Prettier — see 
 
 ## Build & Deploy
 
-`@astrojs/netlify` adapter; `netlify.toml` sets `command = "pnpm run build"`, `publish = "dist"`, `NODE_VERSION = 22`. `pnpm run build` emits static pages to `dist/`; the adapter still bundles its own internal SSR function under `.netlify/` (router fallback/middleware) even though the app has no `prerender = false` routes of its own, see Architecture above. `@astrojs/sitemap` generates `dist/sitemap-index.xml` during build. Set env vars in the Netlify panel. Package manager is pnpm (`pnpm-lock.yaml`, `packageManager` field in `package.json`); native build scripts (esbuild, sharp, @parcel/watcher) are allowlisted in `pnpm-workspace.yaml`.
+Plain static deploy, no adapter; `netlify.toml` sets `command = "pnpm run build"`, `publish = "dist"`, `NODE_VERSION = 22`. `pnpm run build` emits static pages to `dist/`, which Netlify publishes as-is. `@astrojs/sitemap` generates `dist/sitemap-index.xml` during build. Set env vars in the Netlify panel. Package manager is pnpm (`pnpm-lock.yaml`, `packageManager` field in `package.json`); native build scripts (esbuild, sharp, @parcel/watcher) are allowlisted in `pnpm-workspace.yaml`.
 
-The Playwright E2E `webServer` runs `pnpm run build && pnpm run preview:e2e`, **not** `pnpm run preview`: the `@astrojs/netlify` adapter refuses to run `astro preview` (the built-in command errors out under the adapter), so `preview:e2e` serves the static `dist/` with the `serve` package (`serve dist -l 4321`) instead, which the E2E `webServer` can start reliably.
+The Playwright E2E `webServer` runs `pnpm run build && pnpm run preview:e2e`, which serves the static `dist/` with the `serve` package (`serve dist -l 4321`). `serve` streams `dist/404.html` for unknown routes, matching the deployed 404 behavior, so the E2E suite exercises the real not-found page.
 
 ## Key Constraints
 
 - `src/layouts/BaseLayout.astro` is excluded from Prettier (`.prettierignore`) because Prettier 3 mangles `is:inline` script syntax. Edit it manually.
 - `BaseLayout.astro` is also excluded from ESLint auto-fix for the same reason.
 - No React, no client-side framework. All interactivity must be vanilla JS in `<script>` blocks.
-- `tailwind.config.mjs` and `tailwind.config.ts` both exist — `postcss.config.mjs` loads the `.mjs` version (PostCSS resolves `tailwind.config.mjs` by convention).
 - NEVER use the em-dash character (`—`) in user-facing UI copy (headings, leads, labels, button text, FAQ, plan descriptions, any rendered string). Use a comma, colon, period, or parentheses instead. This rule applies only to UI copy — em-dashes are fine in code comments and docs like this file.
 
 ## Git conventions
