@@ -128,9 +128,16 @@ Con varias personas editando a la vez, para minimizar conflictos:
 - El gestor de paquetes es **pnpm** (fijado en `packageManager`). No uses npm ni
   yarn: romperías el lockfile.
 - Dependabot abre PRs semanales agrupados para npm y GitHub Actions
-  (`.github/dependabot.yml`). Revísalos y mergéalos con los checks en verde.
+  (`.github/dependabot.yml`). Los de tipo patch y minor se auto-aprueban y
+  auto-mergean al pasar los checks (`.github/workflows/dependabot-auto-merge.yml`);
+  los major requieren revisión humana.
 - CI corre `pnpm audit --audit-level=high`; un fallo de nivel alto o crítico
   bloquea el pipeline.
+
+## Seguridad
+
+¿Encontraste una vulnerabilidad? No abras un issue público: sigue `SECURITY.md`
+(GitHub Private Vulnerability Reporting o el correo de contacto).
 
 ## Licencia
 
