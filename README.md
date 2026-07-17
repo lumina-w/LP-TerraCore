@@ -6,19 +6,18 @@ Landing page de **TerraCore** — plataforma colombiana de gestión agroindustri
 
 ## Stack
 
-| Tecnología       | Versión | Uso                                           |
-| ---------------- | ------- | --------------------------------------------- |
-| Astro            | 7.0     | Framework SSG + SSR adapter                   |
-| Tailwind CSS     | 3.4     | Utilidades de estilos (PostCSS)               |
-| astro-icon       | 1.x     | Íconos (Lucide + Simple Icons)                |
-| @astrojs/netlify | 8.x     | Adapter de deploy (sin rutas SSR activas hoy) |
-| @astrojs/sitemap | 3.x     | Genera `sitemap-index.xml`                    |
-| TypeScript       | 5.6     | Tipado estático                               |
-| pnpm             | 11.x    | Gestor de paquetes                            |
-| Vitest           | 4.x     | Tests unitarios                               |
-| Playwright       | 1.x     | Tests E2E                                     |
+| Tecnología       | Versión | Uso                             |
+| ---------------- | ------- | ------------------------------- |
+| Astro            | 7.0     | Framework SSG (output estático) |
+| Tailwind CSS     | 3.4     | Utilidades de estilos (PostCSS) |
+| astro-icon       | 1.x     | Íconos (Lucide + Simple Icons)  |
+| @astrojs/sitemap | 3.x     | Genera `sitemap-index.xml`      |
+| TypeScript       | 5.6     | Tipado estático                 |
+| pnpm             | 11.x    | Gestor de paquetes              |
+| Vitest           | 4.x     | Tests unitarios                 |
+| Playwright       | 1.x     | Tests E2E                       |
 
-Output: `static`, todas las páginas son estáticas. "Estático" describe cómo se genera el HTML (pre-renderado en build, sin servidor armándolo por request), no si la página tiene forms o interactividad: el form `#demo` (`ContactForm.astro`) sigue funcionando normal porque hace `fetch()` desde el navegador directo a la API REST de Supabase con la key pública anónima, nunca necesitó ruta de servidor. El adapter de Netlify sigue configurado por si hace falta SSR a futuro, pero hoy no hay ninguna ruta `prerender = false` en la app (la única que había, `/api/waitlist`, necesitaba servidor porque usaba una API key secreta de Brevo que no se puede exponer en el cliente).
+Output: `static`, todas las páginas son estáticas. "Estático" describe cómo se genera el HTML (pre-renderado en build, sin servidor armándolo por request), no si la página tiene forms o interactividad: el form `#demo` (`ContactForm.astro`) sigue funcionando normal porque hace `fetch()` desde el navegador directo a la API REST de Supabase con la key pública anónima, nunca necesitó ruta de servidor. El sitio se despliega como estático plano, sin adapter: no hay ninguna ruta `prerender = false` en la app (la única que había, `/api/waitlist`, necesitaba servidor porque usaba una API key secreta de Brevo que no se puede exponer en el cliente, y se eliminó). Si a futuro hace falta SSR, se re-agrega un adapter con `astro add netlify`.
 
 ---
 
@@ -99,11 +98,7 @@ src/
 │   └── globals.css         # Tokens de diseño, reset, utilidades globales
 └── utils/
     ├── constants.ts        # Datos estáticos: PLANS, PROBLEMS, FEATURES, FAQ
-    ├── constants.test.ts
-    ├── analytics.ts        # Wrapper tipado para window.trackEvent
-    ├── analytics.test.ts
-    ├── cn.ts               # Helper para concatenar clases
-    └── cn.test.ts
+    └── constants.test.ts
 e2e/                         # Tests E2E (Playwright)
 ├── landing.spec.ts
 ├── faq.spec.ts
@@ -144,7 +139,7 @@ public/
 
 ## Deploy
 
-El proyecto usa el adapter `@astrojs/netlify`. El build genera las páginas estáticas en `dist/`; el adapter igual empaqueta su propia función interna en `.netlify/` (router fallback/middleware), aunque la app ya no tiene ninguna ruta propia con `prerender = false`.
+El sitio se despliega como estático plano (sin adapter). El build genera las páginas estáticas en `dist/`, que Netlify publica directamente.
 
 ```bash
 pnpm run build
@@ -159,6 +154,5 @@ El sitemap se genera automáticamente en `dist/sitemap-index.xml` durante `pnpm 
 ## Notas de configuración
 
 - `BaseLayout.astro` está excluido de Prettier (`.prettierignore`) porque Prettier 3 rompe la sintaxis `is:inline`. Editar manualmente.
-- Existen `tailwind.config.mjs` y `tailwind.config.ts` — Astro usa el `.mjs`. No borrar el `.ts`.
 - `src/utils/constants.ts` define `PLANS`, `PROBLEMS`, `FEATURES` y `FAQ` (en ese orden). Solo `FAQ` se consume hoy (en `index.astro`, para el JSON-LD de FAQPage); las secciones aún tienen su copy inline. `constants.ts` puede ser la fuente de verdad si se consolidan los datos.
 - `MetricsBand`, `CaseStudies` y `Testimonials` están en `LandingTemplate` pero ocultos (`display:none`) hasta tener datos reales de validación.
