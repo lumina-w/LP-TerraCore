@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { BENEFITS, FAQ, IMPACT_ROWS, PLANS } from './constants';
+import {
+  BENEFITS,
+  FAQ,
+  IMPACT_ROWS,
+  PLANS,
+  WHATSAPP_DISPLAY,
+  WHATSAPP_NUMBER,
+  waLink,
+} from './constants';
 
 describe('PLANS', () => {
   it('has at least one plan', () => {
@@ -70,5 +78,24 @@ describe('FAQ', () => {
   it('has no duplicate questions', () => {
     const questions = FAQ.map((f) => f.q);
     expect(new Set(questions).size).toBe(questions.length);
+  });
+});
+
+describe('waLink', () => {
+  it('builds a bare wa.me link when no text is given', () => {
+    expect(waLink()).toBe(`https://wa.me/${WHATSAPP_NUMBER}`);
+  });
+
+  it('appends the URL-encoded text when provided', () => {
+    expect(waLink('Hola, con espacios & símbolos')).toBe(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, con espacios & símbolos')}`,
+    );
+  });
+});
+
+describe('WHATSAPP_DISPLAY', () => {
+  it('is a non-empty string starting with +', () => {
+    expect(WHATSAPP_DISPLAY).toBeTruthy();
+    expect(WHATSAPP_DISPLAY.startsWith('+')).toBe(true);
   });
 });
