@@ -5,6 +5,7 @@ import { initReveal } from './reveal';
 class MockIntersectionObserver implements IntersectionObserver {
   readonly root = null;
   readonly rootMargin = '';
+  readonly scrollMargin = '';
   readonly thresholds: ReadonlyArray<number> = [];
   static instances: MockIntersectionObserver[] = [];
   observed: Element[] = [];
