@@ -15,6 +15,9 @@ pnpm install          # instalar dependencias (usa el lockfile)
 pnpm run dev          # servidor de desarrollo en localhost:4321
 ```
 
+`pnpm install` también instala los git hooks (script `prepare` → `lefthook install`).
+No hace falta ningún paso manual.
+
 La versión de Node es la que fija `.nvmrc` (Node 22). Si usas `nvm`, corre
 `nvm use` en la raíz del repo. El campo `engines` de `package.json` documenta
 el mismo rango, así que local, CI y Netlify no divergen.
@@ -34,6 +37,17 @@ pnpm run test:e2e      # Playwright (E2E; construye y sirve dist/ primero)
 Antes de empujar, corre al menos `pnpm run format:check`, `pnpm run lint` y
 `pnpm run typecheck`. CI ejecuta todo esto y además build y E2E; si fallan, el
 PR no se puede mergear.
+
+### Git hooks (automáticos)
+
+`lefthook` corre en cada commit sin que tengas que acordarte:
+
+- **pre-commit**: Prettier y ESLint sobre los archivos en stage (los arregla y
+  re-agrega). `BaseLayout.astro` queda excluido (se edita a mano).
+- **commit-msg**: `commitlint` valida que el mensaje siga Conventional Commits.
+
+Si un hook estorba en un caso puntual, `git commit --no-verify` lo salta, pero
+CI volverá a checar lo mismo, así que úsalo con criterio.
 
 ## Convención de commits
 
@@ -81,9 +95,9 @@ ci: añadir permissions y timeouts a los workflows
 docs: documentar convención de commits
 ```
 
-> La convención es manual: no hay commitlint ni hooks que la fuercen. Respétala
-> a mano. Si el equipo crece y se vuelve difícil de sostener, el siguiente paso
-> natural es añadir `commitlint` + un hook de pre-commit (husky o lefthook).
+> La convención se enforca con `commitlint` en el hook `commit-msg` (ver Git
+> hooks arriba) y, para PRs con squash, con el check "Validate PR title" en CI
+> (el título del PR es el mensaje del commit final en `main`).
 
 ## Ramas y flujo de trabajo
 
@@ -91,7 +105,9 @@ docs: documentar convención de commits
   `chore/pnpm-migration`, `fix/mobile-nav-overlap`.
 - Los Pull Requests apuntan a `main`.
 - Un PR debería tener los checks de CI en verde antes de mergear
-  (Format & Lint, Build, E2E, Lighthouse).
+  (Format & Lint, Build, E2E, Lighthouse, Validate PR title). El job
+  Format & Lint incluye el gate de cobertura (`test:coverage`).
+- El **título del PR** debe seguir Conventional Commits (se mergea con squash).
 
 ### Trabajando en simultáneo
 
@@ -112,9 +128,16 @@ Con varias personas editando a la vez, para minimizar conflictos:
 - El gestor de paquetes es **pnpm** (fijado en `packageManager`). No uses npm ni
   yarn: romperías el lockfile.
 - Dependabot abre PRs semanales agrupados para npm y GitHub Actions
-  (`.github/dependabot.yml`). Revísalos y mergéalos con los checks en verde.
+  (`.github/dependabot.yml`). Los de tipo patch y minor se auto-aprueban y
+  auto-mergean al pasar los checks (`.github/workflows/dependabot-auto-merge.yml`);
+  los major requieren revisión humana.
 - CI corre `pnpm audit --audit-level=high`; un fallo de nivel alto o crítico
   bloquea el pipeline.
+
+## Seguridad
+
+¿Encontraste una vulnerabilidad? No abras un issue público: sigue `SECURITY.md`
+(GitHub Private Vulnerability Reporting o el correo de contacto).
 
 ## Licencia
 

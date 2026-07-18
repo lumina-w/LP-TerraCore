@@ -1,0 +1,7 @@
+# Code owners: auto-solicita review del dueño del área en cada PR.
+# Sintaxis: https://docs.github.com/articles/about-code-owners
+# El auto-request funciona siempre; para *exigir* su aprobación, activa
+# "Require review from Code Owners" en el ruleset del repo.
+
+# Dueño por defecto de todo el repositorio.
+* @wavival
