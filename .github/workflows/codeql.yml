@@ -1,0 +1,49 @@
+name: CodeQL
+
+# SAST con CodeQL para JavaScript/TypeScript.
+#
+# IMPORTANTE: el code scanning de CodeQL en un repositorio PRIVADO de
+# organización requiere GitHub Advanced Security (GHAS). En el plan actual
+# fallaría. Por eso este workflow está gateado a ejecución MANUAL
+# (workflow_dispatch) y no corre en cada push/PR.
+#
+# Para activarlo por completo cuando tengan GHAS (o si el repo se hace público),
+# descomenta el bloque `push` / `pull_request` / `schedule` de abajo.
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  # pull_request:
+  #   branches: [main]
+  # schedule:
+  #   - cron: '0 6 * * 1' # lunes 06:00 UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (JS/TS)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-and-quality
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:javascript-typescript'

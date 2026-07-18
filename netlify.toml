@@ -3,7 +3,7 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "22"
+  # Node version comes from .nvmrc (single source of truth); Netlify reads it.
   # PUBLIC_SITE_URL and CONTACT_WHATSAPP are public values (site domain +
   # public WhatsApp shown on the page), not secrets, but their values are
   # intentionally baked into the static build output (astro.config.mjs,

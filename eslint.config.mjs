@@ -5,7 +5,15 @@ import astroPlugin from 'eslint-plugin-astro';
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', '.astro/**'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      '.astro/**',
+      'coverage/**',
+      'test-results/**',
+      'playwright-report/**',
+      '.lighthouseci/**',
+    ],
   },
 
   // TypeScript files

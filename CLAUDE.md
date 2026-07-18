@@ -110,9 +110,13 @@ The Playwright E2E `webServer` runs `pnpm run build && pnpm run preview:e2e`, **
 - No React, no client-side framework. All interactivity must be vanilla JS in `<script>` blocks.
 - NEVER use the em-dash character (`—`) in user-facing UI copy (headings, leads, labels, button text, FAQ, plan descriptions, any rendered string). Use a comma, colon, period, or parentheses instead. This rule applies only to UI copy — em-dashes are fine in code comments and docs like this file.
 
+## Governance
+
+Org-wide repository governance (branch protection / rulesets model, CI/CD hardening standard, commit conventions, licensing, security) lives in `docs/GOVERNANCE.md`. It is written as the Lumina W organization standard (not terracore-specific); the canonical copy is intended for the `lumina-w/.github` repo so every product inherits it. Apply it when setting up CI, workflows, or repo governance here.
+
 ## Git conventions
 
-Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): description`, where the description is lowercase and in the imperative mood. The `scope` is optional but encouraged. There is no tooling that enforces this (no commitlint, husky, or commit hooks) — it is a convention, so keep to it manually.
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): description`, where the description is lowercase and in the imperative mood. The `scope` is optional but encouraged. This is enforced by `commitlint` in a `commit-msg` hook (via `lefthook`, config in `commitlint.config.js`), and PR titles are checked in CI (`.github/workflows/pr-title.yml`) since PRs are squash-merged. Git hooks install automatically on `pnpm install` (the `prepare` script runs `lefthook install`); `lefthook.yml` also wires a pre-commit hook that runs Prettier + ESLint on staged files.
 
 - Allowed `type` values seen in the history: `feat`, `fix`, `refactor`, `chore`, `docs`, `ci`, `seo`, `a11y`, `perf`, `test`, `style`, `build`.
 - Common scopes: the area touched (`pricing`, `data`, `env`, `deps`), lowercase kebab-case.
