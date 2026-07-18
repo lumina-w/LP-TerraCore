@@ -8,7 +8,7 @@ import { PLANS as plans } from '@utils/constants';
   <div class="container">
     <div class="section-head">
       <div>
-        <Eyebrow num="04">Precios</Eyebrow>
+        <Eyebrow num="05">Precios</Eyebrow>
         <h2 class="display lg" style="margin-top:16px">
           Tres planes. <span class="accent-text">Sin sorpresas.</span>
         </h2>
@@ -69,9 +69,8 @@ import { PLANS as plans } from '@utils/constants';
                   </ul>
                   <a
                     href={p.ctaHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${p.cta}, plan ${p.name} (abre en una pestaña nueva)`}
+                    data-plan-size={p.operationSize}
+                    aria-label={`${p.cta}, plan ${p.name}`}
                     class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'plan-cta']}
                   >
                     {p.cta}
@@ -294,11 +293,26 @@ import { PLANS as plans } from '@utils/constants';
     if (pauseBtn) pauseBtn.hidden = false;
     startTimer();
   }
+
+  // Preselect the matching "tamaño de operación" radio in the #demo form when
+  // a plan CTA is clicked. Delegated on .plans (not the individual .plan-cta
+  // links) because the infinite slider clones plan cards into the DOM.
+  plansEl?.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('.plan-cta');
+    const size = link?.dataset.planSize;
+    if (!size) return;
+    const radio = document.querySelector<HTMLInputElement>(
+      `input[name="tamano_operacion"][value="${CSS.escape(size)}"]`,
+    );
+    if (!radio) return;
+    radio.checked = true;
+    radio.dispatchEvent(new Event('change', { bubbles: true }));
+  });
 </script>
 
 <style>
   .accent-text {
-    color: var(--color-accent);
+    color: var(--color-text-link);
   }
 
   .pricing {
@@ -556,8 +570,11 @@ import { PLANS as plans } from '@utils/constants';
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-accent);
+    color: var(--color-text-link);
     font-weight: 700;
+  }
+  .plan--featured .plan-name {
+    color: var(--color-accent-on-dark);
   }
 
   .plan__title {
@@ -634,13 +651,13 @@ import { PLANS as plans } from '@utils/constants';
   .price-value-note {
     font-size: 12px;
     line-height: 1.4;
-    color: var(--color-accent);
+    color: var(--color-text-link);
     font-weight: 600;
     margin: 8px 0 0;
   }
 
   .plan--featured .price-value-note {
-    color: var(--color-accent);
+    color: var(--color-accent-on-dark);
   }
 
   .plan--featured .price-suffix {

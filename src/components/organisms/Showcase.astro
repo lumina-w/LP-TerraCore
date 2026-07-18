@@ -1,51 +1,59 @@
 ---
 import Eyebrow from '@atoms/Eyebrow.astro';
+import { getImage } from 'astro:assets';
 
-const tabData = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    images: ['/screens/dashboard-1.webp', '/screens/dashboard-2.webp'],
-  },
-  {
-    id: 'animales',
-    label: 'Animales',
-    images: ['/screens/animales-1.webp', '/screens/animales-2.webp', '/screens/animales-3.webp'],
-  },
+const screenshots = import.meta.glob<{ default: ImageMetadata }>('../../assets/screens/*.webp', {
+  eager: true,
+});
+
+function screenshot(name: string): ImageMetadata {
+  return screenshots[`../../assets/screens/${name}.webp`]!.default;
+}
+
+const RAW_TABS = [
+  { id: 'dashboard', label: 'Dashboard', images: ['dashboard-1', 'dashboard-2'] },
+  { id: 'animales', label: 'Animales', images: ['animales-1', 'animales-2', 'animales-3'] },
   {
     id: 'insumos',
     label: 'Insumos',
-    images: [
-      '/screens/insumos-1.webp',
-      '/screens/insumos-2.webp',
-      '/screens/insumos-3.webp',
-      '/screens/insumos-4.webp',
-      '/screens/insumos-5.webp',
-    ],
+    images: ['insumos-1', 'insumos-2', 'insumos-3', 'insumos-4', 'insumos-5'],
   },
   {
     id: 'produccion',
     label: 'Producción',
-    images: [
-      '/screens/produccion-1.webp',
-      '/screens/produccion-2.webp',
-      '/screens/produccion-3.webp',
-      '/screens/produccion-4.webp',
-    ],
+    images: ['produccion-1', 'produccion-2', 'produccion-3', 'produccion-4'],
   },
   {
     id: 'salud',
     label: 'Salud Animal',
     images: [
-      '/screens/salud-animal-1.webp',
-      '/screens/salud-animal-2.webp',
-      '/screens/salud-animal-3.webp',
-      '/screens/salud-animal-4.webp',
-      '/screens/salud-animal-5.webp',
-      '/screens/salud-animal-6.webp',
+      'salud-animal-1',
+      'salud-animal-2',
+      'salud-animal-3',
+      'salud-animal-4',
+      'salud-animal-5',
+      'salud-animal-6',
     ],
   },
 ];
+
+// Pre-optimize every screenshot at build time (responsive widths, re-encoded
+// webp) instead of serving the full-size /public originals to every viewport.
+const tabData = await Promise.all(
+  RAW_TABS.map(async (t) => ({
+    ...t,
+    images: await Promise.all(
+      t.images.map(async (name) => {
+        const img = await getImage({
+          src: screenshot(name),
+          widths: [640, 900, 1200],
+          format: 'webp',
+        });
+        return { src: img.src, srcset: img.srcSet.attribute };
+      }),
+    ),
+  })),
+);
 ---
 
 <section class="showcase reveal" id="producto">
@@ -94,7 +102,9 @@ const tabData = [
       <img
         id="showcase-img"
         class="showcase-img is-active"
-        src={tabData[0]!.images[0]}
+        src={tabData[0]!.images[0]!.src}
+        srcset={tabData[0]!.images[0]!.srcset}
+        sizes="(min-width: 1024px) 900px, 100vw"
         alt={`TerraCore | ${tabData[0]!.label}`}
         width="1200"
         height="750"
@@ -103,8 +113,11 @@ const tabData = [
       />
       <img
         class="showcase-img"
+        src={tabData[0]!.images[0]!.src}
+        srcset={tabData[0]!.images[0]!.srcset}
         width="1200"
         height="750"
+        sizes="(min-width: 1024px) 900px, 100vw"
         alt=""
         aria-hidden="true"
         decoding="async"
@@ -151,32 +164,23 @@ const tabData = [
   </div>
 </section>
 
+<script type="application/json" id="showcase-data" is:inline set:html={JSON.stringify(tabData)} />
+
 <script>
-  const TABS: Record<string, string[]> = {
-    dashboard: ['/screens/dashboard-1.webp', '/screens/dashboard-2.webp'],
-    animales: ['/screens/animales-1.webp', '/screens/animales-2.webp', '/screens/animales-3.webp'],
-    insumos: [
-      '/screens/insumos-1.webp',
-      '/screens/insumos-2.webp',
-      '/screens/insumos-3.webp',
-      '/screens/insumos-4.webp',
-      '/screens/insumos-5.webp',
-    ],
-    produccion: [
-      '/screens/produccion-1.webp',
-      '/screens/produccion-2.webp',
-      '/screens/produccion-3.webp',
-      '/screens/produccion-4.webp',
-    ],
-    salud: [
-      '/screens/salud-animal-1.webp',
-      '/screens/salud-animal-2.webp',
-      '/screens/salud-animal-3.webp',
-      '/screens/salud-animal-4.webp',
-      '/screens/salud-animal-5.webp',
-      '/screens/salud-animal-6.webp',
-    ],
-  };
+  interface ShowcaseImage {
+    src: string;
+    srcset: string;
+  }
+  interface ShowcaseTab {
+    id: string;
+    label: string;
+    images: ShowcaseImage[];
+  }
+
+  const data: ShowcaseTab[] = JSON.parse(document.getElementById('showcase-data')!.textContent!);
+  const TABS: Record<string, ShowcaseImage[]> = Object.fromEntries(
+    data.map((t) => [t.id, t.images]),
+  );
 
   const INTERVAL = 3000;
 
@@ -202,13 +206,14 @@ const tabData = [
 
   let swapToken = 0;
 
-  async function fadeSwap(src: string, label: string) {
+  async function fadeSwap(image: ShowcaseImage, label: string) {
     const cur = layers.find((l) => l.classList.contains('is-active')) ?? layers[0]!;
     const next = layers.find((l) => l !== cur)!;
-    if (cur.currentSrc.endsWith(src) || cur.src.endsWith(src)) return;
+    if (cur.currentSrc.endsWith(image.src) || cur.src.endsWith(image.src)) return;
 
     const token = ++swapToken;
-    next.src = src;
+    next.srcset = image.srcset;
+    next.src = image.src;
     next.alt = `TerraCore | ${label}`;
     try {
       await next.decode();
@@ -526,7 +531,7 @@ const tabData = [
     font-family: var(--font-display);
     font-size: 12px;
     letter-spacing: 0.12em;
-    color: var(--color-accent);
+    color: var(--color-accent-on-dark);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     margin-bottom: 8px;

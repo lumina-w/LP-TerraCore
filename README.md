@@ -6,18 +6,18 @@ Landing page de **TerraCore** — plataforma colombiana de gestión agroindustri
 
 ## Stack
 
-| Tecnología       | Versión | Uso                             |
-| ---------------- | ------- | ------------------------------- |
-| Astro            | 7.0     | Framework SSG (output estático) |
-| Tailwind CSS     | 3.4     | Utilidades de estilos (PostCSS) |
-| astro-icon       | 1.x     | Íconos (Lucide + Simple Icons)  |
-| @astrojs/sitemap | 3.x     | Genera `sitemap-index.xml`      |
-| TypeScript       | 5.6     | Tipado estático                 |
-| pnpm             | 11.x    | Gestor de paquetes              |
-| Vitest           | 4.x     | Tests unitarios                 |
-| Playwright       | 1.x     | Tests E2E                       |
+| Tecnología       | Versión | Uso                                         |
+| ---------------- | ------- | ------------------------------------------- |
+| Astro            | 7.0     | Framework SSG, output estático, sin adapter |
+| Tailwind CSS     | 3.4     | Utilidades de estilos (PostCSS)             |
+| astro-icon       | 1.x     | Íconos (Lucide + Simple Icons)              |
+| @astrojs/sitemap | 3.x     | Genera `sitemap-index.xml`                  |
+| TypeScript       | 5.6     | Tipado estático                             |
+| pnpm             | 11.x    | Gestor de paquetes                          |
+| Vitest           | 4.x     | Tests unitarios                             |
+| Playwright       | 1.x     | Tests E2E                                   |
 
-Output: `static`, todas las páginas son estáticas. "Estático" describe cómo se genera el HTML (pre-renderado en build, sin servidor armándolo por request), no si la página tiene forms o interactividad: el form `#demo` (`ContactForm.astro`) sigue funcionando normal porque hace `fetch()` desde el navegador directo a la API REST de Supabase con la key pública anónima, nunca necesitó ruta de servidor. El sitio se despliega como estático plano, sin adapter: no hay ninguna ruta `prerender = false` en la app (la única que había, `/api/waitlist`, necesitaba servidor porque usaba una API key secreta de Brevo que no se puede exponer en el cliente, y se eliminó). Si a futuro hace falta SSR, se re-agrega un adapter con `astro add netlify`.
+Output: `static`, todas las páginas son estáticas, sin adapter de Astro. "Estático" describe cómo se genera el HTML (pre-renderado en build, sin servidor armándolo por request), no si la página tiene forms o interactividad: el form `#demo` (`ContactForm.astro`) sigue funcionando normal porque se envía vía Netlify Forms (detectado en build a partir del atributo `data-netlify`), nunca necesitó ruta de servidor ni base de datos de terceros. No hay ninguna ruta `prerender = false` en la app (la única que había, `/api/waitlist`, necesitaba servidor porque usaba una API key secreta de Brevo que no se puede exponer en el cliente), así que se quitó el adapter `@astrojs/netlify`: Netlify sirve `dist/` directo, sin función SSR de por medio. Si a futuro hace falta SSR, se re-agrega un adapter con `astro add netlify`.
 
 ---
 
@@ -43,9 +43,11 @@ Copiar `.env.example` y completar:
 ```env
 PUBLIC_GA_ID=G-XXXXXXXXXX        # Google Analytics 4 (opcional; tracking desactivado si está vacío)
 MAIN_CTA_URL=/#demo                      # URL destino de los botones CTA (default /#demo)
-PUBLIC_SUPABASE_URL=https://xxxx.supabase.co   # Form #demo (ContactForm.astro)
-PUBLIC_SUPABASE_ANON_KEY=eyJ...                # Form #demo
+PUBLIC_SITE_URL=https://terracoreapp.co  # URL canónica del sitio (default https://terracoreapp.co)
+CONTACT_WHATSAPP=573108283088            # Número de WhatsApp de contacto, solo dígitos (default 573108283088)
 ```
+
+El form `#demo` (`ContactForm.astro`) no necesita variables de entorno propias: se envía vía Netlify Forms, sin backend ni credenciales de terceros. `CONTACT_WHATSAPP` sí lo usa: es la fuente única del número de WhatsApp para todo el sitio (`WHATSAPP_NUMBER`/`waLink()` en `src/utils/constants.ts`), nada queda hardcodeado por componente.
 
 `PUBLIC_*` quedan expuestas en el bundle del cliente.
 
@@ -78,7 +80,7 @@ pnpm run test:e2e:ui    # Playwright en modo UI
 ```
 src/
 ├── components/
-│   ├── ContactForm.astro   # Form #demo (Supabase)
+│   ├── ContactForm.astro   # Form #demo (Netlify Forms)
 │   ├── atoms/          # Eyebrow
 │   ├── molecules/      # Brand, FloatChip
 │   ├── organisms/      # Secciones de página, incluye Header/Footer
@@ -132,20 +134,20 @@ public/
 
 - **Unit (Vitest)**: colocados como `*.test.ts` junto al archivo que prueban. Si algún día hay que testear algo bajo `src/pages/`, no lo coloques como `*.test.ts` hermano: Astro trata cualquier archivo suelto en `src/pages/` como una ruta y lo compilaría como página. Usa una carpeta `__tests__/` (empieza con `_`, que Astro ignora al enrutar).
 - Los tests que tocan `window`/`document` necesitan el pragma `// @vitest-environment jsdom` al inicio del archivo (el entorno por defecto es `node`).
-- **E2E (Playwright)**: en `e2e/*.spec.ts`. `playwright.config.ts` levanta el sitio solo (`pnpm run build && pnpm run preview`), no hace falta un servidor corriendo a mano. Antes de correrlos una vez: `pnpm exec playwright install chromium`.
+- **E2E (Playwright)**: en `e2e/*.spec.ts`. `playwright.config.ts` levanta el sitio solo (`pnpm run build && pnpm run preview:e2e`, no `pnpm run preview`: `astro preview` sirve su propia página 404 genérica en vez de `dist/404.html`, `preview:e2e` usa `serve` que sí sirve el 404 real, igual que Netlify en producción), no hace falta un servidor corriendo a mano. Antes de correrlos una vez: `pnpm exec playwright install chromium`.
 - CI corre ambas suites en `.github/workflows/ci.yml`: unitarios dentro del job `quality`, E2E en su propio job `e2e`.
 
 ---
 
 ## Deploy
 
-El sitio se despliega como estático plano (sin adapter). El build genera las páginas estáticas en `dist/`, que Netlify publica directamente.
+El proyecto es 100% estático, sin adapter de Astro. El build genera las páginas en `dist/` y Netlify las sirve directo, sin ninguna función SSR de por medio.
 
 ```bash
 pnpm run build
 ```
 
-Netlify ejecuta el build y despliega automáticamente. Las variables de entorno deben configurarse en el panel de Netlify (Site settings → Environment variables): `PUBLIC_GA_ID`, `MAIN_CTA_URL`, `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`.
+Netlify ejecuta el build y despliega automáticamente. Las variables de entorno deben configurarse en el panel de Netlify (Site settings → Environment variables): `PUBLIC_GA_ID`, `MAIN_CTA_URL`, `PUBLIC_SITE_URL`, `CONTACT_WHATSAPP`. Las submissions del form `#demo` llegan directo a Site settings → Forms, sin variables adicionales.
 
 El sitemap se genera automáticamente en `dist/sitemap-index.xml` durante `pnpm run build`.
 

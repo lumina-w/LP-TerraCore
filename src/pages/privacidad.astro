@@ -1,14 +1,15 @@
 ---
 import LegalLayout from '@layouts/LegalLayout.astro';
 import { Icon } from 'astro-icon/components';
+import { waLink } from '@utils/constants';
 
 const email = 'contact@luminaw.co';
-const whatsapp = 'https://wa.me/573108283088';
+const whatsapp = waLink();
 ---
 
 <LegalLayout
-  title="Política de Privacidad · TerraCore"
-  description="Política de privacidad y tratamiento de datos personales de TerraCore conforme a la Ley 1581 de 2012. Lúmina W, Colombia."
+  title="Política de Privacidad y tratamiento de datos · TerraCore"
+  description="Política de privacidad y tratamiento de datos personales de TerraCore, operada por Lúmina W en Colombia, conforme a la Ley 1581 de 2012 de protección de datos."
 >
   <!-- ── Hero ── -->
   <section class="terms-hero reveal">
@@ -293,27 +294,12 @@ const whatsapp = 'https://wa.me/573108283088';
             <div class="def-block">
               <dl>
                 <div>
-                  <dt>Brevo <span class="doc-tag">correos</span></dt>
+                  <dt>Netlify <span class="doc-tag">formulario de contacto</span></dt>
                   <dd>
-                    Utilizamos Brevo para correos transaccionales (confirmación, restablecimiento de
-                    contraseña y notificaciones del servicio). Consulta su <a
+                    Utilizamos Netlify Forms para recibir y almacenar la información que envías en
+                    el formulario de contacto de este sitio. Consulta su <a
                       class="tc-link"
-                      href="https://www.brevo.com/legal/privacypolicy/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >política de privacidad<span class="sr-only">
-                        (abre en una pestaña nueva)</span
-                      ></a
-                    >.
-                  </dd>
-                </div>
-                <div>
-                  <dt>Supabase <span class="doc-tag">base de datos</span></dt>
-                  <dd>
-                    Utilizamos Supabase como infraestructura de base de datos para almacenar la
-                    información de la plataforma. Consulta su <a
-                      class="tc-link"
-                      href="https://supabase.com/privacy"
+                      href="https://www.netlify.com/privacy/"
                       target="_blank"
                       rel="noopener noreferrer"
                       >política de privacidad<span class="sr-only">
@@ -329,15 +315,11 @@ const whatsapp = 'https://wa.me/573108283088';
           <section id="p7" class="doc-section">
             <span class="num">07 · Transferencias internacionales</span>
             <h2>Transferencias internacionales</h2>
+            <p>Tus datos se almacenan en la infraestructura de Hostinger VPS y Netlify.</p>
             <p>
-              Tus datos se almacenan en servidores ubicados en la Unión Europea, jurisdicción que la
-              Superintendencia de Industria y Comercio reconoce como territorio con nivel adecuado
-              de protección de datos.
-            </p>
-            <p>
-              Toda transmisión internacional se realiza conforme al artículo 24 de la Ley 1581 de
-              2012, bajo contratos que obligan al receptor a las mismas garantías aplicables en
-              Colombia.
+              Toda transferencia internacional que esto implique se realiza conforme al artículo 24
+              de la Ley 1581 de 2012, bajo contratos que obligan al receptor a las mismas garantías
+              aplicables en Colombia.
             </p>
           </section>
 

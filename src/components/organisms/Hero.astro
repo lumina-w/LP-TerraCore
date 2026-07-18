@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import FloatChip from '@molecules/FloatChip.astro';
 import { Icon } from 'astro-icon/components';
+import dashboardScreenshot from '../../assets/screens/dashboard-2.webp';
 
 const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
 ---
@@ -76,11 +78,11 @@ const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
       <!-- Right: visual -->
       <div class="hero__visual" aria-hidden="true">
         <div class="hero__frame">
-          <img
-            src="/screens/dashboard-2.webp"
+          <Image
+            src={dashboardScreenshot}
             alt="Panel de control de TerraCore con inventario, salud animal y finanzas de la finca"
-            width="900"
-            height="600"
+            width={900}
+            height={600}
             loading="eager"
             fetchpriority="high"
             decoding="async"
@@ -335,7 +337,7 @@ const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
     font-family: var(--font-display);
     font-weight: 700;
     font-size: clamp(48px, 7vw, 96px);
-    line-height: 0.96;
+    line-height: 1.05;
     letter-spacing: -0.03em;
     margin: 0 0 28px;
     text-wrap: balance;

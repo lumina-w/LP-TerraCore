@@ -1,14 +1,15 @@
 ---
 import LegalLayout from '@layouts/LegalLayout.astro';
 import { Icon } from 'astro-icon/components';
+import { waLink } from '@utils/constants';
 
 const email = 'contact@luminaw.co';
-const whatsapp = 'https://wa.me/573108283088';
+const whatsapp = waLink();
 ---
 
 <LegalLayout
-  title="Términos y Condiciones · TerraCore"
-  description="Términos y condiciones de uso de TerraCore, plataforma SaaS de gestión agroindustrial operada por Lúmina W, Colombia."
+  title="Términos y Condiciones de uso del servicio · TerraCore"
+  description="Términos y condiciones de uso de TerraCore, plataforma SaaS de gestión agroindustrial operada por Lúmina W en Colombia: planes, cancelación y responsabilidades."
 >
   <!-- ── Hero ── -->
   <section class="terms-hero reveal">

@@ -1,18 +1,28 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { waLink } from '@utils/constants';
 
 interface Props {
   /** WhatsApp fallback link (wa.me/...) shown below the form */
   whatsappUrl?: string;
 }
 
-const {
-  whatsappUrl = 'https://wa.me/573108283088?text=Quiero%20solicitar%20una%20demo%20de%20TerraCore%20para%20mi%20finca',
-} = Astro.props;
+const { whatsappUrl = waLink('Quiero solicitar una demo de TerraCore para mi finca') } =
+  Astro.props;
 ---
 
 <div class="lead" data-lead>
-  <form class="lead-form" data-lead-form novalidate>
+  <form
+    class="lead-form"
+    data-lead-form
+    name="lead-terracore"
+    method="POST"
+    data-netlify="true"
+    data-netlify-honeypot="bot-field"
+    novalidate
+  >
+    <input type="hidden" name="form-name" value="lead-terracore" />
+    <input type="hidden" name="fuente" value="landing-terracore" />
     <p class="lead-intro">
       Cuéntanos sobre tu operación, te ayudaremos a encontrar el plan perfecto.
     </p>
@@ -162,6 +172,11 @@ const {
       </div>
     </div>
 
+    <div class="hp-field" aria-hidden="true">
+      <label for="lead-website">Sitio web</label>
+      <input id="lead-website" name="bot-field" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
     <button type="submit" class="btn btn-accent lead-submit" data-lead-submit disabled>
       <span data-submit-label>Quiero mi diagnóstico gratis</span>
       <Icon name="lucide:arrow-right" width={16} height={16} aria-hidden="true" />
@@ -199,9 +214,6 @@ const {
 </div>
 
 <script>
-  const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
-  const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-
   const root = document.querySelector<HTMLElement>('[data-lead]');
   const form = root?.querySelector<HTMLFormElement>('[data-lead-form]');
   const submitBtn = form?.querySelector<HTMLButtonElement>('[data-lead-submit]');
@@ -209,6 +221,12 @@ const {
   const errorEl = form?.querySelector<HTMLElement>('[data-lead-error]');
   const successEl = root?.querySelector<HTMLElement>('[data-lead-success]');
   const successName = successEl?.querySelector<HTMLElement>('[data-success-name]');
+
+  // Anti-spam: a field only a bot would fill (hidden from sighted/keyboard users
+  // via CSS + tabindex="-1"), plus a minimum time-on-form. Netlify Forms also checks
+  // the same "bot-field" honeypot server-side via data-netlify-honeypot.
+  const formRenderedAt = Date.now();
+  const MIN_FILL_TIME_MS = 1500;
 
   if (form && submitBtn && submitLabel && errorEl && successEl) {
     const defaultLabel = submitLabel.textContent ?? 'Quiero mi diagnóstico gratis';
@@ -233,36 +251,34 @@ const {
 
       const data = new FormData(form);
       const nombre = String(data.get('nombre') ?? '').trim();
-      const payload = {
-        nombre,
-        email: String(data.get('email') ?? '').trim(),
-        whatsapp: String(data.get('whatsapp') ?? '').trim(),
-        empresa: String(data.get('empresa') ?? '').trim(),
-        region: String(data.get('region') ?? '').trim(),
-        tamano_operacion: String(data.get('tamano_operacion') ?? ''),
-        tipo_consulta: String(data.get('tipo_consulta') ?? ''),
-        fuente: 'landing-terracore',
-      };
+
+      // Bot heuristics: honeypot filled, or submitted faster than a human could.
+      // Fail silently into the normal success state so scripts don't learn they were blocked.
+      const honeypotFilled = String(data.get('bot-field') ?? '').trim().length > 0;
+      const submittedTooFast = Date.now() - formRenderedAt < MIN_FILL_TIME_MS;
+      if (honeypotFilled || submittedTooFast) {
+        if (successName) successName.textContent = `${nombre || ''}!`;
+        form.removeAttribute('aria-busy');
+        form.hidden = true;
+        successEl.hidden = false;
+        return;
+      }
+
+      const tipoConsulta = String(data.get('tipo_consulta') ?? '');
+      const tamanoOperacion = String(data.get('tamano_operacion') ?? '');
 
       try {
-        if (!SUPABASE_URL || !SUPABASE_ANON_KEY) throw new Error('Supabase env missing');
-
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/terracore_leads`, {
+        const res = await fetch('/', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            apikey: SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            Prefer: 'return=minimal',
-          },
-          body: JSON.stringify(payload),
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
         });
 
-        if (!res.ok) throw new Error(`Supabase ${res.status}`);
+        if (!res.ok) throw new Error(`Netlify Forms ${res.status}`);
 
         window.trackEvent?.('submit_lead', {
-          tipo_consulta: payload.tipo_consulta,
-          tamano_operacion: payload.tamano_operacion,
+          tipo_consulta: tipoConsulta,
+          tamano_operacion: tamanoOperacion,
         });
 
         if (successName) successName.textContent = `${nombre}!`;
@@ -535,6 +551,17 @@ const {
   .opt:has(input:focus-visible) {
     border-color: var(--color-accent);
     box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.3);
+  }
+
+  /* ── Honeypot (anti-spam) ───────────────────────────────────────
+     Off-screen, not display:none — bots that fill every field still see
+     and populate it, while sighted and keyboard/AT users never encounter it. */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 
   /* ── Submit ─────────────────────────────────────────────────── */
