@@ -46,16 +46,24 @@ import { WHATSAPP_NUMBER, WHATSAPP_DISPLAY, waLink } from '@utils/constants';
           <li>
             <Icon name="lucide:mail" width={20} height={20} aria-hidden="true" />
             <span class="sr-only">Correo: </span>
-            <a href="mailto:contact@luminaw.co">contact@luminaw.co</a>
+            <a href="mailto:contact@luminaw.co" onclick="window.trackEvent?.('click_email_footer')"
+              >contact@luminaw.co</a
+            >
           </li>
           <li>
             <Icon name="lucide:phone" width={20} height={20} aria-hidden="true" />
             <span class="sr-only">Teléfono: </span>
-            <a href={`tel:+${WHATSAPP_NUMBER}`}>{WHATSAPP_DISPLAY}</a>
+            <a href={`tel:+${WHATSAPP_NUMBER}`} onclick="window.trackEvent?.('click_tel_footer')"
+              >{WHATSAPP_DISPLAY}</a
+            >
           </li>
           <li>
             <Icon name="simple-icons:whatsapp" width={18} height={18} aria-hidden="true" />
-            <a href={waLink()} target="_blank" rel="noopener noreferrer"
+            <a
+              href={waLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="window.trackEvent?.('click_whatsapp_footer')"
               >WhatsApp<span class="sr-only"> (abre en una pestaña nueva)</span></a
             >
           </li>

@@ -37,29 +37,33 @@ const ctaUrl = import.meta.env.MAIN_CTA_URL ?? '/#demo';
         <p class="hero__tagline">Diseñado con productores de Urabá para el campo colombiano.</p>
 
         <div class="hero__ctas">
-          <a href={ctaUrl} rel="noopener noreferrer" class="btn btn-accent">
+          <a
+            href={ctaUrl}
+            rel="noopener noreferrer"
+            class="btn btn-accent"
+            onclick="window.trackEvent?.('click_cta_hero')"
+          >
             Descubre cuánto pierdes al mes
             <Icon name="lucide:arrow-right" width={16} height={16} aria-hidden="true" />
           </a>
-          <button class="btn btn-ghost-dark" id="video-open-btn">
+          <button
+            class="btn btn-ghost-dark"
+            id="video-open-btn"
+            onclick="window.trackEvent?.('click_video_demo')"
+          >
             Ver demo en video
             <Icon name="lucide:play" width={14} height={14} aria-hidden="true" />
           </button>
         </div>
 
         <p class="hero__trial-note">
-          14 días gratis · Sin tarjeta de crédito · En marcha en tu primera semana
+          Primero un diagnóstico gratis de 30 min. Si encaja, 14 días de prueba sin tarjeta.
         </p>
 
         <div class="hero__meta">
           <div class="hero__stat">
-            <span class="hero__stat-v" aria-hidden="true">
-              <span class="hero__stat-sup">−</span><span class="hero__stat-num" data-count-to="42"
-                >0</span
-              ><span class="hero__stat-sup">%</span>
-            </span>
-            <span class="sr-only">menos 42 por ciento de</span>
-            <span class="hero__stat-l">tiempo administrativo</span>
+            <span class="hero__stat-v hero__stat-v--text">Un solo lugar</span>
+            <span class="hero__stat-l">Adiós a Excel, cuadernos y WhatsApp</span>
           </div>
           <div class="hero__stat">
             <span class="hero__stat-v hero__stat-v--text">Menos compras</span>

@@ -68,7 +68,7 @@ export const PLANS: Plan[] = [
       'Dashboard (4 KPI principales)',
       'Implementación en 24 horas',
     ],
-    cta: 'Quiero mi trial gratis',
+    cta: 'Quiero el plan Semilla',
     ctaHref: '/#demo',
     featured: false,
     operationSize: 'Pequeña (1 sede, hasta 5 personas)',
@@ -245,9 +245,5 @@ export const FAQ: FaqItem[] = [
   {
     q: '¿El soporte es en español?',
     a: 'Sí. Nuestro equipo está en Colombia y entiende el contexto agroindustrial local.',
-  },
-  {
-    q: '¿De dónde viene la cifra del 42%?',
-    a: 'El 42% proviene de datos iniciales de operaciones piloto en la región de Urabá durante 2026. Este impacto varía según tamaño de la operación, complejidad de la cadena de suministro y nivel de adopción del equipo. Compartimos estos números de forma transparente para dar contexto real del producto.',
   },
 ];

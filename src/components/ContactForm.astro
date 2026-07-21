@@ -7,7 +7,7 @@ interface Props {
   whatsappUrl?: string;
 }
 
-const { whatsappUrl = waLink('Quiero solicitar una demo de TerraCore para mi finca') } =
+const { whatsappUrl = waLink('Quiero solicitar un diagnóstico de TerraCore para mi finca') } =
   Astro.props;
 ---
 
@@ -189,7 +189,13 @@ const { whatsappUrl = waLink('Quiero solicitar una demo de TerraCore para mi fin
     <div class="lead-divider" aria-hidden="true">
       <span>¿Prefieres escribir directo?</span>
     </div>
-    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn btn-ghost-dark">
+    <a
+      href={whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn btn-ghost-dark"
+      onclick="window.trackEvent?.('click_whatsapp_form')"
+    >
       Hablar por WhatsApp
       <Icon name="simple-icons:whatsapp" width={18} height={18} aria-hidden="true" />
       <span class="sr-only">(abre en una pestaña nueva)</span>
@@ -205,7 +211,13 @@ const { whatsappUrl = waLink('Quiero solicitar una demo de TerraCore para mi fin
       Te contactamos por WhatsApp o correo pronto.<br />
       Mientras tanto, si tienes una pregunta urgente:
     </p>
-    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn btn-accent">
+    <a
+      href={whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn btn-accent"
+      onclick="window.trackEvent?.('click_whatsapp_success')"
+    >
       Hablar por WhatsApp
       <Icon name="simple-icons:whatsapp" width={18} height={18} aria-hidden="true" />
       <span class="sr-only">(abre en una pestaña nueva)</span>
