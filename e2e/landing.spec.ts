@@ -10,7 +10,7 @@ test.describe('Landing page', () => {
 
   test('renders the primary navigation and CTA', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('link', { name: 'Solicita demo' }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Diagnóstico gratis' }).first()).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Navegación principal' })).toBeVisible();
   });
 
