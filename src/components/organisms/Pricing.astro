@@ -70,6 +70,7 @@ import { PLANS as plans } from '@utils/constants';
                   <a
                     href={p.ctaHref}
                     data-plan-size={p.operationSize}
+                    data-plan-name={p.name}
                     aria-label={`${p.cta}, plan ${p.name}`}
                     class:list={['btn', p.featured ? 'btn-accent' : 'btn-ghost', 'plan-cta']}
                   >
@@ -299,7 +300,13 @@ import { PLANS as plans } from '@utils/constants';
   // links) because the infinite slider clones plan cards into the DOM.
   plansEl?.addEventListener('click', (e) => {
     const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('.plan-cta');
-    const size = link?.dataset.planSize;
+    if (!link) return;
+
+    // Per-plan conversion event (click_plan_semilla / _profesional / _enterprise)
+    const planName = link.dataset.planName;
+    if (planName) window.trackEvent?.(`click_plan_${planName.toLowerCase()}`);
+
+    const size = link.dataset.planSize;
     if (!size) return;
     const radio = document.querySelector<HTMLInputElement>(
       `input[name="tamano_operacion"][value="${CSS.escape(size)}"]`,

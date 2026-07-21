@@ -9,6 +9,7 @@ import { waLink } from '@utils/constants';
   rel="noopener noreferrer"
   class="whatsapp-float"
   aria-label="Escríbenos por WhatsApp (abre en una pestaña nueva)"
+  onclick="window.trackEvent?.('click_whatsapp_float')"
 >
   <Icon name="simple-icons:whatsapp" width={28} height={28} aria-hidden="true" />
 </a>
